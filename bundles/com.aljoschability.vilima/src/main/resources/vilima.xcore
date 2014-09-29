@@ -1,0 +1,112 @@
+@GenModel(nonNLSMarkers="true")
+@Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
+package com.aljoschability.vilima
+
+class Catalog {
+	contains VideoCodec[] videoCodecs
+}
+
+abstract class Codec {
+	String[1] ^id
+	String[1] name
+}
+
+/*
+ * - fourcc
+ *   + xvid
+ *   + mp42
+ * - avc
+ *   + profiles [77=Main, 100=High]
+ *   + levels [31=3.1, 41=4.1]
+ */
+class VideoCodec extends Codec {
+	String[1] ^type
+	String description
+}
+
+class AudioCodec extends Codec {
+}
+
+class SubtitleCodec extends Codec {
+}
+
+/* =================================== */
+class VilimaContent {
+	String[1] path
+	contains MkvFile[] files
+}
+
+class MkvFile  {
+	long[1] fileDate
+	String[1] fileName
+	String[1] filePath
+	long[1] fileSize
+	String segmentUid
+	String segmentPreviousUid
+	String segmentNextUid
+	long segmentTimecodeScale = "1000000"
+	double segmentDuration
+	long segmentDate
+	String segmentTitle
+	String segmentMuxingApp
+	String segmentWritingApp
+	contains MkvTrack[] tracks
+	contains MkvTag[] tags
+}
+
+enum MkvTrackType {
+	VIDEO
+	AUDIO
+	COMPLEX
+	LOGO
+	SUBTITLE
+	CONTROL
+	UNKNOWN
+}
+
+class MkvTrack {
+	int number
+	long uid
+	MkvTrackType ^type
+	boolean flagEnabled = "true"
+	boolean flagDefault = "true"
+	boolean flagForced = "false"
+	boolean flagLacing = "true"
+	String name
+	String language = "eng"
+	String codecId
+	String codecPrivate
+	String codecName
+	boolean videoFlagInterlaced = "false"
+	int videoPixelWidth
+	int videoPixelHeight
+	int videoPixelCropBottom = "0"
+	int videoPixelCropTop = "0"
+	int videoPixelCropLeft = "0"
+	int videoPixelCropRight = "0"
+	int videoDisplayWidth
+	int videoDisplayHeight
+	int videoDisplayUnit = "0"
+	int videoAspectRatioType = "0"
+	double audioSamplingFrequency = "8000.0"
+	double audioOutputSamplingFrequency
+	int audioChannels = "1"
+}
+
+class MkvTag {
+	int ^typeValue = "50"
+	String ^type
+	long trackUid = "0"
+	long chapterUid = "0"
+	long editionUid = "0"
+	long attachmentUid = "0"
+	contains MkvTagEntry[] entries
+}
+
+class MkvTagEntry {
+	String name
+	String language
+	boolean flagDefault
+	String string
+	contains MkvTagEntry[] entries
+}

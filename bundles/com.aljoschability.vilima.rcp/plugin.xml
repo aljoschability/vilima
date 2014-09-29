@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="vilima">
+         <property
+               name="appName"
+               value="vilima">
+         </property>
+         <property
+               name="applicationXMI"
+               value="platform:/plugin/com.aljoschability.vilima.rcp/src/main/resources/vilima.e4xmi">
+         </property>
+         <property
+               name="lifeCycleURI"
+               value="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.VilimaLifeCycleManager">
+         </property>
+      </product>
+   </extension>
+</plugin>
