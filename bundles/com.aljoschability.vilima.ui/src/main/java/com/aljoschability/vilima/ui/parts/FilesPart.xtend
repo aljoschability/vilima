@@ -8,7 +8,6 @@ import javax.inject.Inject
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.di.UIEventTopic
 import org.eclipse.jface.layout.GridDataFactory
-import org.eclipse.jface.layout.GridLayoutFactory
 import org.eclipse.jface.viewers.ColumnLabelProvider
 import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.jface.viewers.TreeViewerColumn
@@ -17,16 +16,14 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Tree
 import org.eclipse.swt.widgets.TreeColumn
 
-class ContentsPart {
+class FilesPart {
 	@Inject IContentManager manager
 
 	TreeViewer viewer
 
 	@PostConstruct
 	def void create(Composite parent) {
-		parent.layout = GridLayoutFactory::fillDefaults.margins(6, 6).create
-
-		var tree = new Tree(parent, SWT::FULL_SELECTION.bitwiseOr(SWT::BORDER).bitwiseOr(SWT::MULTI))
+		var tree = new Tree(parent, SWT::FULL_SELECTION.bitwiseOr(SWT::MULTI))
 		tree.layoutData = GridDataFactory::fillDefaults.grab(true, true).create
 		tree.headerVisible = true
 		tree.linesVisible = true

@@ -1,5 +1,8 @@
 package com.aljoschability.vilima.ui.parts
 
+import com.aljoschability.vilima.MkvFile
+import com.aljoschability.vilima.VilimaFactory
+import com.aljoschability.vilima.reading.MatroskaFile
 import java.io.File
 import java.util.Map
 import javax.annotation.PostConstruct
@@ -14,23 +17,20 @@ import org.eclipse.swt.widgets.FileDialog
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
 
-class InfoPart {
+class InformationPart {
 	val Map<String, Label> labelsMap = newLinkedHashMap
 
 	@PostConstruct
 	def void create(Composite parent) {
-		val composite = new Composite(parent, SWT::NONE)
-		composite.layout = GridLayoutFactory::fillDefaults.margins(6, 6).create
+		createFileGroup(parent)
 
-		createFileGroup(composite)
+		createSegmentGroup(parent)
 
-		createSegmentGroup(composite)
+		createTagsGroup(parent)
 
-		createTagsGroup(composite)
+		createTracksGroup(parent)
 
-		createTracksGroup(composite)
-
-		createButton(composite)
+		createButton(parent)
 	}
 
 	private def createFileGroup(Composite parent) {
@@ -84,7 +84,7 @@ class InfoPart {
 
 		val titleData = new Label(group, SWT::LEAD)
 		titleData.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		titleData.text = ""
+		labelsMap.put("segment.title", titleData)
 
 		// muxer
 		val muxerLabel = new Label(group, SWT::LEAD)
@@ -92,7 +92,7 @@ class InfoPart {
 
 		val muxerData = new Label(group, SWT::LEAD)
 		muxerData.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		muxerData.text = ""
+		labelsMap.put("segment.muxingApp", muxerData)
 
 		// writer
 		val writerLabel = new Label(group, SWT::LEAD)
@@ -100,7 +100,7 @@ class InfoPart {
 
 		val writerData = new Label(group, SWT::LEAD)
 		writerData.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		writerData.text = ""
+		labelsMap.put("segment.writingApp", writerData)
 
 		// date
 		val dateLabel = new Label(group, SWT::LEAD)
@@ -108,7 +108,7 @@ class InfoPart {
 
 		val dateData = new Label(group, SWT::LEAD)
 		dateData.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		dateData.text = ""
+		labelsMap.put("segment.date", dateData)
 	}
 
 	private def createTagsGroup(Composite parent) {
@@ -135,17 +135,33 @@ class InfoPart {
 
 					val result = dialog.open
 					if (result != null) {
-						show(new File(result))
+						val file = new File(result)
+
+						val reader = new MatroskaFile(false)
+
+						val mkv = VilimaFactory::eINSTANCE.createMkvFile
+						mkv.fileDate = file.lastModified
+						mkv.fileName = file.name
+						mkv.filePath = file.parent
+						mkv.fileSize = file.length
+
+						reader.readFile(mkv)
+
+						show(mkv)
 					}
 				}
 			})
 	}
 
-	def show(File file) {
-		labelsMap.get("file.name").text = String.valueOf(file.name)
-		labelsMap.get("file.path").text = String.valueOf(file.parent)
-		labelsMap.get("file.size").text = String.valueOf(file.length)
-		labelsMap.get("file.modified").text = String.valueOf(file.lastModified)
+	def show(MkvFile file) {
+		labelsMap.get("file.name").text = String::valueOf(file.fileName)
+		labelsMap.get("file.path").text = String::valueOf(file.filePath)
+		labelsMap.get("file.size").text = String::valueOf(file.fileSize)
+		labelsMap.get("file.modified").text = String::valueOf(file.fileDate)
 
+		labelsMap.get("segment.title").text = String::valueOf(file.segmentTitle)
+		labelsMap.get("segment.date").text = String::valueOf(file.segmentDate)
+		labelsMap.get("segment.muxingApp").text = String::valueOf(file.segmentMuxingApp)
+		labelsMap.get("segment.writingApp").text = String::valueOf(file.segmentWritingApp)
 	}
 }
