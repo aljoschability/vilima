@@ -1,33 +1,132 @@
 package com.aljoschability.vilima.reading;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 import com.aljoschability.vilima.reading.elements.AbstractEbmlElement;
 
 public class MatroskaEventReader {
+	@Deprecated
 	private RandomAccessFile file;
+	private SeekableByteChannel channel;
 
-	public MatroskaEventReader(String filename) throws FileNotFoundException {
+	public MatroskaEventReader(String filename) throws IOException {
 		file = new RandomAccessFile(filename, "r");
+		channel = Files.newByteChannel(Paths.get(filename), StandardOpenOption.READ);
 	}
 
-	private byte[] _readHead_TODO(boolean clearFirst) throws IOException {
+	public AbstractEbmlElement readNextElement() throws IOException {
+
+		/***************************************************/
+		// read EBML identifier
+		byte[] _OLD_ID = _OLD_readElementId();
+		// System.out.println("OLD[ ID ]=" + Arrays.toString(_OLD_ID));
+
+		// read element size
+		byte[] _OLD_SIZE = _OLD_readElementSize();
+		long size = bytesToLong(_OLD_SIZE);
+		// System.out.println("OLD[SIZE]=" + Arrays.toString(_OLD_SIZE) + " -> " + size);
+
+		// TODO: live stream not implemented!
+		// byte[] SIZE_LIVE = new byte[] { Byte.MAX_VALUE };
+		// if (Arrays.equals(SIZE_LIVE, data)) {
+		// System.out.println("found LIVE!");
+		// }
+		/***************************************************/
+
+		// read element id
+		 byte[] id = toArray(readElementId());
+		// System.out.println("NEW[ ID ]=" + toString(id));
+
+		// read element data size
+		byte[] dataSize = toArray(readDataSize());
+		// System.out.println("NEW[SIZE]=" + toString(dataSize) + " -> " + toLong(dataSize));
+		// System.out.println();
+
+		// check if old crap can be removed
+		if (!Arrays.equals(_OLD_ID, id)) {
+			System.out.println("####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			System.out.println("# OLD[ ID ]=" + Arrays.toString(_OLD_ID));
+			System.out.println("# NEW[ ID ]=" + Arrays.toString(id));
+			System.out.println("####!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		}
+		if (!Arrays.equals(_OLD_SIZE, dataSize)) {
+			System.out.println("########################################");
+			System.out.println("# OLD[SIZE]=" + bytesToLong(_OLD_SIZE) + Arrays.toString(_OLD_SIZE));
+			System.out.println("# NEW[SIZE]=" + bytesToLong(dataSize) + Arrays.toString(dataSize));
+			System.out.println("########################################");
+		}
+
+		return MatroskaLiteral.createElement(id, dataSize.length, bytesToLong(dataSize));
+	}
+
+	private ByteBuffer readElementId() throws IOException {
+		final ByteBuffer buffer = ByteBuffer.allocateDirect(8);
+
+		// read leading bit
+		buffer.limit(1);
+		if (channel.read(buffer) != 1) {
+			throw new RuntimeException();
+		}
+
+		// convert length
+		final int length = getLength(buffer.get(0));
+
+		// read rest of id
+		buffer.limit(length);
+		if (channel.read(buffer) != length - 1) {
+			throw new RuntimeException();
+		}
+
+		buffer.flip();
+
+		return buffer;
+	}
+
+	private ByteBuffer readDataSize() throws IOException {
+		final ByteBuffer buffer = ByteBuffer.allocateDirect(8);
+
+		// read leading bit
+		buffer.limit(1);
+		if (channel.read(buffer) != 1) {
+			throw new RuntimeException();
+		}
+
+		// convert length
+		final int length = getLength(buffer.get(0));
+
+		// read rest of id
+		buffer.limit(length);
+		if (channel.read(buffer) != length - 1) {
+			throw new RuntimeException();
+		}
+
+		// clear the first byte
+		buffer.put(0, (byte) (buffer.get(0) & ((0xFF >>> length))));
+
+		buffer.flip();
+
+		return buffer;
+	}
+
+	@Deprecated
+	private byte[] _OLD_readElementSize() throws IOException {
 		// insert first byte
 		byte firstByte = file.readByte();
 
-		int numBytes = _getIndexOfFirst_TODO(firstByte);
+		int numBytes = getLength(firstByte);
 
 		// Setup space to store the bits
 		byte[] data = new byte[numBytes];
 
 		// Clear the 1 at the front of this byte, all the way to the beginning of the size
-		if (clearFirst) {
-			data[0] = (byte) (firstByte & ((0xFF >>> (data.length))));
-		} else {
-			data[0] = firstByte;
-		}
+		data[0] = (byte) (firstByte & ((0xFF >>> (numBytes))));
 
 		// Read the rest of the size.
 		file.read(data, 1, data.length - 1);
@@ -35,54 +134,75 @@ public class MatroskaEventReader {
 		return data;
 	}
 
-	private static int _getIndexOfFirst_TODO(byte value) {
-		int index = 0;
+	@Deprecated
+	private byte[] _OLD_readElementId() throws IOException {
+		// insert first byte
+		byte firstByte = file.readByte();
 
-		// define mask for long
-		long mask = 0x0080;
+		int numBytes = getLength(firstByte);
 
-		for (int i = 0; i < 8; i++) {
-			// search from beginning
+		// Setup space to store the bits
+		byte[] data = new byte[numBytes];
+
+		data[0] = firstByte;
+
+		// Read the rest of the size.
+		file.read(data, 1, data.length - 1);
+
+		return data;
+	}
+
+	public int read(byte[] buff, int offset, int length) throws IOException {
+		ByteBuffer buffer = ByteBuffer.wrap(buff, offset, length);
+		int resNew = channel.read(buffer);
+
+		int resOld = file.read(buff, offset, length);
+
+		if (resNew != resOld) {
+			throw new RuntimeException();
+		}
+		return resOld;
+	}
+
+	public long skip(long offset) throws IOException {
+		if (offset <= 0 || offset > Integer.MAX_VALUE) {
+			return 0;
+		}
+
+		long pos = channel.position();
+		long len = channel.size();
+		long newpos = pos + offset;
+		if (newpos > len) {
+			newpos = len;
+		}
+		channel.position(newpos);
+
+		long resNew = newpos - pos;
+		long resOld = file.skipBytes((int) offset);
+
+		if (resOld != resNew) {
+			System.out.println();
+
+			throw new RuntimeException();
+		}
+
+		return resOld;
+	}
+
+	private static int getLength(byte value) {
+		int mask = 0x0080;
+		for (int length = 0; length < 8; length++) {
 			if ((value & mask) == mask) {
-				// add size
-				index = i + 1;
-
-				// end loop
-				i = 8;
+				return length + 1;
 			}
 			mask >>>= 1;
 		}
 
-		return index;
+		throw new RuntimeException();
 	}
 
-	public AbstractEbmlElement readNextElement() throws IOException {
-		// read EBML identifier
-		byte[] id = _readHead_TODO(false);
-
-		// read element size
-		byte[] sizeBytes = _readHead_TODO(true);
-		long size = bytesToLong(sizeBytes);
-
-		// TODO: live stream not implemented!
-		// byte[] SIZE_LIVE = new byte[] { Byte.MAX_VALUE };
-		// if (Arrays.equals(SIZE_LIVE, data)) {
-		// System.out.println("found LIVE!");
-		// }
-
-		return MatroskaLiteral.createElement(id, sizeBytes.length, size);
-	}
-
-	public int read(byte[] buff, int offset, int length) throws IOException {
-		return file.read(buff, offset, length);
-	}
-
-	public byte readByte() throws IOException {
-		return file.readByte();
-	}
-
-	public long skip(long offset) throws IOException {
-		return file.skipBytes((int) offset);
+	private static long toLong(ByteBuffer buffer) {
+		return bytesToLong(toArray(buffer));
 	}
 
 	private static long bytesToLong(byte[] data) {
@@ -93,5 +213,16 @@ public class MatroskaEventReader {
 			size |= (value << (8 * i));
 		}
 		return size;
+	}
+
+	private static String toString(ByteBuffer buffer) {
+		return Arrays.toString(toArray(buffer));
+	}
+
+	private static byte[] toArray(ByteBuffer buffer) {
+		byte[] arr = new byte[buffer.limit()];
+		buffer.get(arr);
+
+		return arr;
 	}
 }
