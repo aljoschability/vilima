@@ -32,6 +32,7 @@
     <mainMenu xmi:id="_ekqZqQc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.menus.main">
       <children xsi:type="menu:Menu" xmi:id="_ekqZqgc0EeOgF6k0_n958Q" label="File">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_A3RZkD51EeSoHs2Wxhxf1g" elementId="" label="Read Directory..." command="_nVVgEAkYEeOn36YhCdmfuQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_Xy5agEorEeSxLbcBSUEuUQ" elementId="" label="Rename Files..." command="_cKgT8EorEeSxLbcBSUEuUQ"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_6AsqIEfGEeSxLbcBSUEuUQ" elementId="com.aljoschability.vilima.rcp.menuseparator.1"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_5HiNgEfGEeSxLbcBSUEuUQ" elementId="com.aljoschability.vilima.rcp.handledmenuitem.0" label="Preferences" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/file/preferences.png" command="_ysjRoEfHEeSxLbcBSUEuUQ"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_MErvsD0hEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.menuseparator.0"/>
@@ -56,6 +57,7 @@
     </mainMenu>
   </children>
   <handlers xmi:id="_lD63EAkYEeOn36YhCdmfuQ" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ReadDirectoryHandler" command="_nVVgEAkYEeOn36YhCdmfuQ"/>
+  <handlers xmi:id="_fOlI8EorEeSxLbcBSUEuUQ" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.RenameFilesHandler" command="_cKgT8EorEeSxLbcBSUEuUQ"/>
   <handlers xmi:id="_v_CigEfHEeSxLbcBSUEuUQ" elementId="" command="_ysjRoEfHEeSxLbcBSUEuUQ"/>
   <handlers xmi:id="_ekqZnQc0EeOgF6k0_n958Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ExitHandler" command="_ekqZnAc0EeOgF6k0_n958Q"/>
   <handlers xmi:id="_F6ZVEAnuEeOIkI63lPisZg" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_K4x6oAnuEeOIkI63lPisZg"/>
@@ -69,6 +71,7 @@
   <rootContext xmi:id="_3OTCUEd2EeSeSshVzL7ILQ" elementId="org.eclipse.ui.contexts.dialog" name="Dialogs"/>
   <rootContext xmi:id="_6QV3AEd2EeSeSshVzL7ILQ" elementId="org.eclipse.ui.contexts.window" name="Windows"/>
   <commands xmi:id="_nVVgEAkYEeOn36YhCdmfuQ" elementId="com.aljoschability.vilima.commands.file.import" commandName="Read Directory..."/>
+  <commands xmi:id="_cKgT8EorEeSxLbcBSUEuUQ" elementId="com.aljoschability.vilima.commands.file.rename" commandName="Rename Files..."/>
   <commands xmi:id="_ysjRoEfHEeSxLbcBSUEuUQ" elementId="com.aljoschability.vilima.commands.file.preferences" commandName="Preferences"/>
   <commands xmi:id="_ekqZnAc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.commands.file.exit" commandName="Exit"/>
   <commands xmi:id="_KM9KUD0nEeSYS5JDjizolA" elementId="com.aljoschability.vilima.commands.edit.undo" commandName="Undo"/>

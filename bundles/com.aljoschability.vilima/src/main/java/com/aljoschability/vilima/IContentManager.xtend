@@ -8,7 +8,8 @@ interface IContentManager {
 	def void setPath(String path)
 
 	def void add(MkvFile file)
-	
+
 	def VilimaContent getContent()
-	
+
+	def void refresh()
 }

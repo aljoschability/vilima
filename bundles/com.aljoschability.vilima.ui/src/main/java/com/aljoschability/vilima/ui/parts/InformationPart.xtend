@@ -2,7 +2,6 @@ package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkvFile
 import com.aljoschability.vilima.VilimaFactory
-import com.aljoschability.vilima.reading.MatroskaFile
 import java.io.File
 import java.util.Map
 import javax.annotation.PostConstruct
@@ -16,6 +15,7 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.FileDialog
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
+import com.aljoschability.vilima.reading.MatroskaReader
 
 class InformationPart {
 	val Map<String, Label> labelsMap = newLinkedHashMap
@@ -137,7 +137,7 @@ class InformationPart {
 					if (result != null) {
 						val file = new File(result)
 
-						val reader = new MatroskaFile(false)
+						val reader = new MatroskaReader()
 
 						val mkv = VilimaFactory::eINSTANCE.createMkvFile
 						mkv.fileDate = file.lastModified

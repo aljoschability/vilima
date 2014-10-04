@@ -1,9 +1,14 @@
-@GenModel(nonNLSMarkers="true")
+@GenModel(nonNLSMarkers="true", complianceLevel="7.0", editDirectory="/com.aljoschability.vilima.edit/src/main/xcore")
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
-class Catalog {
+class VilimaCatalog {
+	contains VilimaGenre[] genres
 	contains VideoCodec[] videoCodecs
+}
+
+class VilimaGenre {
+	String[1] name
 }
 
 abstract class Codec {
@@ -37,21 +42,31 @@ class VilimaContent {
 }
 
 class MkvFile  {
-	long[1] fileDate
-	String[1] fileName
 	String[1] filePath
+	String[1] fileName
 	long[1] fileSize
+	long[1] fileDate
 	String segmentUid
 	String segmentPreviousUid
 	String segmentNextUid
 	long segmentTimecodeScale = "1000000"
-	double segmentDuration
-	long segmentDate
+	long segmentDuration ="-1"
+	long segmentDate ="-1"
 	String segmentTitle
 	String segmentMuxingApp
 	String segmentWritingApp
 	contains MkvTrack[] tracks
 	contains MkvTag[] tags
+	contains MkvAttachment[] attachments
+	contains MkvChapter[] chapters
+}
+
+class MkvAttachment{
+	String name
+}
+
+class MkvChapter{
+	String name
 }
 
 enum MkvTrackType {

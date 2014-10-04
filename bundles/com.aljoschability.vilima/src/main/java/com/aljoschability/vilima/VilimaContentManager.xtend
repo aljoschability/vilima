@@ -16,8 +16,17 @@ class VilimaContentManager implements IContentManager {
 	}
 
 	override clear() {
-		broker.send(VilimaEventTopics::CONTENT_CLEAR, null)
 		content.files.clear
+
+		refresh()
+	}
+
+	override add(MkvFile file) {
+		content.files += file
+	}
+
+	override refresh() {
+		broker.send(VilimaEventTopics::CONTENT_REFRESH, content)
 	}
 
 	override getPath() {
@@ -28,12 +37,21 @@ class VilimaContentManager implements IContentManager {
 		content.path = path
 	}
 
-	override add(MkvFile file) {
-		content.files += file
+	def private void report(MkvFile file) {
+		println(file.fileName)
+		for (tag : file.tags) {
+			println('''Tag: «tag.typeValue»:«tag.type»''')
+			for (entry : tag.entries) {
+				report(entry)
+			}
+		}
+	}
 
-		println(file)
-
-		broker.post(VilimaEventTopics::CONTENT_ADD, file)
+	def private void report(MkvTagEntry entry) {
+		println('''«entry.name»=«entry.string»«IF (entry.language != null)» [«entry.language»]«ENDIF»''')
+		for (child : entry.entries) {
+			report(child)
+		}
 	}
 
 	override getContent() {
