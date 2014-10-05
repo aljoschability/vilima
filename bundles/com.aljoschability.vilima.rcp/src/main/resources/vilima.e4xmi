@@ -6,10 +6,11 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_RdngUGM1EeOXbqwwsskOBw" elementId="" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_9zgf8EdvEeSeSshVzL7ILQ" elementId="" containerData="25">
             <children xsi:type="basic:PartStack" xmi:id="_6FGk0EfNEeSxLbcBSUEuUQ" elementId="" containerData="50">
-              <children xsi:type="basic:Part" xmi:id="_UExv0GM1EeOXbqwwsskOBw" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.CatalogPart" label="Catalog" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/catalog.png"/>
+              <children xsi:type="basic:Part" xmi:id="_w_eOkEwWEeSeU5z7yqX-3Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.MetadataPart" label="Metadata" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_xqprkEfOEeSxLbcBSUEuUQ" elementId="" containerData="50">
-              <children xsi:type="basic:Part" xmi:id="_JnAvcEPcEeShf-sMSroa6A" elementId="com.aljoschability.vilima.rcp.part.1" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.InformationPart" label="Information" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
+              <children xsi:type="basic:Part" xmi:id="_JnAvcEPcEeShf-sMSroa6A" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.InformationPart" label="Information" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
+              <children xsi:type="basic:Part" xmi:id="_UExv0GM1EeOXbqwwsskOBw" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.CatalogPart" label="Catalog" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/catalog.png"/>
             </children>
           </children>
           <children xsi:type="basic:Part" xmi:id="_LCgBYAi8EeOn36YhCdmfuQ" elementId="" containerData="75" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="Files" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/files.png">

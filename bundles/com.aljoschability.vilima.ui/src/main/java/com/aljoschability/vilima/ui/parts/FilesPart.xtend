@@ -45,32 +45,31 @@ class FilesPart {
 
 		createIconColumn()
 
-		createStringColumn("Path", 30, VilimaPackage.Literals.MKV_FILE__FILE_PATH)
-		createStringColumn("Name", 30, VilimaPackage.Literals.MKV_FILE__FILE_NAME)
+		//		createStringColumn("Path", 30, VilimaPackage.Literals.MKV_FILE__FILE_PATH)
+		createStringColumn("Name", 140, VilimaPackage.Literals.MKV_FILE__FILE_NAME)
 
-		createSizeColumn("Size", 60, VilimaPackage.Literals.MKV_FILE__FILE_SIZE)
+		createSizeColumn("Size", 63, VilimaPackage.Literals.MKV_FILE__FILE_SIZE)
 
-		createDateColumn("File Date", 30, VilimaPackage.Literals.MKV_FILE__FILE_DATE)
-		createDateColumn("Segment Date", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_DATE)
+		//		createDateColumn("File Date", 30, VilimaPackage.Literals.MKV_FILE__FILE_DATE)
+		//		createDateColumn("Segment Date", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_DATE)
+		createDurationColumn("Duration", 66, VilimaPackage.Literals.MKV_FILE__SEGMENT_DURATION)
 
-		createDurationColumn("Duration", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_DURATION)
-
-		createStringColumn("Title", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_TITLE)
-		createStringColumn("Muxing App", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_MUXING_APP)
-		createStringColumn("Writing App", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_WRITING_APP)
-
-		createCountColumn("Tracks", 30, VilimaPackage.Literals.MKV_FILE__TRACKS)
-		createCountColumn("Attachments", 30, VilimaPackage.Literals.MKV_FILE__ATTACHMENTS)
-		createCountColumn("Chapters", 30, VilimaPackage.Literals.MKV_FILE__CHAPTERS)
-		createCountColumn("Tags", 30, VilimaPackage.Literals.MKV_FILE__TAGS)
-
+		//		createStringColumn("Title", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_TITLE)
 		createStringColumn("UID", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_UID)
-		createStringColumn("Next UID", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_NEXT_UID)
-		createStringColumn("Prev UID", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_PREVIOUS_UID)
+
+		//		createStringColumn("Next UID", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_NEXT_UID)
+		//		createStringColumn("Prev UID", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_PREVIOUS_UID)
+		createCountColumn("Tracks", 49, VilimaPackage.Literals.MKV_FILE__TRACKS)
+		createCountColumn("Attachments", 83, VilimaPackage.Literals.MKV_FILE__ATTACHMENTS)
+		createCountColumn("Chapters", 62, VilimaPackage.Literals.MKV_FILE__CHAPTERS)
+		createCountColumn("Tags", 40, VilimaPackage.Literals.MKV_FILE__TAGS)
+
+		//		createStringColumn("Muxing App", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_MUXING_APP)
+		createStringColumn("Writing App", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_WRITING_APP)
 	}
 
 	private def createCountColumn(String text, int width, EStructuralFeature feature) {
-		val column = new TreeColumn(viewer.tree, SWT::TRAIL)
+		val column = new TreeColumn(viewer.tree, SWT::CENTER)
 
 		column.moveable = true
 		column.resizable = true

@@ -28,6 +28,22 @@ class VilimaScanJob extends Job {
 	}
 
 	override protected run(IProgressMonitor monitor) {
+
+		/*  val ticks = 6000;
+      monitor.beginTask("Doing some work", ticks);
+      try {
+         for (var i=0;i<ticks;i++) {
+            if (monitor.isCanceled()){
+               return Status.CANCEL_STATUS;}
+            monitor.subTask("Processing tick #" + i);
+            //... do some work ...
+            monitor.worked(1);
+         }
+      } finally {
+         monitor.done();
+      }
+      return Status.OK_STATUS;
+      */
 		manager.clear();
 
 		Files::walkFileTree(path, new VilimaFileWalker(manager))

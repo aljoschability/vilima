@@ -195,14 +195,13 @@ public class MatroskaFileSeeker {
 	public void dispose() throws IOException {
 		channel.close();
 
-		System.out.println();
-		System.out.println("    id " + READ_ID_NUM + " (" + (READ_ID_TIME / 1000000d) + "ms)");
-		System.out.println("  size " + READ_SIZE_NUM + " (" + (READ_SIZE_TIME / 1000000d) + "ms)");
-		System.out.println("  data " + READ_DATA_NUM + " (" + (READ_DATA_TIME / 1000000d) + "ms)");
-		System.out.println("create " + CREATE_NUM + " (" + (CREATE_TIME / 1000000d) + "ms)");
-		System.out.println("  skip " + SKIP_NUM + " (" + (SKIP_TIME / 1000000d) + "ms)");
-		System.out.println(" array " + ARRAY_NUM + " (" + (ARRAY_TIME / 1000000d) + "ms)");
-		System.out.println();
+		System.out.println("# array  " + ARRAY_NUM + " (" + (ARRAY_TIME / 1000000d) + "ms)");
+		System.out.println("# id     " + READ_ID_NUM + " (" + (READ_ID_TIME / 1000000d) + "ms)");
+		System.out.println("# size   " + READ_SIZE_NUM + " (" + (READ_SIZE_TIME / 1000000d) + "ms)");
+		System.out.println("# create " + CREATE_NUM + " (" + (CREATE_TIME / 1000000d) + "ms)");
+		System.out.println("# data   " + READ_DATA_NUM + " (" + (READ_DATA_TIME / 1000000d) + "ms)");
+		System.out.println("# skip   " + SKIP_NUM + " (" + (SKIP_TIME / 1000000d) + "ms)");
+		System.out.println("#################################");
 
 		READ_ID_TIME = 0;
 		READ_ID_NUM = 0;

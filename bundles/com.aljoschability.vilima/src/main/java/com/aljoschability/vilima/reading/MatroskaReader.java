@@ -90,20 +90,24 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (element instanceof EbmlMasterElement) {
-				readSegmentNode((EbmlMasterElement) element);
+				if (!readSegmentNode((EbmlMasterElement) element)) {
+					return;
+				}
 			}
 
 			seeker.skip(element);
 		}
 	}
 
-	private void readSegmentNode(EbmlMasterElement element) throws IOException {
+	private boolean readSegmentNode(EbmlMasterElement element) throws IOException {
 		if (MatroskaNode.SeekHead.matches(element)) {
 			elements.put(seeker.getPosition() - element.getHeaderSize(), "SeekHead");
 			readSeekHead(element);
 		} else if (MatroskaNode.Info.matches(element)) {
 			elements.put(seeker.getPosition() - element.getHeaderSize(), "Info");
 			readInfo(element);
+		} else if (MatroskaNode.Cluster.matches(element)) {
+			return false;
 		} else if (MatroskaNode.Tracks.matches(element)) {
 			elements.put(seeker.getPosition() - element.getHeaderSize(), "Tracks");
 			readTracks(element);
@@ -117,6 +121,8 @@ public class MatroskaReader {
 			elements.put(seeker.getPosition() - element.getHeaderSize(), "Tags");
 			readTags(element);
 		}
+
+		return true;
 	}
 
 	private void readSeekHead(EbmlMasterElement parent) throws IOException {
@@ -422,9 +428,11 @@ public class MatroskaReader {
 			if ("V_MPEG4/ISO/AVC".equals(track.getCodecId())) {
 				track.setCodecPrivate("Profile=" + bytes[1] + ", Level=" + bytes[3]);
 			} else if ("V_MS/VFW/FOURCC".equals(track.getCodecId())) {
-				// System.out.println(Arrays.toString(new byte[] { 'X', 'V', 'I', 'D' }));
+				// System.out.println(Arrays.toString(new byte[] { 'X', 'V',
+				// 'I', 'D' }));
 				track.setCodecPrivate(new String(new byte[] { bytes[16], bytes[17], bytes[18], bytes[19] }));
-				// [40, 0, 0, 0, -48, 2, 0, 0, 96, 1, 0, 0, 1, 0, 12, 0, 88, 86, 73, 68, 0, 52, 23,
+				// [40, 0, 0, 0, -48, 2, 0, 0, 96, 1, 0, 0, 1, 0, 12, 0, 88, 86,
+				// 73, 68, 0, 52, 23,
 				// 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 			}
