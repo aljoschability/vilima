@@ -6,8 +6,9 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.aljoschability.vilima.MkvAttachment;
-import com.aljoschability.vilima.MkvChapter;
+import com.aljoschability.vilima.VilimaAttachment;
+import com.aljoschability.vilima.MkvChapterEdition;
+import com.aljoschability.vilima.MkvChapterEntry;
 import com.aljoschability.vilima.MkvFile;
 import com.aljoschability.vilima.MkvTag;
 import com.aljoschability.vilima.MkvTagEntry;
@@ -185,10 +186,6 @@ public class MatroskaReader {
 				double value = seeker.readDouble((EbmlDataElement) element);
 
 				file.setSegmentDuration((long) value);
-			} else if (MatroskaNode.TimecodeScale.matches(element)) {
-				long value = seeker.readLong((EbmlDataElement) element);
-
-				file.setSegmentTimecodeScale(value);
 			} else if (MatroskaNode.PrevUID.matches(element)) {
 				byte[] value = seeker.readBytes((EbmlDataElement) element);
 
@@ -309,10 +306,28 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.AttachedFile.matches(element)) {
-				// TODO: not implemented
-				MkvAttachment a = VilimaFactory.eINSTANCE.createMkvAttachment();
-				a.setName(Arrays.toString(element.getId()));
-				file.getAttachments().add(a);
+				VilimaAttachment attachment = VilimaFactory.eINSTANCE.createVilimaAttachment();
+
+				readAttachedFile((EbmlMasterElement) element, attachment);
+
+				file.getAttachments().add(attachment);
+			}
+
+			seeker.skip(element);
+		}
+	}
+
+	private void readAttachedFile(EbmlMasterElement parent, VilimaAttachment attachment) throws IOException {
+		EbmlElement element;
+		while ((element = seeker.nextChild(parent)) != null) {
+			if (MatroskaNode.FileDescription.matches(element)) {
+				attachment.setDescription(seeker.readString((EbmlDataElement) element));
+			} else if (MatroskaNode.FileName.matches(element)) {
+				attachment.setName(seeker.readString((EbmlDataElement) element));
+			} else if (MatroskaNode.FileMimeType.matches(element)) {
+				attachment.setMimeType(seeker.readString((EbmlDataElement) element));
+			} else if (MatroskaNode.FileData.matches(element)) {
+				attachment.setSize(element.getSize());
 			}
 
 			seeker.skip(element);
@@ -323,10 +338,42 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.EditionEntry.matches(element)) {
-				// TODO: not implemented
-				MkvChapter a = VilimaFactory.eINSTANCE.createMkvChapter();
-				a.setName(Arrays.toString(element.getId()));
-				file.getChapters().add(a);
+				MkvChapterEdition chapter = VilimaFactory.eINSTANCE.createMkvChapterEdition();
+
+				readEditionEntry((EbmlMasterElement) element, chapter);
+
+				file.getEditions().add(chapter);
+			}
+
+			seeker.skip(element);
+		}
+	}
+
+	private void readEditionEntry(EbmlMasterElement parent, MkvChapterEdition chapter) throws IOException {
+		EbmlElement element;
+		while ((element = seeker.nextChild(parent)) != null) {
+			if (MatroskaNode.EditionUID.matches(element)) {
+				chapter.setUid(seeker.readLong((EbmlDataElement) element));
+			} else if (MatroskaNode.ChapterAtom.matches(element)) {
+				MkvChapterEntry entry = VilimaFactory.eINSTANCE.createMkvChapterEntry();
+
+				readChapterAtom((EbmlMasterElement) element, entry);
+
+				System.out.println(entry);
+				chapter.getEntries().add(entry);
+			}
+
+			seeker.skip(element);
+		}
+	}
+
+	private void readChapterAtom(EbmlMasterElement parent, MkvChapterEntry entry) throws IOException {
+		EbmlElement element;
+		while ((element = seeker.nextChild(parent)) != null) {
+			if (MatroskaNode.ChapterTimeStart.matches(element)) {
+				entry.setStart(seeker.readLong((EbmlDataElement) element));
+			} else if (MatroskaNode.ChapterTimeEnd.matches(element)) {
+				entry.setEnd(seeker.readLong((EbmlDataElement) element));
 			}
 
 			seeker.skip(element);

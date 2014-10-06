@@ -39,6 +39,9 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_MErvsD0hEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.menuseparator.0"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_ekqZrQc0EeOgF6k0_n958Q" label="Exit" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/file/exit.png" command="_ekqZnAc0EeOgF6k0_n958Q"/>
       </children>
+      <children xsi:type="menu:Menu" xmi:id="_MkbV4E1rEeSti-fsXBVUMQ" elementId="" label="Actions">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_PUIdYE1rEeSti-fsXBVUMQ" elementId="" label="Clean..." command="_XwvdUE1rEeSti-fsXBVUMQ"/>
+      </children>
       <children xsi:type="menu:Menu" xmi:id="_AAryUD0hEeSYS5JDjizolA" elementId="" label="Edit">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_TxiUYD0mEeSYS5JDjizolA" elementId="" label="Undo" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/edit/undo.png" command="_KM9KUD0nEeSYS5JDjizolA"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_VjrAYD0mEeSYS5JDjizolA" elementId="" label="Redo" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/edit/redo.png" command="_NCvEoD0nEeSYS5JDjizolA"/>
@@ -63,6 +66,7 @@
   <handlers xmi:id="_ekqZnQc0EeOgF6k0_n958Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ExitHandler" command="_ekqZnAc0EeOgF6k0_n958Q"/>
   <handlers xmi:id="_F6ZVEAnuEeOIkI63lPisZg" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_K4x6oAnuEeOIkI63lPisZg"/>
   <handlers xmi:id="_ekqZpwc0EeOgF6k0_n958Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_ekqZpgc0EeOgF6k0_n958Q"/>
+  <handlers xmi:id="_V4hXcE1rEeSti-fsXBVUMQ" elementId="" command="_XwvdUE1rEeSti-fsXBVUMQ"/>
   <bindingTables xmi:id="_ekqZngc0EeOgF6k0_n958Q" bindingContext="_sUwwQA_jEeO_4LEaCI1c-g">
     <bindings xmi:id="_Jz_AgEd2EeSeSshVzL7ILQ" elementId="com.aljoschability.vilima.rcp.keybinding.1" keySequence="M1+X" command="_CSzXMD0nEeSYS5JDjizolA"/>
     <bindings xmi:id="_EUoPkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.keybinding.0" keySequence="M1+C" command="_FjsgMD0nEeSYS5JDjizolA"/>
@@ -84,6 +88,7 @@
   <commands xmi:id="_lW06oD0nEeSYS5JDjizolA" elementId="com.aljoschability.vilima.commands.edit.invertselection" commandName="Invert Selection"/>
   <commands xmi:id="_K4x6oAnuEeOIkI63lPisZg" elementId="com.aljoschability.vilima.commands.help.documentation" commandName="Documentation"/>
   <commands xmi:id="_ekqZpgc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.commands.help.about" commandName="About"/>
+  <commands xmi:id="_XwvdUE1rEeSti-fsXBVUMQ" elementId="com.aljoschability.vilima.commands.actions.clean" commandName="Clean"/>
   <addons xmi:id="_ekqZkgc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_ekqZkwc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_ekqZlAc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

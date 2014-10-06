@@ -49,24 +49,32 @@ class MkvFile  {
 	String segmentUid
 	String segmentPreviousUid
 	String segmentNextUid
-	long segmentTimecodeScale = "1000000"
 	long segmentDuration ="-1"
 	long segmentDate ="-1"
 	String segmentTitle
 	String segmentMuxingApp
 	String segmentWritingApp
 	contains MkvTrack[] tracks
+	contains VilimaAttachment[] attachments
+	contains MkvChapterEdition[] editions
 	contains MkvTag[] tags
-	contains MkvAttachment[] attachments
-	contains MkvChapter[] chapters
 }
 
-class MkvAttachment{
+class VilimaAttachment{
 	String name
+	String description
+	String mimeType
+	long size
 }
 
-class MkvChapter{
-	String name
+class MkvChapterEdition{
+	long uid
+	contains MkvChapterEntry[] entries
+}
+
+class MkvChapterEntry {
+	long start
+	long end
 }
 
 enum MkvTrackType {

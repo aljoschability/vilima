@@ -70,7 +70,6 @@ public class MkvFileItemProvider
 			addSegmentUidPropertyDescriptor(object);
 			addSegmentPreviousUidPropertyDescriptor(object);
 			addSegmentNextUidPropertyDescriptor(object);
-			addSegmentTimecodeScalePropertyDescriptor(object);
 			addSegmentDurationPropertyDescriptor(object);
 			addSegmentDatePropertyDescriptor(object);
 			addSegmentTitlePropertyDescriptor(object);
@@ -235,28 +234,6 @@ public class MkvFileItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Segment Timecode Scale feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSegmentTimecodeScalePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentTimecodeScale_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentTimecodeScale_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_TIMECODE_SCALE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This adds a property descriptor for the Segment Duration feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -379,9 +356,9 @@ public class MkvFileItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__TRACKS);
-			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__TAGS);
 			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__ATTACHMENTS);
-			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__CHAPTERS);
+			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__EDITIONS);
+			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__TAGS);
 		}
 		return childrenFeatures;
 	}
@@ -444,7 +421,6 @@ public class MkvFileItemProvider
 			case VilimaPackage.MKV_FILE__SEGMENT_UID:
 			case VilimaPackage.MKV_FILE__SEGMENT_PREVIOUS_UID:
 			case VilimaPackage.MKV_FILE__SEGMENT_NEXT_UID:
-			case VilimaPackage.MKV_FILE__SEGMENT_TIMECODE_SCALE:
 			case VilimaPackage.MKV_FILE__SEGMENT_DURATION:
 			case VilimaPackage.MKV_FILE__SEGMENT_DATE:
 			case VilimaPackage.MKV_FILE__SEGMENT_TITLE:
@@ -453,9 +429,9 @@ public class MkvFileItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case VilimaPackage.MKV_FILE__TRACKS:
-			case VilimaPackage.MKV_FILE__TAGS:
 			case VilimaPackage.MKV_FILE__ATTACHMENTS:
-			case VilimaPackage.MKV_FILE__CHAPTERS:
+			case VilimaPackage.MKV_FILE__EDITIONS:
+			case VilimaPackage.MKV_FILE__TAGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -480,18 +456,18 @@ public class MkvFileItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(VilimaPackage.Literals.MKV_FILE__ATTACHMENTS,
+				 VilimaFactory.eINSTANCE.createVilimaAttachment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(VilimaPackage.Literals.MKV_FILE__EDITIONS,
+				 VilimaFactory.eINSTANCE.createMkvChapterEdition()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(VilimaPackage.Literals.MKV_FILE__TAGS,
 				 VilimaFactory.eINSTANCE.createMkvTag()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(VilimaPackage.Literals.MKV_FILE__ATTACHMENTS,
-				 VilimaFactory.eINSTANCE.createMkvAttachment()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(VilimaPackage.Literals.MKV_FILE__CHAPTERS,
-				 VilimaFactory.eINSTANCE.createMkvChapter()));
 	}
 
 	/**

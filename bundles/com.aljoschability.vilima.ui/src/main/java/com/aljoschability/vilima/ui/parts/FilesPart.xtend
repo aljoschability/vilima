@@ -25,9 +25,12 @@ import org.eclipse.swt.widgets.Tree
 import org.eclipse.swt.widgets.TreeColumn
 import java.util.List
 import com.aljoschability.vilima.VilimaContent
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService
+import com.aljoschability.vilima.format.VilimaFormatter
 
 class FilesPart {
 	@Inject IContentManager manager
+	@Inject ESelectionService selectionService
 
 	TreeViewer viewer
 
@@ -40,32 +43,113 @@ class FilesPart {
 
 		viewer = new TreeViewer(tree)
 		viewer.contentProvider = new VilimaContentProvider(manager)
+		viewer.addSelectionChangedListener(
+			[ e |
+				selectionService.selection = viewer.selection
+			])
 
+		// empty column to remove the tree expansion space on first column
 		createEmptyColumn()
 
+		// file icon to show
 		createIconColumn()
 
-		//		createStringColumn("Path", 30, VilimaPackage.Literals.MKV_FILE__FILE_PATH)
+		// the file name
 		createStringColumn("Name", 140, VilimaPackage.Literals.MKV_FILE__FILE_NAME)
 
+		// the title of the segment
+		createStringColumn("Title", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_TITLE)
+
+		// relevant file contents
+		createCountColumn("Tracks", 49, VilimaPackage.Literals.MKV_FILE__TRACKS)
+		createAttachmentColumn()
+		createChaptersColumn()
+		createTagsColumn()
+
+		// the file size
 		createSizeColumn("Size", 63, VilimaPackage.Literals.MKV_FILE__FILE_SIZE)
 
-		//		createDateColumn("File Date", 30, VilimaPackage.Literals.MKV_FILE__FILE_DATE)
-		//		createDateColumn("Segment Date", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_DATE)
+		// the segment duration
 		createDurationColumn("Duration", 66, VilimaPackage.Literals.MKV_FILE__SEGMENT_DURATION)
 
-		//		createStringColumn("Title", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_TITLE)
-		createStringColumn("UID", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_UID)
+	}
 
-		//		createStringColumn("Next UID", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_NEXT_UID)
-		//		createStringColumn("Prev UID", 30, VilimaPackage.Literals.MKV_FILE__SEGMENT_PREVIOUS_UID)
-		createCountColumn("Tracks", 49, VilimaPackage.Literals.MKV_FILE__TRACKS)
-		createCountColumn("Attachments", 83, VilimaPackage.Literals.MKV_FILE__ATTACHMENTS)
-		createCountColumn("Chapters", 62, VilimaPackage.Literals.MKV_FILE__CHAPTERS)
-		createCountColumn("Tags", 40, VilimaPackage.Literals.MKV_FILE__TAGS)
+	def createTagsColumn() {
+		val column = new TreeColumn(viewer.tree, SWT::CENTER)
 
-		//		createStringColumn("Muxing App", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_MUXING_APP)
-		createStringColumn("Writing App", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_WRITING_APP)
+		column.moveable = true
+		column.resizable = true
+		column.width = 40
+		column.text = "Tags"
+
+		val viewerColumn = new TreeViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkvFile) {
+					val value = element.tags.size
+					if (value > 0) {
+						return String.valueOf(value)
+					}
+				}
+				return ""
+			}
+		}
+	}
+
+	def createAttachmentColumn() {
+		val column = new TreeColumn(viewer.tree, SWT::LEAD)
+		column.moveable = true
+		column.resizable = true
+		column.width = 83
+		column.text = "Attachments"
+
+		val viewerColumn = new TreeViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkvFile) {
+					val b = new StringBuilder
+
+					for (att : element.attachments) {
+						b.append(att.name)
+						b.append(" (")
+						b.append(att.size)
+						b.append("bytes)")
+						b.append(", ")
+					}
+
+					if (b.length != 0) {
+						return b.toString.substring(0, b.length - 2)
+					}
+				}
+				return ""
+			}
+		}
+	}
+
+	def createChaptersColumn() {
+		val column = new TreeColumn(viewer.tree, SWT::CENTER)
+		column.moveable = true
+		column.resizable = true
+		column.width = 62
+		column.text = "Chapters"
+
+		val viewerColumn = new TreeViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkvFile) {
+					var count = 0
+					for (edition : element.editions) {
+						for (chapter : edition.entries) {
+							count++
+						}
+					}
+					if (count > 0) {
+						return String.valueOf(count)
+					}
+				}
+				return ""
+			}
+		}
 	}
 
 	private def createCountColumn(String text, int width, EStructuralFeature feature) {
@@ -112,14 +196,6 @@ class FilesPart {
 		}
 	}
 
-	new() {
-		NF = NumberFormat::getNumberInstance
-		NF.maximumFractionDigits = 2
-	}
-
-	val SimpleDateFormat DF = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
-	val NumberFormat NF
-
 	private def createDurationColumn(String text, int width, EStructuralFeature feature) {
 		val column = new TreeColumn(viewer.tree, SWT::TRAIL)
 
@@ -161,48 +237,11 @@ class FilesPart {
 
 		val viewerColumn = new TreeViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
-
 			override getText(Object element) {
 				if (element instanceof EObject) {
-					val size = element.eGet(feature) as Long
-
-					var i = 1
-					var result = size as double
-					while (result > 1024) {
-						result = result / 1024d
-						i++
-					}
-
-					val unit = switch (i) {
-						case 2: "kB"
-						case 3: "MB"
-						case 4: "GB"
-						default: "Bytes"
-					}
-
-					return NF.format(result) + " " + unit
-				}
-				return ""
-			}
-		}
-	}
-
-	private def createDateColumn(String text, int width, EStructuralFeature feature) {
-		val column = new TreeColumn(viewer.tree, SWT::LEAD)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = width
-		column.text = text
-
-		val viewerColumn = new TreeViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-
-			override getText(Object element) {
-				if (element instanceof EObject) {
-					val timestamp = element.eGet(feature) as Long
-					if (timestamp > 0) {
-						return DF.format(timestamp)
+					val size = element.eGet(feature)
+					if (size instanceof Long) {
+						return VilimaFormatter::fileSize(size)
 					}
 				}
 				return ""

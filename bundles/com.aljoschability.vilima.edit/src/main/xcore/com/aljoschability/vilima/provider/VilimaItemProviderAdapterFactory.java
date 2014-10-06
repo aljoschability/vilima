@@ -233,49 +233,72 @@ public class VilimaItemProviderAdapterFactory extends VilimaAdapterFactory imple
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.MkvAttachment} instances.
+	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.VilimaAttachment} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MkvAttachmentItemProvider mkvAttachmentItemProvider;
+	protected VilimaAttachmentItemProvider vilimaAttachmentItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.aljoschability.vilima.MkvAttachment}.
+	 * This creates an adapter for a {@link com.aljoschability.vilima.VilimaAttachment}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMkvAttachmentAdapter() {
-		if (mkvAttachmentItemProvider == null) {
-			mkvAttachmentItemProvider = new MkvAttachmentItemProvider(this);
+	public Adapter createVilimaAttachmentAdapter() {
+		if (vilimaAttachmentItemProvider == null) {
+			vilimaAttachmentItemProvider = new VilimaAttachmentItemProvider(this);
 		}
 
-		return mkvAttachmentItemProvider;
+		return vilimaAttachmentItemProvider;
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.MkvChapter} instances.
+	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.MkvChapterEdition} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected MkvChapterItemProvider mkvChapterItemProvider;
+	protected MkvChapterEditionItemProvider mkvChapterEditionItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.aljoschability.vilima.MkvChapter}.
+	 * This creates an adapter for a {@link com.aljoschability.vilima.MkvChapterEdition}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createMkvChapterAdapter() {
-		if (mkvChapterItemProvider == null) {
-			mkvChapterItemProvider = new MkvChapterItemProvider(this);
+	public Adapter createMkvChapterEditionAdapter() {
+		if (mkvChapterEditionItemProvider == null) {
+			mkvChapterEditionItemProvider = new MkvChapterEditionItemProvider(this);
 		}
 
-		return mkvChapterItemProvider;
+		return mkvChapterEditionItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.MkvChapterEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MkvChapterEntryItemProvider mkvChapterEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.aljoschability.vilima.MkvChapterEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMkvChapterEntryAdapter() {
+		if (mkvChapterEntryItemProvider == null) {
+			mkvChapterEntryItemProvider = new MkvChapterEntryItemProvider(this);
+		}
+
+		return mkvChapterEntryItemProvider;
 	}
 
 	/**
@@ -453,8 +476,9 @@ public class VilimaItemProviderAdapterFactory extends VilimaAdapterFactory imple
 		if (subtitleCodecItemProvider != null) subtitleCodecItemProvider.dispose();
 		if (vilimaContentItemProvider != null) vilimaContentItemProvider.dispose();
 		if (mkvFileItemProvider != null) mkvFileItemProvider.dispose();
-		if (mkvAttachmentItemProvider != null) mkvAttachmentItemProvider.dispose();
-		if (mkvChapterItemProvider != null) mkvChapterItemProvider.dispose();
+		if (vilimaAttachmentItemProvider != null) vilimaAttachmentItemProvider.dispose();
+		if (mkvChapterEditionItemProvider != null) mkvChapterEditionItemProvider.dispose();
+		if (mkvChapterEntryItemProvider != null) mkvChapterEntryItemProvider.dispose();
 		if (mkvTrackItemProvider != null) mkvTrackItemProvider.dispose();
 		if (mkvTagItemProvider != null) mkvTagItemProvider.dispose();
 		if (mkvTagEntryItemProvider != null) mkvTagEntryItemProvider.dispose();

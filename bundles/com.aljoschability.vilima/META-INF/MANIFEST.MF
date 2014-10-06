@@ -22,6 +22,7 @@ Require-Bundle: com.aljoschability.eclipse.core.runtime,
  org.apache.commons.io;bundle-version="2.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.aljoschability.vilima,
+ com.aljoschability.vilima.format,
  com.aljoschability.vilima.impl,
  com.aljoschability.vilima.jobs,
  com.aljoschability.vilima.reading,

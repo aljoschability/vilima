@@ -3,7 +3,7 @@
 package com.aljoschability.vilima.provider;
 
 
-import com.aljoschability.vilima.MkvAttachment;
+import com.aljoschability.vilima.VilimaAttachment;
 import com.aljoschability.vilima.VilimaPackage;
 
 import java.util.Collection;
@@ -26,12 +26,12 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.aljoschability.vilima.MkvAttachment} object.
+ * This is the item provider adapter for a {@link com.aljoschability.vilima.VilimaAttachment} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class MkvAttachmentItemProvider 
+public class VilimaAttachmentItemProvider 
 	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
@@ -45,7 +45,7 @@ public class MkvAttachmentItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MkvAttachmentItemProvider(AdapterFactory adapterFactory) {
+	public VilimaAttachmentItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,6 +61,9 @@ public class MkvAttachmentItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addDescriptionPropertyDescriptor(object);
+			addMimeTypePropertyDescriptor(object);
+			addSizePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -76,9 +79,9 @@ public class MkvAttachmentItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvAttachment_name_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvAttachment_name_feature", "_UI_MkvAttachment_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_ATTACHMENT__NAME,
+				 getString("_UI_VilimaAttachment_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaAttachment_name_feature", "_UI_VilimaAttachment_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_ATTACHMENT__NAME,
 				 true,
 				 false,
 				 false,
@@ -88,14 +91,80 @@ public class MkvAttachmentItemProvider
 	}
 
 	/**
-	 * This returns MkvAttachment.gif.
+	 * This adds a property descriptor for the Description feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDescriptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaAttachment_description_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaAttachment_description_feature", "_UI_VilimaAttachment_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_ATTACHMENT__DESCRIPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Mime Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMimeTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaAttachment_mimeType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaAttachment_mimeType_feature", "_UI_VilimaAttachment_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_ATTACHMENT__MIME_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Size feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSizePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaAttachment_size_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaAttachment_size_feature", "_UI_VilimaAttachment_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_ATTACHMENT__SIZE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns VilimaAttachment.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/MkvAttachment")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VilimaAttachment")); //$NON-NLS-1$
 	}
 
 	/**
@@ -106,10 +175,10 @@ public class MkvAttachmentItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((MkvAttachment)object).getName();
+		String label = ((VilimaAttachment)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_MkvAttachment_type") : //$NON-NLS-1$
-			getString("_UI_MkvAttachment_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_VilimaAttachment_type") : //$NON-NLS-1$
+			getString("_UI_VilimaAttachment_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 
@@ -124,8 +193,11 @@ public class MkvAttachmentItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(MkvAttachment.class)) {
-			case VilimaPackage.MKV_ATTACHMENT__NAME:
+		switch (notification.getFeatureID(VilimaAttachment.class)) {
+			case VilimaPackage.VILIMA_ATTACHMENT__NAME:
+			case VilimaPackage.VILIMA_ATTACHMENT__DESCRIPTION:
+			case VilimaPackage.VILIMA_ATTACHMENT__MIME_TYPE:
+			case VilimaPackage.VILIMA_ATTACHMENT__SIZE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
