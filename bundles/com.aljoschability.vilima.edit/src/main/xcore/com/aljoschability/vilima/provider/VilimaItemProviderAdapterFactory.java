@@ -95,6 +95,29 @@ public class VilimaItemProviderAdapterFactory extends VilimaAdapterFactory imple
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.VilimaContentType} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VilimaContentTypeItemProvider vilimaContentTypeItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.aljoschability.vilima.VilimaContentType}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVilimaContentTypeAdapter() {
+		if (vilimaContentTypeItemProvider == null) {
+			vilimaContentTypeItemProvider = new VilimaContentTypeItemProvider(this);
+		}
+
+		return vilimaContentTypeItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.VilimaGenre} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -115,75 +138,6 @@ public class VilimaItemProviderAdapterFactory extends VilimaAdapterFactory imple
 		}
 
 		return vilimaGenreItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.VideoCodec} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VideoCodecItemProvider videoCodecItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.aljoschability.vilima.VideoCodec}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVideoCodecAdapter() {
-		if (videoCodecItemProvider == null) {
-			videoCodecItemProvider = new VideoCodecItemProvider(this);
-		}
-
-		return videoCodecItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.AudioCodec} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected AudioCodecItemProvider audioCodecItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.aljoschability.vilima.AudioCodec}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createAudioCodecAdapter() {
-		if (audioCodecItemProvider == null) {
-			audioCodecItemProvider = new AudioCodecItemProvider(this);
-		}
-
-		return audioCodecItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.aljoschability.vilima.SubtitleCodec} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SubtitleCodecItemProvider subtitleCodecItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.aljoschability.vilima.SubtitleCodec}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createSubtitleCodecAdapter() {
-		if (subtitleCodecItemProvider == null) {
-			subtitleCodecItemProvider = new SubtitleCodecItemProvider(this);
-		}
-
-		return subtitleCodecItemProvider;
 	}
 
 	/**
@@ -470,10 +424,8 @@ public class VilimaItemProviderAdapterFactory extends VilimaAdapterFactory imple
 	 */
 	public void dispose() {
 		if (vilimaCatalogItemProvider != null) vilimaCatalogItemProvider.dispose();
+		if (vilimaContentTypeItemProvider != null) vilimaContentTypeItemProvider.dispose();
 		if (vilimaGenreItemProvider != null) vilimaGenreItemProvider.dispose();
-		if (videoCodecItemProvider != null) videoCodecItemProvider.dispose();
-		if (audioCodecItemProvider != null) audioCodecItemProvider.dispose();
-		if (subtitleCodecItemProvider != null) subtitleCodecItemProvider.dispose();
 		if (vilimaContentItemProvider != null) vilimaContentItemProvider.dispose();
 		if (mkvFileItemProvider != null) mkvFileItemProvider.dispose();
 		if (vilimaAttachmentItemProvider != null) vilimaAttachmentItemProvider.dispose();

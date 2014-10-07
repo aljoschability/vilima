@@ -4,35 +4,15 @@ package com.aljoschability.vilima
 
 class VilimaCatalog {
 	contains VilimaGenre[] genres
-	contains VideoCodec[] videoCodecs
+	contains VilimaContentType[] contentTypes
+}
+
+class VilimaContentType {
+	String[1] name
 }
 
 class VilimaGenre {
 	String[1] name
-}
-
-abstract class Codec {
-	String[1] ^id
-	String[1] name
-}
-
-/*
- * - fourcc
- *   + xvid
- *   + mp42
- * - avc
- *   + profiles [77=Main, 100=High]
- *   + levels [31=3.1, 41=4.1]
- */
-class VideoCodec extends Codec {
-	String[1] ^type
-	String description
-}
-
-class AudioCodec extends Codec {
-}
-
-class SubtitleCodec extends Codec {
 }
 
 /* =================================== */
@@ -117,12 +97,8 @@ class MkvTrack {
 }
 
 class MkvTag {
-	int ^typeValue = "50"
+	long ^typeValue = "50"
 	String ^type
-	long trackUid = "0"
-	long chapterUid = "0"
-	long editionUid = "0"
-	long attachmentUid = "0"
 	contains MkvTagEntry[] entries
 }
 
@@ -133,3 +109,25 @@ class MkvTagEntry {
 	String string
 	contains MkvTagEntry[] entries
 }
+
+/*
+ * - fourcc
+ *   + xvid
+ *   + mp42
+ * - avc
+ *   + profiles [77=Main, 100=High]
+ *   + levels [31=3.1, 41=4.1]
+abstract class Codec {
+	String[1] ^id
+	String[1] name
+}
+class VideoCodec extends Codec {
+	String[1] ^type
+	String description
+}
+class AudioCodec extends Codec {
+}
+
+class SubtitleCodec extends Codec {
+}
+ */

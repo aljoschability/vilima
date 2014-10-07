@@ -3,7 +3,7 @@
 package com.aljoschability.vilima.provider;
 
 
-import com.aljoschability.vilima.VideoCodec;
+import com.aljoschability.vilima.VilimaContentType;
 import com.aljoschability.vilima.VilimaPackage;
 
 import java.util.Collection;
@@ -12,25 +12,40 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
+import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.aljoschability.vilima.VideoCodec} object.
+ * This is the item provider adapter for a {@link com.aljoschability.vilima.VilimaContentType} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class VideoCodecItemProvider extends CodecItemProvider {
+public class VilimaContentTypeItemProvider 
+	extends ItemProviderAdapter
+	implements
+		IEditingDomainItemProvider,
+		IStructuredItemContentProvider,
+		ITreeItemContentProvider,
+		IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VideoCodecItemProvider(AdapterFactory adapterFactory) {
+	public VilimaContentTypeItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -45,26 +60,25 @@ public class VideoCodecItemProvider extends CodecItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addTypePropertyDescriptor(object);
-			addDescriptionPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Type feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addTypePropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VideoCodec_type_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_VideoCodec_type_feature", "_UI_VideoCodec_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.VIDEO_CODEC__TYPE,
+				 getString("_UI_VilimaContentType_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaContentType_name_feature", "_UI_VilimaContentType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_CONTENT_TYPE__NAME,
 				 true,
 				 false,
 				 false,
@@ -74,36 +88,14 @@ public class VideoCodecItemProvider extends CodecItemProvider {
 	}
 
 	/**
-	 * This adds a property descriptor for the Description feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDescriptionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_VideoCodec_description_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_VideoCodec_description_feature", "_UI_VideoCodec_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.VIDEO_CODEC__DESCRIPTION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns VideoCodec.gif.
+	 * This returns VilimaContentType.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VideoCodec")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VilimaContentType")); //$NON-NLS-1$
 	}
 
 	/**
@@ -114,10 +106,10 @@ public class VideoCodecItemProvider extends CodecItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VideoCodec)object).getName();
+		String label = ((VilimaContentType)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VideoCodec_type") : //$NON-NLS-1$
-			getString("_UI_VideoCodec_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_VilimaContentType_type") : //$NON-NLS-1$
+			getString("_UI_VilimaContentType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 
@@ -132,9 +124,8 @@ public class VideoCodecItemProvider extends CodecItemProvider {
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(VideoCodec.class)) {
-			case VilimaPackage.VIDEO_CODEC__TYPE:
-			case VilimaPackage.VIDEO_CODEC__DESCRIPTION:
+		switch (notification.getFeatureID(VilimaContentType.class)) {
+			case VilimaPackage.VILIMA_CONTENT_TYPE__NAME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -151,6 +142,17 @@ public class VideoCodecItemProvider extends CodecItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return VilimaEditPlugin.INSTANCE;
 	}
 
 }

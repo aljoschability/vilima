@@ -78,7 +78,7 @@ public class VilimaCatalogItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(VilimaPackage.Literals.VILIMA_CATALOG__GENRES);
-			childrenFeatures.add(VilimaPackage.Literals.VILIMA_CATALOG__VIDEO_CODECS);
+			childrenFeatures.add(VilimaPackage.Literals.VILIMA_CATALOG__CONTENT_TYPES);
 		}
 		return childrenFeatures;
 	}
@@ -132,7 +132,7 @@ public class VilimaCatalogItemProvider
 
 		switch (notification.getFeatureID(VilimaCatalog.class)) {
 			case VilimaPackage.VILIMA_CATALOG__GENRES:
-			case VilimaPackage.VILIMA_CATALOG__VIDEO_CODECS:
+			case VilimaPackage.VILIMA_CATALOG__CONTENT_TYPES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -157,8 +157,8 @@ public class VilimaCatalogItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(VilimaPackage.Literals.VILIMA_CATALOG__VIDEO_CODECS,
-				 VilimaFactory.eINSTANCE.createVideoCodec()));
+				(VilimaPackage.Literals.VILIMA_CATALOG__CONTENT_TYPES,
+				 VilimaFactory.eINSTANCE.createVilimaContentType()));
 	}
 
 	/**

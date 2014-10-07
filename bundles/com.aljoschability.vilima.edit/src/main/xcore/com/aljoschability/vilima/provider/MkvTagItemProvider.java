@@ -65,10 +65,6 @@ public class MkvTagItemProvider
 
 			addTypeValuePropertyDescriptor(object);
 			addTypePropertyDescriptor(object);
-			addTrackUidPropertyDescriptor(object);
-			addChapterUidPropertyDescriptor(object);
-			addEditionUidPropertyDescriptor(object);
-			addAttachmentUidPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -113,94 +109,6 @@ public class MkvTagItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Track Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addTrackUidPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MkvTag_trackUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTag_trackUid_feature", "_UI_MkvTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TAG__TRACK_UID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Chapter Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addChapterUidPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MkvTag_chapterUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTag_chapterUid_feature", "_UI_MkvTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TAG__CHAPTER_UID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Edition Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEditionUidPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MkvTag_editionUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTag_editionUid_feature", "_UI_MkvTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TAG__EDITION_UID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Attachment Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAttachmentUidPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_MkvTag_attachmentUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTag_attachmentUid_feature", "_UI_MkvTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TAG__ATTACHMENT_UID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -273,10 +181,6 @@ public class MkvTagItemProvider
 		switch (notification.getFeatureID(MkvTag.class)) {
 			case VilimaPackage.MKV_TAG__TYPE_VALUE:
 			case VilimaPackage.MKV_TAG__TYPE:
-			case VilimaPackage.MKV_TAG__TRACK_UID:
-			case VilimaPackage.MKV_TAG__CHAPTER_UID:
-			case VilimaPackage.MKV_TAG__EDITION_UID:
-			case VilimaPackage.MKV_TAG__ATTACHMENT_UID:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case VilimaPackage.MKV_TAG__ENTRIES:

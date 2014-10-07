@@ -386,65 +386,69 @@ public class MatroskaReader {
 			if (MatroskaNode.Tag.matches(element)) {
 				MkvTag tag = VilimaFactory.eINSTANCE.createMkvTag();
 
-				readTag((EbmlMasterElement) element, tag);
-
-				file.getTags().add(tag);
+				// only add when tags are global (not track-specific)
+				if (readTag((EbmlMasterElement) element, tag)) {
+					file.getTags().add(tag);
+				}
 			}
 
 			seeker.skip(element);
 		}
 	}
 
-	private void readTag(EbmlMasterElement parent, MkvTag tag) throws IOException {
+	private boolean readTag(EbmlMasterElement parent, MkvTag tag) throws IOException {
+		boolean global = true;
+
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.Targets.matches(element)) {
-				readTagTargets((EbmlMasterElement) element, tag);
+				global = readTagTargets((EbmlMasterElement) element, tag);
 			} else if (MatroskaNode.SimpleTag.matches(element)) {
 				tag.getEntries().add(readTagsSimpleTag((EbmlMasterElement) element));
 			}
 
 			seeker.skip(element);
 		}
+
+		return global;
 	}
 
-	private void readTagTargets(EbmlMasterElement parent, MkvTag tag) throws IOException {
+	private boolean readTagTargets(EbmlMasterElement parent, MkvTag tag) throws IOException {
+		boolean global = true;
+
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
-			if (MatroskaNode.TagTrackUID.matches(element)) {
-				long value = seeker.readLong((EbmlDataElement) element);
-
-				tag.setTrackUid(value);
+			if (MatroskaNode.TargetTypeValue.matches(element)) {
+				tag.setTypeValue(seeker.readLong((EbmlDataElement) element));
+			} else if (MatroskaNode.TargetType.matches(element)) {
+				tag.setType(seeker.readString((EbmlDataElement) element));
+			} else if (MatroskaNode.TagTrackUID.matches(element)) {
+				global = false;
+			} else if (MatroskaNode.TagEditionUID.matches(element)) {
+				global = false;
 			} else if (MatroskaNode.TagChapterUID.matches(element)) {
-				long value = seeker.readLong((EbmlDataElement) element);
-
-				tag.setChapterUid(value);
+				global = false;
 			} else if (MatroskaNode.TagAttachmentUID.matches(element)) {
-				long value = seeker.readLong((EbmlDataElement) element);
-
-				tag.setAttachmentUid(value);
+				global = false;
 			}
 
 			seeker.skip(element);
 		}
+
+		return global;
 	}
 
 	private MkvTagEntry readTagsSimpleTag(EbmlMasterElement parent) throws IOException {
 		MkvTagEntry tag = VilimaFactory.eINSTANCE.createMkvTagEntry();
 
 		EbmlElement element = null;
-
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.TagName.matches(element)) {
-				String value = seeker.readString((EbmlDataElement) element);
-
-				tag.setName(value);
+				tag.setName(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.TagString.matches(element)) {
-				String value = seeker.readString((EbmlDataElement) element);
-
-				tag.setString(value);
+				tag.setString(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.SimpleTag.matches(element)) {
-				tag.getEntries().add(readTagsSimpleTag(parent));
+				tag.getEntries().add(readTagsSimpleTag((EbmlMasterElement) element));
 			}
 
 			seeker.skip(element);

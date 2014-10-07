@@ -59,7 +59,7 @@ public class MetadataPart {
 
 	private void createTypeGroup(Composite parent) {
 		Group typeGroup = new Group(parent, SWT.NONE);
-		typeGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
+		typeGroup.setLayout(GridLayoutFactory.swtDefaults().numColumns(3).create());
 		typeGroup.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		typeGroup.setText("Type");
 
@@ -148,6 +148,15 @@ public class MetadataPart {
 		Text dateData = new Text(showComposite, SWT.BORDER);
 		dateData.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 		controls.put("show.date", dateData);
+
+		// comment
+		Label commentLabel = new Label(showComposite, SWT.TRAIL);
+		commentLabel.setLayoutData(GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).create());
+		commentLabel.setText("Comment");
+
+		Text commentData = new Text(showComposite, SWT.BORDER);
+		commentData.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		controls.put("show.comment", commentData);
 	}
 
 	private void createMovieControls(Composite parent) {
@@ -250,9 +259,13 @@ public class MetadataPart {
 	}
 
 	private void parseFullTag(StringBuilder builder, MkvTag tag) {
+		builder.append(tag.getTypeValue());
+		builder.append(" (");
+		builder.append(tag.getType());
+		builder.append("):");
+		builder.append("\n");
+
 		for (MkvTagEntry entry : tag.getEntries()) {
-			builder.append(tag.getTypeValue());
-			builder.append("\n");
 			parseFullTagEntry(builder, entry, 1);
 		}
 	}
@@ -263,7 +276,7 @@ public class MetadataPart {
 		}
 
 		builder.append(entry.getName());
-		builder.append(": ");
+		builder.append("=");
 		builder.append(entry.getString());
 		builder.append("\n");
 
