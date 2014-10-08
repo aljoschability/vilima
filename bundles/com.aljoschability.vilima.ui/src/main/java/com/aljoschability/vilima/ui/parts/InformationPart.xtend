@@ -1,6 +1,7 @@
 package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkvFile
+import com.aljoschability.vilima.format.VilimaFormatter
 import java.util.Map
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -14,10 +15,11 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
-import com.aljoschability.vilima.format.VilimaFormatter
 
 class InformationPart {
 	val Map<String, Label> labelsMap = newLinkedHashMap
+
+	MkvFile input
 
 	@PostConstruct
 	def void create(Composite parent) {
@@ -28,10 +30,6 @@ class InformationPart {
 		createFileGroup(composite)
 
 		createSegmentGroup(composite)
-
-		createTagsGroup(composite)
-
-		createTracksGroup(composite)
 	}
 
 	private def createFileGroup(Composite parent) {
@@ -41,7 +39,7 @@ class InformationPart {
 		group.text = "File"
 
 		// path
-		val pathLabel = new Label(group, SWT::LEAD)
+		val pathLabel = new Label(group, SWT::TRAIL)
 		pathLabel.text = "Path"
 
 		val pathData = new Label(group, SWT::LEAD)
@@ -49,7 +47,7 @@ class InformationPart {
 		labelsMap.put("file.path", pathData)
 
 		// name
-		val nameLabel = new Label(group, SWT::LEAD)
+		val nameLabel = new Label(group, SWT::TRAIL)
 		nameLabel.text = "Name"
 
 		val nameData = new Label(group, SWT::LEAD)
@@ -57,7 +55,7 @@ class InformationPart {
 		labelsMap.put("file.name", nameData)
 
 		// size
-		val sizeLabel = new Label(group, SWT::LEAD)
+		val sizeLabel = new Label(group, SWT::TRAIL)
 		sizeLabel.text = "Size"
 
 		val sizeData = new Label(group, SWT::LEAD)
@@ -65,7 +63,7 @@ class InformationPart {
 		labelsMap.put("file.size", sizeData)
 
 		// size
-		val modifiedLabel = new Label(group, SWT::LEAD)
+		val modifiedLabel = new Label(group, SWT::TRAIL)
 		modifiedLabel.text = "Modified"
 
 		val modifiedData = new Label(group, SWT::LEAD)
@@ -80,7 +78,7 @@ class InformationPart {
 		group.text = "Segment"
 
 		// title
-		val titleLabel = new Label(group, SWT::LEAD)
+		val titleLabel = new Label(group, SWT::TRAIL)
 		titleLabel.text = "Title"
 
 		val titleData = new Label(group, SWT::LEAD)
@@ -88,7 +86,7 @@ class InformationPart {
 		labelsMap.put("segment.title", titleData)
 
 		// muxer
-		val muxerLabel = new Label(group, SWT::LEAD)
+		val muxerLabel = new Label(group, SWT::TRAIL)
 		muxerLabel.text = "Muxer"
 
 		val muxerData = new Label(group, SWT::LEAD)
@@ -96,7 +94,7 @@ class InformationPart {
 		labelsMap.put("segment.muxingApp", muxerData)
 
 		// writer
-		val writerLabel = new Label(group, SWT::LEAD)
+		val writerLabel = new Label(group, SWT::TRAIL)
 		writerLabel.text = "Writer"
 
 		val writerData = new Label(group, SWT::LEAD)
@@ -104,7 +102,7 @@ class InformationPart {
 		labelsMap.put("segment.writingApp", writerData)
 
 		// date
-		val dateLabel = new Label(group, SWT::LEAD)
+		val dateLabel = new Label(group, SWT::TRAIL)
 		dateLabel.text = "Date"
 
 		val dateData = new Label(group, SWT::LEAD)
@@ -112,21 +110,14 @@ class InformationPart {
 		labelsMap.put("segment.date", dateData)
 	}
 
-	private def createTagsGroup(Composite parent) {
-		val group = new Group(parent, SWT::NONE)
-		group.layout = GridLayoutFactory::fillDefaults.numColumns(2).margins(6, 6).create
-		group.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		group.text = "Tags"
-	}
-
-	private def createTracksGroup(Composite parent) {
-		val group = new Group(parent, SWT::NONE)
-		group.layout = GridLayoutFactory::fillDefaults.numColumns(2).margins(6, 6).create
-		group.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		group.text = "Tracks"
-	}
-
 	def private show(MkvFile file) {
+		if (file == null) {
+			for (key : labelsMap.keySet) {
+				labelsMap.get(key).text = ""
+			}
+			return
+		}
+
 		labelsMap.get("file.name").text = String::valueOf(file.fileName)
 		labelsMap.get("file.path").text = String::valueOf(file.filePath)
 		labelsMap.get("file.size").text = String::valueOf(VilimaFormatter::fileSize(file.fileSize))
@@ -140,13 +131,17 @@ class InformationPart {
 
 	@Inject
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
+		input = null
+
 		if (selection != null && selection.size() == 1) {
 			val selected = selection.getFirstElement();
 			if (selected instanceof MkvFile) {
-				show(selected);
+				input = selected
 			}
-		} else {
-			System.out.println("empty selection or none selected!");
+		}
+
+		if (!labelsMap.empty) {
+			show(input)
 		}
 	}
 }

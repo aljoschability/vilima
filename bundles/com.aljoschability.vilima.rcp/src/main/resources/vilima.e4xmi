@@ -5,27 +5,36 @@
       <children xsi:type="advanced:Perspective" xmi:id="_ekrAoQc0EeOgF6k0_n958Q" label="">
         <children xsi:type="basic:PartSashContainer" xmi:id="_RdngUGM1EeOXbqwwsskOBw" elementId="" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_9zgf8EdvEeSeSshVzL7ILQ" elementId="" containerData="25">
-            <children xsi:type="basic:PartStack" xmi:id="_6FGk0EfNEeSxLbcBSUEuUQ" elementId="" containerData="50">
+            <children xsi:type="basic:PartStack" xmi:id="_6FGk0EfNEeSxLbcBSUEuUQ" elementId="" containerData="60">
               <children xsi:type="basic:Part" xmi:id="_w_eOkEwWEeSeU5z7yqX-3Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.MetadataPart" label="Metadata" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
             </children>
-            <children xsi:type="basic:PartStack" xmi:id="_xqprkEfOEeSxLbcBSUEuUQ" elementId="" containerData="50">
-              <children xsi:type="basic:Part" xmi:id="_JnAvcEPcEeShf-sMSroa6A" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.InformationPart" label="Information" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
+            <children xsi:type="basic:PartStack" xmi:id="_xqprkEfOEeSxLbcBSUEuUQ" elementId="" containerData="40">
               <children xsi:type="basic:Part" xmi:id="_UExv0GM1EeOXbqwwsskOBw" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.CatalogPart" label="Catalog" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/catalog.png"/>
             </children>
           </children>
-          <children xsi:type="basic:Part" xmi:id="_LCgBYAi8EeOn36YhCdmfuQ" elementId="" containerData="75" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="Files" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/files.png">
-            <menus xsi:type="menu:PopupMenu" xmi:id="_9PD3QGG-EeObvP6rYfVwSw" elementId="com.aljoschability.malimar.menus.listpart">
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_Ge7XQGMLEeObvP6rYfVwSw" elementId="" label="Refresh Files"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_R8SV8GMMEeObvP6rYfVwSw" elementId="" label="Clean Files"/>
-              <children xsi:type="menu:MenuSeparator" xmi:id="_WCJYEGMMEeObvP6rYfVwSw" elementId="com.aljoschability.malimar.ui.menuseparator.0"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_PZwikGG-EeObvP6rYfVwSw" elementId="com.aljoschability.malimar.ui.handledmenuitem.0" label="Create Clean-Up Script"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_ZupR8GHuEeObvP6rYfVwSw" elementId="com.aljoschability.malimar.ui.handledmenuitem.1" label="Create Rename Script"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_SJehIGN_EeOro_gLAvNijw" elementId="" label="Rename Files"/>
-              <children xsi:type="menu:HandledMenuItem" xmi:id="_m13IgGpBEeO_aLUcRZFLIQ" elementId="com.aljoschability.malimar.ui.handledmenuitem.2" label="List Missing Episodes"/>
-            </menus>
-            <toolbar xmi:id="_Tg924D0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.toolbar.0">
-              <children xsi:type="menu:DirectToolItem" xmi:id="_UoVHkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.directtoolitem.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ExitHandler"/>
-            </toolbar>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_0T3-8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.partsashcontainer.0" containerData="75">
+            <children xsi:type="basic:PartStack" xmi:id="_1xQi8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.partstack.0" containerData="70">
+              <children xsi:type="basic:Part" xmi:id="_LCgBYAi8EeOn36YhCdmfuQ" elementId="" containerData="75" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="Files" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/files.png">
+                <menus xsi:type="menu:PopupMenu" xmi:id="_9PD3QGG-EeObvP6rYfVwSw" elementId="com.aljoschability.malimar.menus.listpart">
+                  <children xsi:type="menu:HandledMenuItem" xmi:id="_Ge7XQGMLEeObvP6rYfVwSw" elementId="" label="Refresh Files"/>
+                  <children xsi:type="menu:HandledMenuItem" xmi:id="_R8SV8GMMEeObvP6rYfVwSw" elementId="" label="Clean Files"/>
+                  <children xsi:type="menu:MenuSeparator" xmi:id="_WCJYEGMMEeObvP6rYfVwSw" elementId="com.aljoschability.malimar.ui.menuseparator.0"/>
+                  <children xsi:type="menu:HandledMenuItem" xmi:id="_PZwikGG-EeObvP6rYfVwSw" elementId="com.aljoschability.malimar.ui.handledmenuitem.0" label="Create Clean-Up Script"/>
+                  <children xsi:type="menu:HandledMenuItem" xmi:id="_ZupR8GHuEeObvP6rYfVwSw" elementId="com.aljoschability.malimar.ui.handledmenuitem.1" label="Create Rename Script"/>
+                  <children xsi:type="menu:HandledMenuItem" xmi:id="_SJehIGN_EeOro_gLAvNijw" elementId="" label="Rename Files"/>
+                  <children xsi:type="menu:HandledMenuItem" xmi:id="_m13IgGpBEeO_aLUcRZFLIQ" elementId="com.aljoschability.malimar.ui.handledmenuitem.2" label="List Missing Episodes"/>
+                </menus>
+                <toolbar xmi:id="_Tg924D0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.toolbar.0">
+                  <children xsi:type="menu:DirectToolItem" xmi:id="_UoVHkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.directtoolitem.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ExitHandler"/>
+                </toolbar>
+              </children>
+            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_2PKm8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.partstack.1" containerData="30">
+              <children xsi:type="basic:Part" xmi:id="_3l1fIE72EeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.part.tracks" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.TracksPart" label="Tracks" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/tracks.png"/>
+              <children xsi:type="basic:Part" xmi:id="_zWdXoE7VEeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.part.attachments" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.AttachmentsPart" label="Attachments" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/attachments.png"/>
+              <children xsi:type="basic:Part" xmi:id="_4mEz8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.part.chapters" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.ChaptersPart" label="Chapters" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/chapters.png"/>
+              <children xsi:type="basic:Part" xmi:id="_JnAvcEPcEeShf-sMSroa6A" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.InformationPart" label="Segment" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
+            </children>
           </children>
         </children>
       </children>

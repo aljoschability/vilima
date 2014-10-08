@@ -12,6 +12,11 @@ final class Activator extends AbstractActivator {
 
 	override protected initialize() {
 		Activator::INSTANCE = this
+
+		addImage(VilimaImages::TRACK_TYPE_VIDEO)
+		addImage(VilimaImages::TRACK_TYPE_AUDIO)
+		addImage(VilimaImages::TRACK_TYPE_SUBTITLE)
+
 	}
 
 	override protected dispose() {

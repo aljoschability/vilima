@@ -61,7 +61,7 @@ class FilesPart {
 		createStringColumn("Title", 60, VilimaPackage.Literals.MKV_FILE__SEGMENT_TITLE)
 
 		// relevant file contents
-		createCountColumn("Tracks", 49, VilimaPackage.Literals.MKV_FILE__TRACKS)
+		createTracksColumn()
 		createAttachmentColumn()
 		createChaptersColumn()
 		createTagsColumn()
@@ -70,8 +70,30 @@ class FilesPart {
 		createSizeColumn("Size", 63, VilimaPackage.Literals.MKV_FILE__FILE_SIZE)
 
 		// the segment duration
-		createDurationColumn("Duration", 66, VilimaPackage.Literals.MKV_FILE__SEGMENT_DURATION)
+		createDurationColumn("Duration", 66)
 
+	}
+
+	def createTracksColumn() {
+		val column = new TreeColumn(viewer.tree, SWT::CENTER)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 49
+		column.text = "Tracks"
+
+		val viewerColumn = new TreeViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkvFile) {
+					val value = element.tracks.size
+					if (value > 0) {
+						return String.valueOf(value)
+					}
+				}
+				return ""
+			}
+		}
 	}
 
 	def createTagsColumn() {
@@ -97,7 +119,7 @@ class FilesPart {
 	}
 
 	def createAttachmentColumn() {
-		val column = new TreeColumn(viewer.tree, SWT::LEAD)
+		val column = new TreeColumn(viewer.tree, SWT::CENTER)
 		column.moveable = true
 		column.resizable = true
 		column.width = 83
@@ -107,18 +129,9 @@ class FilesPart {
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if (element instanceof MkvFile) {
-					val b = new StringBuilder
-
-					for (att : element.attachments) {
-						b.append(att.name)
-						b.append(" (")
-						b.append(att.size)
-						b.append("bytes)")
-						b.append(", ")
-					}
-
-					if (b.length != 0) {
-						return b.toString.substring(0, b.length - 2)
+					val value = element.attachments.size
+					if (value > 0) {
+						return String.valueOf(value)
 					}
 				}
 				return ""
@@ -196,7 +209,7 @@ class FilesPart {
 		}
 	}
 
-	private def createDurationColumn(String text, int width, EStructuralFeature feature) {
+	private def createDurationColumn(String text, int width) {
 		val column = new TreeColumn(viewer.tree, SWT::TRAIL)
 
 		column.moveable = true
@@ -208,19 +221,8 @@ class FilesPart {
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 
 			override getText(Object element) {
-				if (element instanceof EObject) {
-					val duration = element.eGet(feature) as Long
-
-					if (duration > 0) {
-						val ms = duration % 1000
-						val seconds = (duration / 1000) % 60;
-						val minutes = ((duration / (1000 * 60)) % 60);
-						val hours = ((duration / (1000 * 60 * 60)) % 24);
-
-						val format = "%d:%02d:%02d,%03d"
-
-						return String.format(format, hours, minutes, seconds, ms)
-					}
+				if (element instanceof MkvFile) {
+					return VilimaFormatter::getTime(element.segmentDuration)
 				}
 				return ""
 			}

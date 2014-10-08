@@ -53,8 +53,15 @@ class MkvChapterEdition{
 }
 
 class MkvChapterEntry {
-	long start
-	long end
+	long uid = "0"
+	long start = "-1"
+	long end = "-1"
+	contains VilimaChapterDisplay[] displays
+}
+
+class VilimaChapterDisplay {
+	String string
+	String language
 }
 
 enum MkvTrackType {

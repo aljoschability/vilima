@@ -14,6 +14,7 @@ import com.aljoschability.vilima.MkvTag;
 import com.aljoschability.vilima.MkvTagEntry;
 import com.aljoschability.vilima.MkvTrack;
 import com.aljoschability.vilima.MkvTrackType;
+import com.aljoschability.vilima.VilimaChapterDisplay;
 import com.aljoschability.vilima.VilimaFactory;
 
 public class MatroskaReader {
@@ -359,7 +360,6 @@ public class MatroskaReader {
 
 				readChapterAtom((EbmlMasterElement) element, entry);
 
-				System.out.println(entry);
 				chapter.getEntries().add(entry);
 			}
 
@@ -374,6 +374,27 @@ public class MatroskaReader {
 				entry.setStart(seeker.readLong((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapterTimeEnd.matches(element)) {
 				entry.setEnd(seeker.readLong((EbmlDataElement) element));
+			} else if (MatroskaNode.ChapterDisplay.matches(element)) {
+				VilimaChapterDisplay display = VilimaFactory.eINSTANCE.createVilimaChapterDisplay();
+
+				readChapterDisplay((EbmlMasterElement) element, display);
+
+				entry.getDisplays().add(display);
+			}
+
+			seeker.skip(element);
+		}
+	}
+
+	private void readChapterDisplay(EbmlMasterElement parent, VilimaChapterDisplay display) throws IOException {
+		EbmlElement element;
+		while ((element = seeker.nextChild(parent)) != null) {
+			if (MatroskaNode.ChapString.matches(element)) {
+				display.setString(seeker.readString((EbmlDataElement) element));
+			} else if (MatroskaNode.ChapLanguage.matches(element)) {
+				display.setLanguage(seeker.readString((EbmlDataElement) element));
+			} else if (MatroskaNode.ChapCountry.matches(element)) {
+				// TODO: ChapCountry not used
 			}
 
 			seeker.skip(element);
