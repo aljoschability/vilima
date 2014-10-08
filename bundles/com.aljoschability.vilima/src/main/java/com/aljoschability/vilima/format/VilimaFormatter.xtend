@@ -73,7 +73,7 @@ class VilimaFormatter {
 		}
 
 		if (code == "und") {
-			return '''? («code»)'''
+			return ""
 		}
 
 		switch (code) {

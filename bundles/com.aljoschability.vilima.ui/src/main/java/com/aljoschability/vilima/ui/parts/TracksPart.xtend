@@ -123,7 +123,10 @@ class TracksPart {
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if (element instanceof MkvTrack) {
-					return String.valueOf(element.name)
+					val name = element.name
+					if (name != null) {
+						return name
+					}
 				}
 				return ""
 			}
