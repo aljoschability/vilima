@@ -1,6 +1,5 @@
 package com.aljoschability.vilima.ui.parts
 
-import com.aljoschability.vilima.MkvFile
 import com.aljoschability.vilima.format.VilimaFormatter
 import java.util.Map
 import javax.annotation.PostConstruct
@@ -15,11 +14,12 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
+import com.aljoschability.vilima.VilimaFile
 
 class InformationPart {
 	val Map<String, Label> labelsMap = newLinkedHashMap
 
-	MkvFile input
+	VilimaFile input
 
 	@PostConstruct
 	def void create(Composite parent) {
@@ -30,6 +30,8 @@ class InformationPart {
 		createFileGroup(composite)
 
 		createSegmentGroup(composite)
+
+		show(input)
 	}
 
 	private def createFileGroup(Composite parent) {
@@ -110,23 +112,26 @@ class InformationPart {
 		labelsMap.put("segment.date", dateData)
 	}
 
-	def private show(MkvFile file) {
+	def private show(VilimaFile file) {
 		if (file == null) {
 			for (key : labelsMap.keySet) {
-				labelsMap.get(key).text = ""
+				val label = labelsMap.get(key)
+				if (!label.disposed) {
+					label.text = ""
+				}
 			}
 			return
 		}
 
-		labelsMap.get("file.name").text = String::valueOf(file.fileName)
-		labelsMap.get("file.path").text = String::valueOf(file.filePath)
-		labelsMap.get("file.size").text = String::valueOf(VilimaFormatter::fileSize(file.fileSize))
-		labelsMap.get("file.modified").text = String::valueOf(VilimaFormatter::date(file.fileDate))
+		labelsMap.get("file.name").text = String::valueOf(file.getFileName)
+		labelsMap.get("file.path").text = String::valueOf(file.getFilePath)
+		labelsMap.get("file.size").text = String::valueOf(VilimaFormatter::fileSize(file.getFileSize))
+		labelsMap.get("file.modified").text = String::valueOf(VilimaFormatter::date(file.getFileDate))
 
-		labelsMap.get("segment.title").text = String::valueOf(file.segmentTitle)
-		labelsMap.get("segment.date").text = String::valueOf(VilimaFormatter::date(file.segmentDate))
-		labelsMap.get("segment.muxingApp").text = String::valueOf(file.segmentMuxingApp)
-		labelsMap.get("segment.writingApp").text = String::valueOf(file.segmentWritingApp)
+		labelsMap.get("segment.title").text = String::valueOf(file.getSegmentTitle)
+		labelsMap.get("segment.date").text = String::valueOf(VilimaFormatter::date(file.getSegmentDate))
+		labelsMap.get("segment.muxingApp").text = String::valueOf(file.getSegmentMuxingApp)
+		labelsMap.get("segment.writingApp").text = String::valueOf(file.getSegmentWritingApp)
 	}
 
 	@Inject
@@ -135,7 +140,7 @@ class InformationPart {
 
 		if (selection != null && selection.size() == 1) {
 			val selected = selection.getFirstElement();
-			if (selected instanceof MkvFile) {
+			if (selected instanceof VilimaFile) {
 				input = selected
 			}
 		}

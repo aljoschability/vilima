@@ -2,15 +2,11 @@ package com.aljoschability.vilima.reader
 
 import java.io.File
 import java.io.FileInputStream
-import javax.xml.stream.XMLInputFactory
-import javax.xml.stream.XMLStreamConstants
-import org.apache.commons.io.input.BOMInputStream
-import org.eigenbase.xom.XOMUtil
-import com.google.common.io.Files
-import com.google.common.base.Charsets
-import org.eigenbase.xom.Parser
-import org.eigenbase.xom.DOMWrapper
 import java.util.List
+import org.apache.commons.io.input.BOMInputStream
+import org.eigenbase.xom.DOMWrapper
+import org.eigenbase.xom.Parser
+import org.eigenbase.xom.XOMUtil
 
 interface IMatroskaTagsXmlParser {
 	val TAGS = 'Tags'

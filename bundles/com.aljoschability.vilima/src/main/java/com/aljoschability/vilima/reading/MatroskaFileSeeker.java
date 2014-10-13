@@ -12,19 +12,6 @@ import java.nio.file.StandardOpenOption;
 import com.google.common.base.Charsets;
 
 public class MatroskaFileSeeker {
-	private static long READ_ID_NUM = 0;
-	private static long READ_ID_TIME = 0;
-	private static long READ_SIZE_NUM = 0;
-	private static long READ_SIZE_TIME = 0;
-	private static long READ_DATA_NUM = 0;
-	private static long READ_DATA_TIME = 0;
-	private static long CREATE_NUM = 0;
-	private static long CREATE_TIME = 0;
-	private static long SKIP_NUM = 0;
-	private static long SKIP_TIME = 0;
-	private static long ARRAY_NUM = 0;
-	private static long ARRAY_TIME = 0;
-
 	private static long UNIX_EPOCH_DELAY = 978307200;
 
 	private final SeekableByteChannel channel;
@@ -51,8 +38,6 @@ public class MatroskaFileSeeker {
 	}
 
 	private static EbmlElement createElement(byte[] id, byte[] dataSize) {
-		long started = System.nanoTime();
-
 		int headerSize = id.length + dataSize.length;
 		long size = bytesToLong(dataSize);
 		MatroskaNode node = MatroskaNode.get(id);
@@ -66,13 +51,10 @@ public class MatroskaFileSeeker {
 			element = new EbmlDataElement(node, headerSize, size);
 		}
 
-		CREATE_TIME += System.nanoTime() - started;
-		CREATE_NUM++;
 		return element;
 	}
 
 	private ByteBuffer readElementId() throws IOException {
-		long started = System.nanoTime();
 		idBuffer.clear();
 
 		// read leading bit
@@ -92,13 +74,10 @@ public class MatroskaFileSeeker {
 
 		idBuffer.flip();
 
-		READ_ID_TIME += System.nanoTime() - started;
-		READ_ID_NUM++;
 		return idBuffer;
 	}
 
 	private ByteBuffer readDataSize() throws IOException {
-		long started = System.nanoTime();
 		sizeBuffer.clear();
 
 		// read leading bit
@@ -121,46 +100,7 @@ public class MatroskaFileSeeker {
 
 		sizeBuffer.flip();
 
-		READ_SIZE_TIME += System.nanoTime() - started;
-		READ_SIZE_NUM++;
 		return sizeBuffer;
-	}
-
-	@Deprecated
-	public EbmlElement nextElement3() throws IOException {
-		// read element id
-		readElementId();
-
-		// read element data size
-		readDataSize();
-
-		// id, headerSize, size
-		byte[] id = toArray(idBuffer);
-		int headerSize = id.length + sizeBuffer.limit();
-		long size = toLong(sizeBuffer);
-
-		MatroskaNode node = MatroskaNode.get(id);
-		if (node == null) {
-			return new EbmlUnknownElement(id, headerSize, size);
-		}
-
-		if (EbmlElementType.MASTER.equals(node.getType())) {
-			return new EbmlMasterElement(node, headerSize, size);
-		}
-
-		return new EbmlDataElement(node, headerSize, size);
-	}
-
-	private long toLong(ByteBuffer buffer) {
-		long size = 0;
-		long value = 0;
-		int i = 0;
-		while (buffer.hasRemaining()) {
-			value = (buffer.get() << 56) >>> 56;
-			size |= (value << (8 * i));
-			i++;
-		}
-		return size;
 	}
 
 	private static long bytesToLong(byte[] data) {
@@ -194,31 +134,9 @@ public class MatroskaFileSeeker {
 
 	public void dispose() throws IOException {
 		channel.close();
-
-		System.out.println("# array  " + ARRAY_NUM + " (" + (ARRAY_TIME / 1000000d) + "ms)");
-		System.out.println("# id     " + READ_ID_NUM + " (" + (READ_ID_TIME / 1000000d) + "ms)");
-		System.out.println("# size   " + READ_SIZE_NUM + " (" + (READ_SIZE_TIME / 1000000d) + "ms)");
-		System.out.println("# create " + CREATE_NUM + " (" + (CREATE_TIME / 1000000d) + "ms)");
-		System.out.println("# data   " + READ_DATA_NUM + " (" + (READ_DATA_TIME / 1000000d) + "ms)");
-		System.out.println("# skip   " + SKIP_NUM + " (" + (SKIP_TIME / 1000000d) + "ms)");
-		System.out.println("#################################");
-
-		READ_ID_TIME = 0;
-		READ_ID_NUM = 0;
-		READ_SIZE_TIME = 0;
-		READ_SIZE_NUM = 0;
-		CREATE_TIME = 0;
-		CREATE_NUM = 0;
-		READ_DATA_TIME = 0;
-		READ_DATA_NUM = 0;
-		SKIP_TIME = 0;
-		SKIP_NUM = 0;
-		ARRAY_TIME = 0;
-		ARRAY_NUM = 0;
 	}
 
 	private long skip(long offset) throws IOException {
-		long started = System.nanoTime();
 		if (offset <= 0 || offset > Integer.MAX_VALUE) {
 			return 0;
 		}
@@ -231,8 +149,6 @@ public class MatroskaFileSeeker {
 		}
 		channel.position(newpos);
 
-		SKIP_TIME += System.nanoTime() - started;
-		SKIP_NUM++;
 		return newpos - pos;
 	}
 
@@ -249,13 +165,9 @@ public class MatroskaFileSeeker {
 	}
 
 	public static byte[] toArray(ByteBuffer buffer) {
-		long started = System.nanoTime();
-
 		byte[] arr = new byte[buffer.limit()];
 		buffer.get(arr);
 
-		ARRAY_NUM++;
-		ARRAY_TIME += System.nanoTime() - started;
 		return arr;
 	}
 
@@ -329,7 +241,6 @@ public class MatroskaFileSeeker {
 	}
 
 	private void readData(EbmlDataElement element) throws IOException {
-		long started = System.nanoTime();
 		ByteBuffer buffer = ByteBuffer.allocateDirect((int) element.getSize());
 
 		channel.read(buffer);
@@ -341,9 +252,6 @@ public class MatroskaFileSeeker {
 		if (element.getSize() > Integer.MAX_VALUE) {
 			throw new RuntimeException();
 		}
-
-		READ_DATA_TIME += System.nanoTime() - started;
-		READ_DATA_NUM++;
 	}
 
 	public long readTimestamp(EbmlDataElement element) throws IOException {

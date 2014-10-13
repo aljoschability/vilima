@@ -1,28 +1,28 @@
 package com.aljoschability.vilima.format
 
-import com.aljoschability.vilima.MkvTrack
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import com.aljoschability.vilima.VilimaFileTrack
 
 class VilimaFormatter {
 	static val DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
 	static val SIZE_FORMAT = NumberFormat::getNumberInstance
 
-	def static String getTrackInfo(MkvTrack track) {
-		if (track.codecId.startsWith("A_")) {
-			return '''«track.codecId.substring(2)» («track.audioChannels» channels)'''
+	def static String getTrackInfo(VilimaFileTrack track) {
+		if (track.getCodecId.startsWith("A_")) {
+			return '''«track.getCodecId.substring(2)» («track.getAudioChannels» channels)'''
 		}
 
-		if (track.codecId.startsWith("S_")) {
-			return track.codecId.substring(2)
+		if (track.getCodecId.startsWith("S_")) {
+			return track.getCodecId.substring(2)
 		}
 
-		if (track.codecId.startsWith("V_")) {
-			if (track.codecId == "V_MS/VFW/FOURCC") {
-				return '''«track.codecId.substring(2)» («track.codecPrivate»)'''
+		if (track.getCodecId.startsWith("V_")) {
+			if (track.getCodecId == "V_MS/VFW/FOURCC") {
+				return '''«track.getCodecId.substring(2)» («track.getCodecPrivate»)'''
 			}
-			return track.codecId.substring(2)
+			return track.getCodecId.substring(2)
 		}
 
 		return track.toString()

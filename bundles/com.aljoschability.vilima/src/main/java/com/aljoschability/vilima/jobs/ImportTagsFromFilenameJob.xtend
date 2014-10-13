@@ -3,12 +3,12 @@ package com.aljoschability.vilima.jobs
 import org.eclipse.core.runtime.jobs.Job
 import org.eclipse.core.runtime.IProgressMonitor
 import java.util.Collection
-import com.aljoschability.vilima.MkvFile
 import java.io.File
 import java.util.regex.Pattern
+import com.aljoschability.vilima.VilimaFile
 
 class ImportTagsFromFilenameJob extends Job {
-	new(Collection<MkvFile> files, String pattern) {
+	new(Collection<VilimaFile> files, String pattern) {
 		super("import tags from file name")
 	}
 

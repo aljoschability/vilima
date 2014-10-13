@@ -20,9 +20,14 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
+import java.util.List
+import org.eclipse.swt.events.ControlListener
+import org.eclipse.swt.events.ControlEvent
+import org.eclipse.swt.widgets.Menu
+import org.eclipse.swt.widgets.MenuItem
 import com.aljoschability.vilima.VilimaFile
 
-class FilesPart {
+class TableShowsPart {
 	@Inject Display display
 	@Inject ESelectionService selectionService
 
@@ -47,11 +52,23 @@ class FilesPart {
 		// the file name
 		createFileNameColumn()
 
-		// the title of the segment
-		createSegmentTitleColumn()
+		// show
+		createShowColumn()
 
-		// relevant file contents
-		createTagsColumn()
+		// genres
+		createGenresColumn()
+
+		// season
+		createSeasonColumn()
+
+		// season
+		createEpisodeColumn()
+
+		// title
+		createTitleColumn()
+
+		// date
+		createDateColumn()
 
 		// the file size
 		createSizeColumn()
@@ -62,7 +79,7 @@ class FilesPart {
 		viewer.input = input
 	}
 
-	def createFileNameColumn() {
+	def private void createFileNameColumn() {
 		val column = new TableColumn(viewer.table, SWT::CENTER)
 
 		column.moveable = true
@@ -99,21 +116,46 @@ class FilesPart {
 		}
 	}
 
-	def private void createSegmentTitleColumn() {
+	def private void createShowColumn() {
 		val column = new TableColumn(viewer.table, SWT::LEAD)
 
 		column.moveable = true
 		column.resizable = true
-		column.width = 120
-		column.text = "Segment Title"
+		column.width = 100
+		column.text = "Show"
 
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if (element instanceof VilimaFile) {
-					val value = element.getSegmentTitle
-					if (value != null) {
-						return String.valueOf(value)
+					return findTagString(element, 70, "TITLE")
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createGenresColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 100
+		column.text = "Genres"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof VilimaFile) {
+					val b = new StringBuilder
+
+					for (genre : findTagStrings(element, 70, "GENRE")) {
+						b.append(genre)
+						b.append(", ")
+					}
+
+					if (b.length != 0) {
+						return b.toString().substring(0, b.length - 2)
 					}
 				}
 				return ""
@@ -121,22 +163,95 @@ class FilesPart {
 		}
 	}
 
-	def private void createTagsColumn() {
+	def private void createSeasonColumn() {
 		val column = new TableColumn(viewer.table, SWT::CENTER)
 
 		column.moveable = true
 		column.resizable = true
-		column.width = 40
-		column.text = "Tags"
+		column.width = 27
+		column.text = "S"
+		column.toolTipText = "Season"
 
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if (element instanceof VilimaFile) {
-					val value = element.tags.size
-					if (value > 0) {
-						return String.valueOf(value)
-					}
+					return findTagString(element, 60, "PART_NUMBER")
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createEpisodeColumn() {
+		val column = new TableColumn(viewer.table, SWT::CENTER)
+
+		val menu = new Menu(viewer.table.shell, SWT::POP_UP)
+
+		val item = new MenuItem(menu, SWT::PUSH)
+		item.text = "Test"
+		viewer.table.menu = menu
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 27
+		column.text = "E"
+		column.toolTipText = "Episode"
+		column.addControlListener(
+			new ControlListener() {
+
+				override controlMoved(ControlEvent e) {
+				}
+
+				override controlResized(ControlEvent e) {
+					println(column.width)
+				}
+
+			})
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof VilimaFile) {
+					return findTagString(element, 50, "PART_NUMBER")
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createTitleColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 160
+		column.text = "Title"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof VilimaFile) {
+					return findTagString(element, 50, "TITLE")
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createDateColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 100
+		column.text = "Date"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof VilimaFile) {
+					return findTagString(element, 50, "DATE_RELEASE")
 				}
 				return ""
 			}
@@ -148,7 +263,7 @@ class FilesPart {
 
 		column.moveable = true
 		column.resizable = true
-		column.width = 73
+		column.width = 68
 		column.text = "Size"
 
 		val viewerColumn = new TableViewerColumn(viewer, column)
@@ -167,7 +282,7 @@ class FilesPart {
 
 		column.moveable = true
 		column.resizable = true
-		column.width = 73
+		column.width = 71
 		column.text = "Duration"
 
 		val viewerColumn = new TableViewerColumn(viewer, column)
@@ -188,5 +303,32 @@ class FilesPart {
 		if (viewer != null && !viewer.control.disposed) {
 			viewer.input = input
 		}
+	}
+
+	def private static String findTagString(VilimaFile file, int level, String name) {
+		for (tag : file.tags) {
+			if (tag.getTarget == level) {
+				for (entry : tag.entries) {
+					if (entry.name == name) {
+						return entry.getValue
+					}
+				}
+			}
+		}
+		return ""
+	}
+
+	def private static List<String> findTagStrings(VilimaFile file, int level, String name) {
+		val list = newArrayList
+		for (tag : file.tags) {
+			if (tag.getTarget == level) {
+				for (entry : tag.entries) {
+					if (entry.name == name) {
+						list += entry.getValue
+					}
+				}
+			}
+		}
+		return list
 	}
 }

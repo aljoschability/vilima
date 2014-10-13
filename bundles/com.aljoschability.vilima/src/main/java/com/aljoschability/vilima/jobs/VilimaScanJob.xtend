@@ -52,7 +52,6 @@ class VilimaScanJob extends Job {
 
 		val reader = new MatroskaReader()
 		for (file : manager.content.files) {
-			println('''reading «file.fileName»...''')
 			reader.readFile(file)
 		}
 
@@ -73,7 +72,7 @@ class VilimaFileWalker extends SimpleFileVisitor<Path> {
 		if (path.toString.toLowerCase.endsWith(".mkv")) {
 			val realFile = path.toFile
 
-			val file = VilimaFactory::eINSTANCE.createMkvFile
+			val file = VilimaFactory::eINSTANCE.createVilimaFile
 			file.fileName = realFile.name
 			file.filePath = realFile.parent
 			file.fileDate = realFile.lastModified

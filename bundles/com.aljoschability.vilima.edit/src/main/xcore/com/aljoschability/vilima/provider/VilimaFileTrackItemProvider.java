@@ -2,18 +2,12 @@
  */
 package com.aljoschability.vilima.provider;
 
-
-import com.aljoschability.vilima.MkvTrack;
-import com.aljoschability.vilima.VilimaPackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -25,34 +19,29 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.aljoschability.vilima.VilimaFileTrack;
+import com.aljoschability.vilima.VilimaPackage;
+
 /**
- * This is the item provider adapter for a {@link com.aljoschability.vilima.MkvTrack} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a {@link com.aljoschability.vilima.VilimaFileTrack} object.
+ * <!-- begin-user-doc
+ * --> <!-- end-user-doc -->
  * @generated
  */
-public class MkvTrackItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+public class VilimaFileTrackItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MkvTrackItemProvider(AdapterFactory adapterFactory) {
+	public VilimaFileTrackItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/**
 	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -92,8 +81,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Number feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addNumberPropertyDescriptor(Object object) {
@@ -101,9 +89,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_number_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_number_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__NUMBER,
+				 getString("_UI_VilimaFileTrack_number_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_number_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__NUMBER,
 				 true,
 				 false,
 				 false,
@@ -114,8 +102,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addUidPropertyDescriptor(Object object) {
@@ -123,9 +110,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_uid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_uid_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__UID,
+				 getString("_UI_VilimaFileTrack_uid_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_uid_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__UID,
 				 true,
 				 false,
 				 false,
@@ -136,8 +123,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Type feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addTypePropertyDescriptor(Object object) {
@@ -145,9 +131,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_type_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_type_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__TYPE,
+				 getString("_UI_VilimaFileTrack_type_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_type_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__TYPE,
 				 true,
 				 false,
 				 false,
@@ -158,8 +144,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Flag Enabled feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFlagEnabledPropertyDescriptor(Object object) {
@@ -167,9 +152,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_flagEnabled_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_flagEnabled_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__FLAG_ENABLED,
+				 getString("_UI_VilimaFileTrack_flagEnabled_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_flagEnabled_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__FLAG_ENABLED,
 				 true,
 				 false,
 				 false,
@@ -180,8 +165,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Flag Default feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFlagDefaultPropertyDescriptor(Object object) {
@@ -189,9 +173,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_flagDefault_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_flagDefault_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__FLAG_DEFAULT,
+				 getString("_UI_VilimaFileTrack_flagDefault_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_flagDefault_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__FLAG_DEFAULT,
 				 true,
 				 false,
 				 false,
@@ -202,8 +186,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Flag Forced feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFlagForcedPropertyDescriptor(Object object) {
@@ -211,9 +194,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_flagForced_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_flagForced_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__FLAG_FORCED,
+				 getString("_UI_VilimaFileTrack_flagForced_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_flagForced_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__FLAG_FORCED,
 				 true,
 				 false,
 				 false,
@@ -224,8 +207,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Flag Lacing feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFlagLacingPropertyDescriptor(Object object) {
@@ -233,9 +215,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_flagLacing_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_flagLacing_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__FLAG_LACING,
+				 getString("_UI_VilimaFileTrack_flagLacing_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_flagLacing_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__FLAG_LACING,
 				 true,
 				 false,
 				 false,
@@ -246,8 +228,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
@@ -255,9 +236,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_name_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_name_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__NAME,
+				 getString("_UI_VilimaFileTrack_name_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_name_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__NAME,
 				 true,
 				 false,
 				 false,
@@ -268,8 +249,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Language feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addLanguagePropertyDescriptor(Object object) {
@@ -277,9 +257,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_language_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_language_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__LANGUAGE,
+				 getString("_UI_VilimaFileTrack_language_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_language_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__LANGUAGE,
 				 true,
 				 false,
 				 false,
@@ -290,8 +270,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Codec Id feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addCodecIdPropertyDescriptor(Object object) {
@@ -299,9 +278,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_codecId_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_codecId_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__CODEC_ID,
+				 getString("_UI_VilimaFileTrack_codecId_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_codecId_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__CODEC_ID,
 				 true,
 				 false,
 				 false,
@@ -312,8 +291,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Codec Private feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addCodecPrivatePropertyDescriptor(Object object) {
@@ -321,9 +299,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_codecPrivate_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_codecPrivate_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__CODEC_PRIVATE,
+				 getString("_UI_VilimaFileTrack_codecPrivate_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_codecPrivate_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__CODEC_PRIVATE,
 				 true,
 				 false,
 				 false,
@@ -334,8 +312,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Codec Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addCodecNamePropertyDescriptor(Object object) {
@@ -343,9 +320,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_codecName_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_codecName_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__CODEC_NAME,
+				 getString("_UI_VilimaFileTrack_codecName_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_codecName_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__CODEC_NAME,
 				 true,
 				 false,
 				 false,
@@ -355,9 +332,9 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Video Flag Interlaced feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Video Flag Interlaced feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addVideoFlagInterlacedPropertyDescriptor(Object object) {
@@ -365,9 +342,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoFlagInterlaced_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoFlagInterlaced_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_FLAG_INTERLACED,
+				 getString("_UI_VilimaFileTrack_videoFlagInterlaced_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoFlagInterlaced_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_FLAG_INTERLACED,
 				 true,
 				 false,
 				 false,
@@ -378,8 +355,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Video Pixel Width feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addVideoPixelWidthPropertyDescriptor(Object object) {
@@ -387,9 +363,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoPixelWidth_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoPixelWidth_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_PIXEL_WIDTH,
+				 getString("_UI_VilimaFileTrack_videoPixelWidth_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoPixelWidth_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_PIXEL_WIDTH,
 				 true,
 				 false,
 				 false,
@@ -400,8 +376,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Video Pixel Height feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addVideoPixelHeightPropertyDescriptor(Object object) {
@@ -409,9 +384,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoPixelHeight_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoPixelHeight_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_PIXEL_HEIGHT,
+				 getString("_UI_VilimaFileTrack_videoPixelHeight_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoPixelHeight_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_PIXEL_HEIGHT,
 				 true,
 				 false,
 				 false,
@@ -422,8 +397,8 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Video Pixel Crop Bottom feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	protected void addVideoPixelCropBottomPropertyDescriptor(Object object) {
@@ -431,9 +406,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoPixelCropBottom_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoPixelCropBottom_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_PIXEL_CROP_BOTTOM,
+				 getString("_UI_VilimaFileTrack_videoPixelCropBottom_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoPixelCropBottom_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_BOTTOM,
 				 true,
 				 false,
 				 false,
@@ -443,9 +418,9 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Video Pixel Crop Top feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Video Pixel Crop Top feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addVideoPixelCropTopPropertyDescriptor(Object object) {
@@ -453,9 +428,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoPixelCropTop_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoPixelCropTop_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_PIXEL_CROP_TOP,
+				 getString("_UI_VilimaFileTrack_videoPixelCropTop_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoPixelCropTop_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_TOP,
 				 true,
 				 false,
 				 false,
@@ -465,9 +440,9 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Video Pixel Crop Left feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Video Pixel Crop Left feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addVideoPixelCropLeftPropertyDescriptor(Object object) {
@@ -475,9 +450,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoPixelCropLeft_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoPixelCropLeft_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_PIXEL_CROP_LEFT,
+				 getString("_UI_VilimaFileTrack_videoPixelCropLeft_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoPixelCropLeft_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_LEFT,
 				 true,
 				 false,
 				 false,
@@ -487,9 +462,9 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Video Pixel Crop Right feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Video Pixel Crop Right feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addVideoPixelCropRightPropertyDescriptor(Object object) {
@@ -497,9 +472,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoPixelCropRight_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoPixelCropRight_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_PIXEL_CROP_RIGHT,
+				 getString("_UI_VilimaFileTrack_videoPixelCropRight_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoPixelCropRight_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_RIGHT,
 				 true,
 				 false,
 				 false,
@@ -509,9 +484,9 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Video Display Width feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Video Display Width feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addVideoDisplayWidthPropertyDescriptor(Object object) {
@@ -519,9 +494,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoDisplayWidth_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoDisplayWidth_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_DISPLAY_WIDTH,
+				 getString("_UI_VilimaFileTrack_videoDisplayWidth_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoDisplayWidth_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_DISPLAY_WIDTH,
 				 true,
 				 false,
 				 false,
@@ -531,9 +506,9 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Video Display Height feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Video Display Height feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addVideoDisplayHeightPropertyDescriptor(Object object) {
@@ -541,9 +516,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoDisplayHeight_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoDisplayHeight_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_DISPLAY_HEIGHT,
+				 getString("_UI_VilimaFileTrack_videoDisplayHeight_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoDisplayHeight_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_DISPLAY_HEIGHT,
 				 true,
 				 false,
 				 false,
@@ -554,8 +529,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Video Display Unit feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addVideoDisplayUnitPropertyDescriptor(Object object) {
@@ -563,9 +537,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoDisplayUnit_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoDisplayUnit_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_DISPLAY_UNIT,
+				 getString("_UI_VilimaFileTrack_videoDisplayUnit_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoDisplayUnit_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_DISPLAY_UNIT,
 				 true,
 				 false,
 				 false,
@@ -576,8 +550,8 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Video Aspect Ratio Type feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	protected void addVideoAspectRatioTypePropertyDescriptor(Object object) {
@@ -585,9 +559,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_videoAspectRatioType_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_videoAspectRatioType_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__VIDEO_ASPECT_RATIO_TYPE,
+				 getString("_UI_VilimaFileTrack_videoAspectRatioType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_videoAspectRatioType_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__VIDEO_ASPECT_RATIO_TYPE,
 				 true,
 				 false,
 				 false,
@@ -598,8 +572,8 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Audio Sampling Frequency feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	protected void addAudioSamplingFrequencyPropertyDescriptor(Object object) {
@@ -607,9 +581,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_audioSamplingFrequency_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_audioSamplingFrequency_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__AUDIO_SAMPLING_FREQUENCY,
+				 getString("_UI_VilimaFileTrack_audioSamplingFrequency_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_audioSamplingFrequency_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__AUDIO_SAMPLING_FREQUENCY,
 				 true,
 				 false,
 				 false,
@@ -620,8 +594,8 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Audio Output Sampling Frequency feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	protected void addAudioOutputSamplingFrequencyPropertyDescriptor(Object object) {
@@ -629,9 +603,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_audioOutputSamplingFrequency_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_audioOutputSamplingFrequency_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__AUDIO_OUTPUT_SAMPLING_FREQUENCY,
+				 getString("_UI_VilimaFileTrack_audioOutputSamplingFrequency_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_audioOutputSamplingFrequency_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__AUDIO_OUTPUT_SAMPLING_FREQUENCY,
 				 true,
 				 false,
 				 false,
@@ -642,8 +616,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * This adds a property descriptor for the Audio Channels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addAudioChannelsPropertyDescriptor(Object object) {
@@ -651,9 +624,9 @@ public class MkvTrackItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTrack_audioChannels_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTrack_audioChannels_feature", "_UI_MkvTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TRACK__AUDIO_CHANNELS,
+				 getString("_UI_VilimaFileTrack_audioChannels_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFileTrack_audioChannels_feature", "_UI_VilimaFileTrack_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE_TRACK__AUDIO_CHANNELS,
 				 true,
 				 false,
 				 false,
@@ -663,69 +636,66 @@ public class MkvTrackItemProvider
 	}
 
 	/**
-	 * This returns MkvTrack.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns VilimaFileTrack.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/MkvTrack")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VilimaFileTrack")); //$NON-NLS-1$
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((MkvTrack)object).getName();
+		String label = ((VilimaFileTrack)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_MkvTrack_type") : //$NON-NLS-1$
-			getString("_UI_MkvTrack_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_VilimaFileTrack_type") : //$NON-NLS-1$
+			getString("_UI_VilimaFileTrack_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached children and by creating
+	 * a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(MkvTrack.class)) {
-			case VilimaPackage.MKV_TRACK__NUMBER:
-			case VilimaPackage.MKV_TRACK__UID:
-			case VilimaPackage.MKV_TRACK__TYPE:
-			case VilimaPackage.MKV_TRACK__FLAG_ENABLED:
-			case VilimaPackage.MKV_TRACK__FLAG_DEFAULT:
-			case VilimaPackage.MKV_TRACK__FLAG_FORCED:
-			case VilimaPackage.MKV_TRACK__FLAG_LACING:
-			case VilimaPackage.MKV_TRACK__NAME:
-			case VilimaPackage.MKV_TRACK__LANGUAGE:
-			case VilimaPackage.MKV_TRACK__CODEC_ID:
-			case VilimaPackage.MKV_TRACK__CODEC_PRIVATE:
-			case VilimaPackage.MKV_TRACK__CODEC_NAME:
-			case VilimaPackage.MKV_TRACK__VIDEO_FLAG_INTERLACED:
-			case VilimaPackage.MKV_TRACK__VIDEO_PIXEL_WIDTH:
-			case VilimaPackage.MKV_TRACK__VIDEO_PIXEL_HEIGHT:
-			case VilimaPackage.MKV_TRACK__VIDEO_PIXEL_CROP_BOTTOM:
-			case VilimaPackage.MKV_TRACK__VIDEO_PIXEL_CROP_TOP:
-			case VilimaPackage.MKV_TRACK__VIDEO_PIXEL_CROP_LEFT:
-			case VilimaPackage.MKV_TRACK__VIDEO_PIXEL_CROP_RIGHT:
-			case VilimaPackage.MKV_TRACK__VIDEO_DISPLAY_WIDTH:
-			case VilimaPackage.MKV_TRACK__VIDEO_DISPLAY_HEIGHT:
-			case VilimaPackage.MKV_TRACK__VIDEO_DISPLAY_UNIT:
-			case VilimaPackage.MKV_TRACK__VIDEO_ASPECT_RATIO_TYPE:
-			case VilimaPackage.MKV_TRACK__AUDIO_SAMPLING_FREQUENCY:
-			case VilimaPackage.MKV_TRACK__AUDIO_OUTPUT_SAMPLING_FREQUENCY:
-			case VilimaPackage.MKV_TRACK__AUDIO_CHANNELS:
+		switch (notification.getFeatureID(VilimaFileTrack.class)) {
+			case VilimaPackage.VILIMA_FILE_TRACK__NUMBER:
+			case VilimaPackage.VILIMA_FILE_TRACK__UID:
+			case VilimaPackage.VILIMA_FILE_TRACK__TYPE:
+			case VilimaPackage.VILIMA_FILE_TRACK__FLAG_ENABLED:
+			case VilimaPackage.VILIMA_FILE_TRACK__FLAG_DEFAULT:
+			case VilimaPackage.VILIMA_FILE_TRACK__FLAG_FORCED:
+			case VilimaPackage.VILIMA_FILE_TRACK__FLAG_LACING:
+			case VilimaPackage.VILIMA_FILE_TRACK__NAME:
+			case VilimaPackage.VILIMA_FILE_TRACK__LANGUAGE:
+			case VilimaPackage.VILIMA_FILE_TRACK__CODEC_ID:
+			case VilimaPackage.VILIMA_FILE_TRACK__CODEC_PRIVATE:
+			case VilimaPackage.VILIMA_FILE_TRACK__CODEC_NAME:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_FLAG_INTERLACED:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_PIXEL_WIDTH:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_PIXEL_HEIGHT:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_BOTTOM:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_TOP:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_LEFT:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_PIXEL_CROP_RIGHT:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_DISPLAY_WIDTH:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_DISPLAY_HEIGHT:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_DISPLAY_UNIT:
+			case VilimaPackage.VILIMA_FILE_TRACK__VIDEO_ASPECT_RATIO_TYPE:
+			case VilimaPackage.VILIMA_FILE_TRACK__AUDIO_SAMPLING_FREQUENCY:
+			case VilimaPackage.VILIMA_FILE_TRACK__AUDIO_OUTPUT_SAMPLING_FREQUENCY:
+			case VilimaPackage.VILIMA_FILE_TRACK__AUDIO_CHANNELS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -735,8 +705,7 @@ public class MkvTrackItemProvider
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
 	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -746,8 +715,7 @@ public class MkvTrackItemProvider
 
 	/**
 	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

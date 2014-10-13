@@ -1,7 +1,5 @@
 package com.aljoschability.vilima.ui.parts;
 
-import com.aljoschability.vilima.MkvFile
-import com.aljoschability.vilima.MkvTrack
 import com.aljoschability.vilima.format.VilimaFormatter
 import com.aljoschability.vilima.ui.VilimaImages
 import javax.annotation.PostConstruct
@@ -21,7 +19,9 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
 
-import static com.aljoschability.vilima.MkvTrackType.*
+import com.aljoschability.vilima.VilimaFile
+import com.aljoschability.vilima.VilimaFileTrack
+import static com.aljoschability.vilima.VilimaFileTrackType.*
 
 class TracksPart {
 	Object input
@@ -38,9 +38,9 @@ class TracksPart {
 		viewer.contentProvider = ArrayContentProvider::getInstance()
 		viewer.comparator = new ViewerComparator() {
 			override compare(Viewer viewer, Object a, Object b) {
-				if (a instanceof MkvTrack) {
-					if (b instanceof MkvTrack) {
-						return Integer.compare(a.number, b.number)
+				if (a instanceof VilimaFileTrack) {
+					if (b instanceof VilimaFileTrack) {
+						return Integer.compare(a.getNumber, b.getNumber)
 					}
 				}
 				super.compare(viewer, a, b)
@@ -65,15 +65,15 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkvTrack) {
+				if (element instanceof VilimaFileTrack) {
 					return VilimaFormatter::getTrackInfo(element)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof MkvTrack) {
-					switch (element.type) {
+				if (element instanceof VilimaFileTrack) {
+					switch (element.getType) {
 						case VIDEO: {
 							return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
 						}
@@ -84,7 +84,7 @@ class TracksPart {
 							return VilimaImages::image(VilimaImages::TRACK_TYPE_SUBTITLE)
 						}
 						default: {
-							println("trying to show image for track - type not known: " + element.type)
+							println("trying to show image for track - type not known: " + element.getType)
 						}
 					}
 				}
@@ -104,8 +104,8 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkvTrack) {
-					return VilimaFormatter::getLanguage(element.language)
+				if (element instanceof VilimaFileTrack) {
+					return VilimaFormatter::getLanguage(element.getLanguage)
 				}
 				return ""
 			}
@@ -122,8 +122,8 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkvTrack) {
-					val name = element.name
+				if (element instanceof VilimaFileTrack) {
+					val name = element.getName
 					if (name != null) {
 						return name
 					}
@@ -139,7 +139,7 @@ class TracksPart {
 
 		if (selection != null && selection.size() == 1) {
 			val element = selection.firstElement
-			if (element instanceof MkvFile) {
+			if (element instanceof VilimaFile) {
 				input = element.tracks
 			}
 		}

@@ -2,32 +2,37 @@ package com.aljoschability.vilima.reading;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.aljoschability.vilima.VilimaAttachment;
-import com.aljoschability.vilima.MkvChapterEdition;
-import com.aljoschability.vilima.MkvChapterEntry;
-import com.aljoschability.vilima.MkvFile;
-import com.aljoschability.vilima.MkvTag;
 import com.aljoschability.vilima.MkvTagEntry;
-import com.aljoschability.vilima.MkvTrack;
-import com.aljoschability.vilima.MkvTrackType;
-import com.aljoschability.vilima.VilimaChapterDisplay;
 import com.aljoschability.vilima.VilimaFactory;
+import com.aljoschability.vilima.VilimaFile;
+import com.aljoschability.vilima.VilimaFileAttachment;
+import com.aljoschability.vilima.VilimaFileChapter;
+import com.aljoschability.vilima.VilimaFileChapterText;
+import com.aljoschability.vilima.VilimaFileEdition;
+import com.aljoschability.vilima.VilimaFileTagRaw;
+import com.aljoschability.vilima.VilimaFileTrack;
+import com.aljoschability.vilima.VilimaFileTrackType;
 
 public class MatroskaReader {
 	private static char[] HEX = "0123456789ABCDEF".toCharArray();
 
-	private MkvFile file;
+	private VilimaFile file;
 	private MatroskaFileSeeker seeker;
 
 	private Map<Long, String> elements;
 	private Map<Long, MatroskaNode> seeks;
 	private long seekOffset;
 
-	public void readFile(MkvFile file) throws IOException {
+	public void readFile(VilimaFile file) throws IOException {
+		DEBUG_NF.setMinimumFractionDigits(2);
+		DEBUG_NF.setMaximumFractionDigits(2);
+		final long started = System.nanoTime();
+
 		this.file = file;
 
 		// reset
@@ -53,7 +58,24 @@ public class MatroskaReader {
 
 		// close file seeker
 		seeker.dispose();
+
+		// parse the read tags
+		// for (MkvTag tag : file.getTags()) {
+		// for (MkvTagEntry entry : tag.getEntries()) {
+		// if (entry.getName().equals("CONTENT_TYPE")) {
+		// VilimaContentType contentType = VilimaFactory.eINSTANCE.createVilimaContentType();
+		// file.setContentType(contentType);
+		// System.out.println(entry.getString());
+		// }
+		// }
+		// }
+
+		// TODO: debug
+		final String elapsed = DEBUG_NF.format((System.nanoTime() - started) / 1000000d);
+		System.out.println("Needed " + elapsed + "ms to read file '" + file.getFileName() + "'.");
 	}
+
+	private static NumberFormat DEBUG_NF = NumberFormat.getNumberInstance();
 
 	private void readFile() throws IOException {
 		EbmlElement element = seeker.nextElement();
@@ -213,7 +235,7 @@ public class MatroskaReader {
 	}
 
 	private void readTrackEntry(EbmlMasterElement parent) throws IOException {
-		MkvTrack track = VilimaFactory.eINSTANCE.createMkvTrack();
+		VilimaFileTrack track = VilimaFactory.eINSTANCE.createVilimaFileTrack();
 
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -259,7 +281,7 @@ public class MatroskaReader {
 		file.getTracks().add(track);
 	}
 
-	private void readTrackAudioDetails(EbmlMasterElement parent, MkvTrack track) throws IOException {
+	private void readTrackAudioDetails(EbmlMasterElement parent, VilimaFileTrack track) throws IOException {
 		EbmlElement element = null;
 
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -277,7 +299,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readTrackVideoDetails(EbmlMasterElement parent, MkvTrack track) throws IOException {
+	private void readTrackVideoDetails(EbmlMasterElement parent, VilimaFileTrack track) throws IOException {
 		EbmlElement element = null;
 
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -307,7 +329,7 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.AttachedFile.matches(element)) {
-				VilimaAttachment attachment = VilimaFactory.eINSTANCE.createVilimaAttachment();
+				VilimaFileAttachment attachment = VilimaFactory.eINSTANCE.createVilimaFileAttachment();
 
 				readAttachedFile((EbmlMasterElement) element, attachment);
 
@@ -318,7 +340,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readAttachedFile(EbmlMasterElement parent, VilimaAttachment attachment) throws IOException {
+	private void readAttachedFile(EbmlMasterElement parent, VilimaFileAttachment attachment) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.FileDescription.matches(element)) {
@@ -339,7 +361,7 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.EditionEntry.matches(element)) {
-				MkvChapterEdition chapter = VilimaFactory.eINSTANCE.createMkvChapterEdition();
+				VilimaFileEdition chapter = VilimaFactory.eINSTANCE.createVilimaFileEdition();
 
 				readEditionEntry((EbmlMasterElement) element, chapter);
 
@@ -350,13 +372,13 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readEditionEntry(EbmlMasterElement parent, MkvChapterEdition chapter) throws IOException {
+	private void readEditionEntry(EbmlMasterElement parent, VilimaFileEdition chapter) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.EditionUID.matches(element)) {
 				chapter.setUid(seeker.readLong((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapterAtom.matches(element)) {
-				MkvChapterEntry entry = VilimaFactory.eINSTANCE.createMkvChapterEntry();
+				VilimaFileChapter entry = VilimaFactory.eINSTANCE.createVilimaFileChapter();
 
 				readChapterAtom((EbmlMasterElement) element, entry);
 
@@ -367,15 +389,13 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readChapterAtom(EbmlMasterElement parent, MkvChapterEntry entry) throws IOException {
+	private void readChapterAtom(EbmlMasterElement parent, VilimaFileChapter entry) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.ChapterTimeStart.matches(element)) {
 				entry.setStart(seeker.readLong((EbmlDataElement) element));
-			} else if (MatroskaNode.ChapterTimeEnd.matches(element)) {
-				entry.setEnd(seeker.readLong((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapterDisplay.matches(element)) {
-				VilimaChapterDisplay display = VilimaFactory.eINSTANCE.createVilimaChapterDisplay();
+				VilimaFileChapterText display = VilimaFactory.eINSTANCE.createVilimaFileChapterText();
 
 				readChapterDisplay((EbmlMasterElement) element, display);
 
@@ -386,13 +406,13 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readChapterDisplay(EbmlMasterElement parent, VilimaChapterDisplay display) throws IOException {
+	private void readChapterDisplay(EbmlMasterElement parent, VilimaFileChapterText display) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.ChapString.matches(element)) {
-				display.setString(seeker.readString((EbmlDataElement) element));
+				display.setText(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapLanguage.matches(element)) {
-				display.setLanguage(seeker.readString((EbmlDataElement) element));
+				display.getLanguages().add(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapCountry.matches(element)) {
 				// TODO: ChapCountry not used
 			}
@@ -405,7 +425,7 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.Tag.matches(element)) {
-				MkvTag tag = VilimaFactory.eINSTANCE.createMkvTag();
+				VilimaFileTagRaw tag = VilimaFactory.eINSTANCE.createVilimaFileTagRaw();
 
 				// only add when tags are global (not track-specific)
 				if (readTag((EbmlMasterElement) element, tag)) {
@@ -417,7 +437,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private boolean readTag(EbmlMasterElement parent, MkvTag tag) throws IOException {
+	private boolean readTag(EbmlMasterElement parent, VilimaFileTagRaw tag) throws IOException {
 		boolean global = true;
 
 		EbmlElement element = null;
@@ -434,15 +454,15 @@ public class MatroskaReader {
 		return global;
 	}
 
-	private boolean readTagTargets(EbmlMasterElement parent, MkvTag tag) throws IOException {
+	private boolean readTagTargets(EbmlMasterElement parent, VilimaFileTagRaw tag) throws IOException {
 		boolean global = true;
 
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.TargetTypeValue.matches(element)) {
-				tag.setTypeValue(seeker.readLong((EbmlDataElement) element));
+				tag.setTarget((int) seeker.readLong((EbmlDataElement) element));
 			} else if (MatroskaNode.TargetType.matches(element)) {
-				tag.setType(seeker.readString((EbmlDataElement) element));
+				tag.setTargetText(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.TagTrackUID.matches(element)) {
 				global = false;
 			} else if (MatroskaNode.TagEditionUID.matches(element)) {
@@ -467,7 +487,7 @@ public class MatroskaReader {
 			if (MatroskaNode.TagName.matches(element)) {
 				tag.setName(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.TagString.matches(element)) {
-				tag.setString(seeker.readString((EbmlDataElement) element));
+				tag.setValue(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.SimpleTag.matches(element)) {
 				tag.getEntries().add(readTagsSimpleTag((EbmlMasterElement) element));
 			}
@@ -488,7 +508,7 @@ public class MatroskaReader {
 		return new String(hexChars);
 	}
 
-	private static void rewriteCodecPrivate(MkvTrack track) {
+	private static void rewriteCodecPrivate(VilimaFileTrack track) {
 		if (track.getCodecPrivate() != null) {
 			// reconstruct byte array
 			String[] split = track.getCodecPrivate().substring(1, track.getCodecPrivate().length() - 2).split(", ");
@@ -511,20 +531,20 @@ public class MatroskaReader {
 		}
 	}
 
-	private static MkvTrackType convertTrackType(byte value) {
+	private static VilimaFileTrackType convertTrackType(byte value) {
 		switch (value) {
 		case 0x01:
-			return MkvTrackType.VIDEO;
+			return VilimaFileTrackType.VIDEO;
 		case 0x02:
-			return MkvTrackType.AUDIO;
+			return VilimaFileTrackType.AUDIO;
 		case 0x03:
-			return MkvTrackType.COMPLEX;
+			return VilimaFileTrackType.COMPLEX;
 		case 0x10:
-			return MkvTrackType.LOGO;
+			return VilimaFileTrackType.LOGO;
 		case 0x11:
-			return MkvTrackType.SUBTITLE;
+			return VilimaFileTrackType.SUBTITLE;
 		case 0x20:
-			return MkvTrackType.CONTROL;
+			return VilimaFileTrackType.CONTROL;
 		default:
 			throw new RuntimeException("cannot convert track type from " + value);
 		}

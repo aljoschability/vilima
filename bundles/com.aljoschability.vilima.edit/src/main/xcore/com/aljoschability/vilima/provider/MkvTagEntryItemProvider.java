@@ -2,21 +2,13 @@
  */
 package com.aljoschability.vilima.provider;
 
-
-import com.aljoschability.vilima.MkvTagEntry;
-import com.aljoschability.vilima.VilimaFactory;
-import com.aljoschability.vilima.VilimaPackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -28,24 +20,21 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.aljoschability.vilima.MkvTagEntry;
+import com.aljoschability.vilima.VilimaFactory;
+import com.aljoschability.vilima.VilimaPackage;
+
 /**
  * This is the item provider adapter for a {@link com.aljoschability.vilima.MkvTagEntry} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class MkvTagEntryItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+public class MkvTagEntryItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public MkvTagEntryItemProvider(AdapterFactory adapterFactory) {
@@ -54,8 +43,7 @@ public class MkvTagEntryItemProvider
 
 	/**
 	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -66,15 +54,14 @@ public class MkvTagEntryItemProvider
 			addNamePropertyDescriptor(object);
 			addLanguagePropertyDescriptor(object);
 			addFlagDefaultPropertyDescriptor(object);
-			addStringPropertyDescriptor(object);
+			addValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
 	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
@@ -95,8 +82,7 @@ public class MkvTagEntryItemProvider
 
 	/**
 	 * This adds a property descriptor for the Language feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addLanguagePropertyDescriptor(Object object) {
@@ -117,8 +103,7 @@ public class MkvTagEntryItemProvider
 
 	/**
 	 * This adds a property descriptor for the Flag Default feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFlagDefaultPropertyDescriptor(Object object) {
@@ -138,19 +123,18 @@ public class MkvTagEntryItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the String feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Value feature.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addStringPropertyDescriptor(Object object) {
+	protected void addValuePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvTagEntry_string_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTagEntry_string_feature", "_UI_MkvTagEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_TAG_ENTRY__STRING,
+				 getString("_UI_MkvTagEntry_value_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_MkvTagEntry_value_feature", "_UI_MkvTagEntry_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.MKV_TAG_ENTRY__VALUE,
 				 true,
 				 false,
 				 false,
@@ -163,8 +147,8 @@ public class MkvTagEntryItemProvider
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -177,8 +161,7 @@ public class MkvTagEntryItemProvider
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -191,8 +174,7 @@ public class MkvTagEntryItemProvider
 
 	/**
 	 * This returns MkvTagEntry.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -202,8 +184,7 @@ public class MkvTagEntryItemProvider
 
 	/**
 	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -213,13 +194,12 @@ public class MkvTagEntryItemProvider
 			getString("_UI_MkvTagEntry_type") : //$NON-NLS-1$
 			getString("_UI_MkvTagEntry_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached children and by creating
+	 * a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	@Override
@@ -230,7 +210,7 @@ public class MkvTagEntryItemProvider
 			case VilimaPackage.MKV_TAG_ENTRY__NAME:
 			case VilimaPackage.MKV_TAG_ENTRY__LANGUAGE:
 			case VilimaPackage.MKV_TAG_ENTRY__FLAG_DEFAULT:
-			case VilimaPackage.MKV_TAG_ENTRY__STRING:
+			case VilimaPackage.MKV_TAG_ENTRY__VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case VilimaPackage.MKV_TAG_ENTRY__ENTRIES:
@@ -243,8 +223,7 @@ public class MkvTagEntryItemProvider
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
 	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -259,8 +238,7 @@ public class MkvTagEntryItemProvider
 
 	/**
 	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

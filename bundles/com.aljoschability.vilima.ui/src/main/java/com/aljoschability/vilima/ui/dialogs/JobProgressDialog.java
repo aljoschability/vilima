@@ -4,6 +4,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+
 /**
  * @see org.eclipse.ui.internal.progress.ProgressMonitorFocusJobDialog
  */

@@ -2,21 +2,13 @@
  */
 package com.aljoschability.vilima.provider;
 
-
-import com.aljoschability.vilima.MkvFile;
-import com.aljoschability.vilima.VilimaFactory;
-import com.aljoschability.vilima.VilimaPackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -28,34 +20,30 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
+import com.aljoschability.vilima.VilimaFactory;
+import com.aljoschability.vilima.VilimaFile;
+import com.aljoschability.vilima.VilimaPackage;
+
 /**
- * This is the item provider adapter for a {@link com.aljoschability.vilima.MkvFile} object.
+ * This is the item provider adapter for a {@link com.aljoschability.vilima.VilimaFile} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class MkvFileItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+public class VilimaFileItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MkvFileItemProvider(AdapterFactory adapterFactory) {
+	public VilimaFileItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
 	/**
 	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -70,19 +58,20 @@ public class MkvFileItemProvider
 			addSegmentUidPropertyDescriptor(object);
 			addSegmentPreviousUidPropertyDescriptor(object);
 			addSegmentNextUidPropertyDescriptor(object);
-			addSegmentDurationPropertyDescriptor(object);
-			addSegmentDatePropertyDescriptor(object);
 			addSegmentTitlePropertyDescriptor(object);
 			addSegmentMuxingAppPropertyDescriptor(object);
 			addSegmentWritingAppPropertyDescriptor(object);
+			addSegmentDurationPropertyDescriptor(object);
+			addSegmentDatePropertyDescriptor(object);
+			addContentTypePropertyDescriptor(object);
+			addGenresPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
 	 * This adds a property descriptor for the File Path feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFilePathPropertyDescriptor(Object object) {
@@ -90,9 +79,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_filePath_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_filePath_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__FILE_PATH,
+				 getString("_UI_VilimaFile_filePath_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_filePath_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__FILE_PATH,
 				 true,
 				 false,
 				 false,
@@ -103,8 +92,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the File Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFileNamePropertyDescriptor(Object object) {
@@ -112,9 +100,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_fileName_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_fileName_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__FILE_NAME,
+				 getString("_UI_VilimaFile_fileName_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_fileName_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__FILE_NAME,
 				 true,
 				 false,
 				 false,
@@ -125,8 +113,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the File Size feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFileSizePropertyDescriptor(Object object) {
@@ -134,9 +121,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_fileSize_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_fileSize_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__FILE_SIZE,
+				 getString("_UI_VilimaFile_fileSize_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_fileSize_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__FILE_SIZE,
 				 true,
 				 false,
 				 false,
@@ -147,8 +134,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the File Date feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addFileDatePropertyDescriptor(Object object) {
@@ -156,9 +142,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_fileDate_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_fileDate_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__FILE_DATE,
+				 getString("_UI_VilimaFile_fileDate_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_fileDate_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__FILE_DATE,
 				 true,
 				 false,
 				 false,
@@ -169,8 +155,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the Segment Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSegmentUidPropertyDescriptor(Object object) {
@@ -178,9 +163,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentUid_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_UID,
+				 getString("_UI_VilimaFile_segmentUid_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentUid_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_UID,
 				 true,
 				 false,
 				 false,
@@ -190,9 +175,9 @@ public class MkvFileItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Segment Previous Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Segment Previous Uid feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addSegmentPreviousUidPropertyDescriptor(Object object) {
@@ -200,9 +185,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentPreviousUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentPreviousUid_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_PREVIOUS_UID,
+				 getString("_UI_VilimaFile_segmentPreviousUid_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentPreviousUid_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_PREVIOUS_UID,
 				 true,
 				 false,
 				 false,
@@ -213,8 +198,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the Segment Next Uid feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSegmentNextUidPropertyDescriptor(Object object) {
@@ -222,9 +206,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentNextUid_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentNextUid_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_NEXT_UID,
+				 getString("_UI_VilimaFile_segmentNextUid_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentNextUid_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_NEXT_UID,
 				 true,
 				 false,
 				 false,
@@ -235,8 +219,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the Segment Duration feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSegmentDurationPropertyDescriptor(Object object) {
@@ -244,9 +227,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentDuration_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentDuration_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_DURATION,
+				 getString("_UI_VilimaFile_segmentDuration_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentDuration_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_DURATION,
 				 true,
 				 false,
 				 false,
@@ -257,8 +240,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the Segment Date feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSegmentDatePropertyDescriptor(Object object) {
@@ -266,9 +248,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentDate_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentDate_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_DATE,
+				 getString("_UI_VilimaFile_segmentDate_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentDate_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_DATE,
 				 true,
 				 false,
 				 false,
@@ -278,9 +260,50 @@ public class MkvFileItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Content Type feature.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContentTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaFile_contentType_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_contentType_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__CONTENT_TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Genres feature.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addGenresPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaFile_genres_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_genres_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__GENRES,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Segment Title feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSegmentTitlePropertyDescriptor(Object object) {
@@ -288,9 +311,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentTitle_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentTitle_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_TITLE,
+				 getString("_UI_VilimaFile_segmentTitle_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentTitle_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_TITLE,
 				 true,
 				 false,
 				 false,
@@ -301,8 +324,7 @@ public class MkvFileItemProvider
 
 	/**
 	 * This adds a property descriptor for the Segment Muxing App feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected void addSegmentMuxingAppPropertyDescriptor(Object object) {
@@ -310,9 +332,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentMuxingApp_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentMuxingApp_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_MUXING_APP,
+				 getString("_UI_VilimaFile_segmentMuxingApp_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentMuxingApp_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_MUXING_APP,
 				 true,
 				 false,
 				 false,
@@ -322,9 +344,9 @@ public class MkvFileItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Segment Writing App feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This adds a property descriptor for the Segment Writing App feature. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	protected void addSegmentWritingAppPropertyDescriptor(Object object) {
@@ -332,9 +354,9 @@ public class MkvFileItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_MkvFile_segmentWritingApp_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_MkvFile_segmentWritingApp_feature", "_UI_MkvFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.MKV_FILE__SEGMENT_WRITING_APP,
+				 getString("_UI_VilimaFile_segmentWritingApp_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaFile_segmentWritingApp_feature", "_UI_VilimaFile_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_FILE__SEGMENT_WRITING_APP,
 				 true,
 				 false,
 				 false,
@@ -347,25 +369,24 @@ public class MkvFileItemProvider
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__TRACKS);
-			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__ATTACHMENTS);
-			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__EDITIONS);
-			childrenFeatures.add(VilimaPackage.Literals.MKV_FILE__TAGS);
+			childrenFeatures.add(VilimaPackage.Literals.VILIMA_FILE__TRACKS);
+			childrenFeatures.add(VilimaPackage.Literals.VILIMA_FILE__ATTACHMENTS);
+			childrenFeatures.add(VilimaPackage.Literals.VILIMA_FILE__EDITIONS);
+			childrenFeatures.add(VilimaPackage.Literals.VILIMA_FILE__TAGS);
 		}
 		return childrenFeatures;
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -377,61 +398,58 @@ public class MkvFileItemProvider
 	}
 
 	/**
-	 * This returns MkvFile.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This returns VilimaFile.gif.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/MkvFile")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VilimaFile")); //$NON-NLS-1$
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((MkvFile)object).getFileName();
+		String label = ((VilimaFile)object).getFileName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_MkvFile_type") : //$NON-NLS-1$
-			getString("_UI_MkvFile_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_VilimaFile_type") : //$NON-NLS-1$
+			getString("_UI_VilimaFile_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
 
 	/**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached children and by creating
+	 * a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(MkvFile.class)) {
-			case VilimaPackage.MKV_FILE__FILE_PATH:
-			case VilimaPackage.MKV_FILE__FILE_NAME:
-			case VilimaPackage.MKV_FILE__FILE_SIZE:
-			case VilimaPackage.MKV_FILE__FILE_DATE:
-			case VilimaPackage.MKV_FILE__SEGMENT_UID:
-			case VilimaPackage.MKV_FILE__SEGMENT_PREVIOUS_UID:
-			case VilimaPackage.MKV_FILE__SEGMENT_NEXT_UID:
-			case VilimaPackage.MKV_FILE__SEGMENT_DURATION:
-			case VilimaPackage.MKV_FILE__SEGMENT_DATE:
-			case VilimaPackage.MKV_FILE__SEGMENT_TITLE:
-			case VilimaPackage.MKV_FILE__SEGMENT_MUXING_APP:
-			case VilimaPackage.MKV_FILE__SEGMENT_WRITING_APP:
+		switch (notification.getFeatureID(VilimaFile.class)) {
+			case VilimaPackage.VILIMA_FILE__FILE_PATH:
+			case VilimaPackage.VILIMA_FILE__FILE_NAME:
+			case VilimaPackage.VILIMA_FILE__FILE_SIZE:
+			case VilimaPackage.VILIMA_FILE__FILE_DATE:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_UID:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_PREVIOUS_UID:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_NEXT_UID:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_TITLE:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_MUXING_APP:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_WRITING_APP:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_DURATION:
+			case VilimaPackage.VILIMA_FILE__SEGMENT_DATE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case VilimaPackage.MKV_FILE__TRACKS:
-			case VilimaPackage.MKV_FILE__ATTACHMENTS:
-			case VilimaPackage.MKV_FILE__EDITIONS:
-			case VilimaPackage.MKV_FILE__TAGS:
+			case VilimaPackage.VILIMA_FILE__TRACKS:
+			case VilimaPackage.VILIMA_FILE__ATTACHMENTS:
+			case VilimaPackage.VILIMA_FILE__EDITIONS:
+			case VilimaPackage.VILIMA_FILE__TAGS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -441,8 +459,7 @@ public class MkvFileItemProvider
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
 	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -451,29 +468,28 @@ public class MkvFileItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(VilimaPackage.Literals.MKV_FILE__TRACKS,
-				 VilimaFactory.eINSTANCE.createMkvTrack()));
+				(VilimaPackage.Literals.VILIMA_FILE__TRACKS,
+				 VilimaFactory.eINSTANCE.createVilimaFileTrack()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(VilimaPackage.Literals.MKV_FILE__ATTACHMENTS,
-				 VilimaFactory.eINSTANCE.createVilimaAttachment()));
+				(VilimaPackage.Literals.VILIMA_FILE__ATTACHMENTS,
+				 VilimaFactory.eINSTANCE.createVilimaFileAttachment()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(VilimaPackage.Literals.MKV_FILE__EDITIONS,
-				 VilimaFactory.eINSTANCE.createMkvChapterEdition()));
+				(VilimaPackage.Literals.VILIMA_FILE__EDITIONS,
+				 VilimaFactory.eINSTANCE.createVilimaFileEdition()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(VilimaPackage.Literals.MKV_FILE__TAGS,
-				 VilimaFactory.eINSTANCE.createMkvTag()));
+				(VilimaPackage.Literals.VILIMA_FILE__TAGS,
+				 VilimaFactory.eINSTANCE.createVilimaFileTagRaw()));
 	}
 
 	/**
 	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

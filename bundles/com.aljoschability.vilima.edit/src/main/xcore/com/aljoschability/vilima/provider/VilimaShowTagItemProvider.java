@@ -19,23 +19,23 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.aljoschability.vilima.VilimaContentType;
 import com.aljoschability.vilima.VilimaPackage;
+import com.aljoschability.vilima.VilimaShowTag;
 
 /**
- * This is the item provider adapter for a {@link com.aljoschability.vilima.VilimaContentType} object. <!--
- * begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the item provider adapter for a {@link com.aljoschability.vilima.VilimaShowTag} object.
+ * <!-- begin-user-doc
+ * --> <!-- end-user-doc -->
  * @generated
  */
-public class VilimaContentTypeItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
+public class VilimaShowTagItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider,
 		IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VilimaContentTypeItemProvider(AdapterFactory adapterFactory) {
+	public VilimaShowTagItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -49,25 +49,27 @@ public class VilimaContentTypeItemProvider extends ItemProviderAdapter implement
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addFilesPropertyDescriptor(object);
+			addShowPropertyDescriptor(object);
+			addSeasonPropertyDescriptor(object);
+			addEpisodePropertyDescriptor(object);
+			addTitlePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Name feature.
+	 * This adds a property descriptor for the Show feature.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addNamePropertyDescriptor(Object object) {
+	protected void addShowPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VilimaContentType_name_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaContentType_name_feature", "_UI_VilimaContentType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.VILIMA_CONTENT_TYPE__NAME,
+				 getString("_UI_VilimaShowTag_show_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaShowTag_show_feature", "_UI_VilimaShowTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_SHOW_TAG__SHOW,
 				 true,
 				 false,
 				 false,
@@ -77,34 +79,66 @@ public class VilimaContentTypeItemProvider extends ItemProviderAdapter implement
 	}
 
 	/**
-	 * This adds a property descriptor for the Files feature.
+	 * This adds a property descriptor for the Season feature.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addFilesPropertyDescriptor(Object object) {
+	protected void addSeasonPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VilimaContentType_files_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaContentType_files_feature", "_UI_VilimaContentType_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 VilimaPackage.Literals.VILIMA_CONTENT_TYPE__FILES,
+				 getString("_UI_VilimaShowTag_season_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaShowTag_season_feature", "_UI_VilimaShowTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_SHOW_TAG__SEASON,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This returns VilimaContentType.gif.
+	 * This adds a property descriptor for the Episode feature.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VilimaContentType")); //$NON-NLS-1$
+	protected void addEpisodePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaShowTag_episode_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaShowTag_episode_feature", "_UI_VilimaShowTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_SHOW_TAG__EPISODE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Title feature.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTitlePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VilimaShowTag_title_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_VilimaShowTag_title_feature", "_UI_VilimaShowTag_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 VilimaPackage.Literals.VILIMA_SHOW_TAG__TITLE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -114,10 +148,10 @@ public class VilimaContentTypeItemProvider extends ItemProviderAdapter implement
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VilimaContentType)object).getName();
+		String label = ((VilimaShowTag)object).getShow();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VilimaContentType_type") : //$NON-NLS-1$
-			getString("_UI_VilimaContentType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_VilimaShowTag_type") : //$NON-NLS-1$
+			getString("_UI_VilimaShowTag_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -131,8 +165,11 @@ public class VilimaContentTypeItemProvider extends ItemProviderAdapter implement
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(VilimaContentType.class)) {
-			case VilimaPackage.VILIMA_CONTENT_TYPE__NAME:
+		switch (notification.getFeatureID(VilimaShowTag.class)) {
+			case VilimaPackage.VILIMA_SHOW_TAG__SHOW:
+			case VilimaPackage.VILIMA_SHOW_TAG__SEASON:
+			case VilimaPackage.VILIMA_SHOW_TAG__EPISODE:
+			case VilimaPackage.VILIMA_SHOW_TAG__TITLE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

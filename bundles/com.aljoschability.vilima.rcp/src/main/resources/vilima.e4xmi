@@ -2,19 +2,20 @@
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_ekqZkAc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.application" bindingContexts="_sUwwQA_jEeO_4LEaCI1c-g">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_ekqZkQc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.window" label="Vilima" iconURI="platform:/plugin/com.aljoschability.vilima.rcp/src/main/resources/icons/application.png" bindingContexts="_sUwwQA_jEeO_4LEaCI1c-g" x="300" y="200" width="900" height="600">
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_ekrAoAc0EeOgF6k0_n958Q">
-      <children xsi:type="advanced:Perspective" xmi:id="_ekrAoQc0EeOgF6k0_n958Q" label="">
+      <children xsi:type="advanced:Perspective" xmi:id="_ekrAoQc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.rcp.perspective.all" label="">
         <children xsi:type="basic:PartSashContainer" xmi:id="_RdngUGM1EeOXbqwwsskOBw" elementId="" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_9zgf8EdvEeSeSshVzL7ILQ" elementId="" containerData="25">
-            <children xsi:type="basic:PartStack" xmi:id="_6FGk0EfNEeSxLbcBSUEuUQ" elementId="" containerData="60">
-              <children xsi:type="basic:Part" xmi:id="_w_eOkEwWEeSeU5z7yqX-3Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.MetadataPart" label="Metadata" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
-            </children>
             <children xsi:type="basic:PartStack" xmi:id="_xqprkEfOEeSxLbcBSUEuUQ" elementId="" containerData="40">
               <children xsi:type="basic:Part" xmi:id="_UExv0GM1EeOXbqwwsskOBw" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.CatalogPart" label="Catalog" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/catalog.png"/>
             </children>
+            <children xsi:type="basic:PartStack" xmi:id="_6FGk0EfNEeSxLbcBSUEuUQ" elementId="" containerData="60">
+              <children xsi:type="basic:Part" xmi:id="_w_eOkEwWEeSeU5z7yqX-3Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.MetadataPart" label="Metadata" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
+            </children>
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_0T3-8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.partsashcontainer.0" containerData="75">
-            <children xsi:type="basic:PartStack" xmi:id="_1xQi8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.partstack.0" containerData="70">
-              <children xsi:type="basic:Part" xmi:id="_LCgBYAi8EeOn36YhCdmfuQ" elementId="" containerData="75" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="Files" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/files.png">
+            <children xsi:type="basic:PartStack" xmi:id="_Itx8kFBtEeSTY8WzyertyA" elementId="com.aljoschability.vilima.rcp.partstack.0" containerData="75">
+              <children xsi:type="basic:Part" xmi:id="_ecNX4FBtEeSTY8WzyertyA" elementId="com.aljoschability.vilima.rcp.part.shows" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.TableShowsPart" label="Shows" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/blueprints.png"/>
+              <children xsi:type="basic:Part" xmi:id="_LCgBYAi8EeOn36YhCdmfuQ" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="All" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/files.png">
                 <menus xsi:type="menu:PopupMenu" xmi:id="_9PD3QGG-EeObvP6rYfVwSw" elementId="com.aljoschability.malimar.menus.listpart">
                   <children xsi:type="menu:HandledMenuItem" xmi:id="_Ge7XQGMLEeObvP6rYfVwSw" elementId="" label="Refresh Files"/>
                   <children xsi:type="menu:HandledMenuItem" xmi:id="_R8SV8GMMEeObvP6rYfVwSw" elementId="" label="Clean Files"/>
@@ -24,10 +25,8 @@
                   <children xsi:type="menu:HandledMenuItem" xmi:id="_SJehIGN_EeOro_gLAvNijw" elementId="" label="Rename Files"/>
                   <children xsi:type="menu:HandledMenuItem" xmi:id="_m13IgGpBEeO_aLUcRZFLIQ" elementId="com.aljoschability.malimar.ui.handledmenuitem.2" label="List Missing Episodes"/>
                 </menus>
-                <toolbar xmi:id="_Tg924D0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.toolbar.0">
-                  <children xsi:type="menu:DirectToolItem" xmi:id="_UoVHkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.directtoolitem.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ExitHandler"/>
-                </toolbar>
               </children>
+              <children xsi:type="basic:Part" xmi:id="_LqXpgFBtEeSTY8WzyertyA" elementId="com.aljoschability.vilima.rcp.part.movies" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.TableMoviesPart" label="Movies"/>
             </children>
             <children xsi:type="basic:PartStack" xmi:id="_2PKm8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.rcp.partstack.1" containerData="30">
               <children xsi:type="basic:Part" xmi:id="_3l1fIE72EeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.part.tracks" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.TracksPart" label="Tracks" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/tracks.png"/>
@@ -68,6 +67,24 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_ekqZrwc0EeOgF6k0_n958Q" label="About" iconURI="" command="_ekqZpgc0EeOgF6k0_n958Q"/>
       </children>
     </mainMenu>
+    <trimBars xmi:id="_6T4dsE-OEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.trimbar.0">
+      <children xsi:type="menu:ToolBar" xmi:id="_cQ8ZEE-PEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.toolbar.1">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_eHH3kE-PEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.about" label="Save" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/file/save.png" command="_ekqZpgc0EeOgF6k0_n958Q"/>
+        <children xsi:type="menu:ToolControl" xmi:id="_7yaRME-OEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.toolcontrol.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.controls.PerspectiveControl"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_1a08sE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="All" command="_QTiWcE-QEeSmnYfQADCQZw">
+          <parameters xmi:id="_1a08sU-REeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.all"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_f0v3AE-PEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="Movies" command="_QTiWcE-QEeSmnYfQADCQZw">
+          <parameters xmi:id="_ETTewE-QEeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.movies"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_DrZUwE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="TV Shows" command="_QTiWcE-QEeSmnYfQADCQZw">
+          <parameters xmi:id="_DrZUwU-REeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.shows"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_yThNgE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="Other" command="_QTiWcE-QEeSmnYfQADCQZw">
+          <parameters xmi:id="_yThNgU-REeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.other"/>
+        </children>
+      </children>
+    </trimBars>
   </children>
   <handlers xmi:id="_lD63EAkYEeOn36YhCdmfuQ" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ReadDirectoryHandler" command="_nVVgEAkYEeOn36YhCdmfuQ"/>
   <handlers xmi:id="_fOlI8EorEeSxLbcBSUEuUQ" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.RenameFilesHandler" command="_cKgT8EorEeSxLbcBSUEuUQ"/>
@@ -76,6 +93,7 @@
   <handlers xmi:id="_F6ZVEAnuEeOIkI63lPisZg" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_K4x6oAnuEeOIkI63lPisZg"/>
   <handlers xmi:id="_ekqZpwc0EeOgF6k0_n958Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_ekqZpgc0EeOgF6k0_n958Q"/>
   <handlers xmi:id="_V4hXcE1rEeSti-fsXBVUMQ" elementId="" command="_XwvdUE1rEeSti-fsXBVUMQ"/>
+  <handlers xmi:id="_LixgsE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handler.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.SwitchPerspectiveHandler" command="_QTiWcE-QEeSmnYfQADCQZw"/>
   <bindingTables xmi:id="_ekqZngc0EeOgF6k0_n958Q" bindingContext="_sUwwQA_jEeO_4LEaCI1c-g">
     <bindings xmi:id="_Jz_AgEd2EeSeSshVzL7ILQ" elementId="com.aljoschability.vilima.rcp.keybinding.1" keySequence="M1+X" command="_CSzXMD0nEeSYS5JDjizolA"/>
     <bindings xmi:id="_EUoPkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.keybinding.0" keySequence="M1+C" command="_FjsgMD0nEeSYS5JDjizolA"/>
@@ -98,6 +116,9 @@
   <commands xmi:id="_K4x6oAnuEeOIkI63lPisZg" elementId="com.aljoschability.vilima.commands.help.documentation" commandName="Documentation"/>
   <commands xmi:id="_ekqZpgc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.commands.help.about" commandName="About"/>
   <commands xmi:id="_XwvdUE1rEeSti-fsXBVUMQ" elementId="com.aljoschability.vilima.commands.actions.clean" commandName="Clean"/>
+  <commands xmi:id="_QTiWcE-QEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.command.switchPerspective" commandName="Switch Perspective">
+    <parameters xmi:id="_Rn9ywE-QEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.parameters.perspective" name="Perspective" optional="false"/>
+  </commands>
   <addons xmi:id="_ekqZkgc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_ekqZkwc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_ekqZlAc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

@@ -2,69 +2,110 @@
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
-class VilimaCatalog {
-	contains VilimaGenre[] genres
+class VilimaLibrary
+{
 	contains VilimaContentType[] contentTypes
+	contains VilimaGenre[] genres
+	contains VilimaFile[] files
 }
 
-class VilimaContentType {
+class VilimaContentType
+{
 	String[1] name
+	refers VilimaFile[] files opposite contentType
 }
 
-class VilimaGenre {
+class VilimaGenre
+{
 	String[1] name
+	refers VilimaFile[] files opposite genres
 }
 
-/* =================================== */
-class VilimaContent {
-	String[1] path
-	contains MkvFile[] files
-}
-
-class MkvFile  {
+class VilimaFile
+{
 	String[1] filePath
 	String[1] fileName
 	long[1] fileSize
 	long[1] fileDate
-	String segmentUid
+	String segmentUid = "0"
 	String segmentPreviousUid
 	String segmentNextUid
-	long segmentDuration ="-1"
-	long segmentDate ="-1"
 	String segmentTitle
 	String segmentMuxingApp
 	String segmentWritingApp
-	contains MkvTrack[] tracks
-	contains VilimaAttachment[] attachments
-	contains MkvChapterEdition[] editions
-	contains MkvTag[] tags
+	long segmentDuration ="-1"
+	long segmentDate ="-1"
+	contains VilimaFileTrack[] tracks
+	contains VilimaFileAttachment[] attachments
+	contains VilimaFileEdition[] editions
+	contains VilimaFileTagRaw[] tags
+	// actual bidirectional
+	refers VilimaContentType contentType opposite files
+	refers VilimaGenre[] genres opposite files
 }
 
-class VilimaAttachment{
-	String name
-	String description
-	String mimeType
-	long size
+/* === TAGS ========================== */
+abstract class VilimaShowTag
+{
+	String show
+	int season
+	int episode
+	String title
 }
 
-class MkvChapterEdition{
-	long uid
-	contains MkvChapterEntry[] entries
+class VilimaFileTagRaw
+{
+	int target = "50"
+	String targetText
+	contains MkvTagEntry[] entries
 }
 
-class MkvChapterEntry {
-	long uid = "0"
-	long start = "-1"
-	long end = "-1"
-	contains VilimaChapterDisplay[] displays
+class MkvTagEntry
+{
+	String[1] name
+	String[1] language = "und"
+	boolean[1] flagDefault = "true"
+	String value
+	contains MkvTagEntry[] entries
 }
 
-class VilimaChapterDisplay {
-	String string
-	String language
+/* === ATTACHMENTS =================== */
+class VilimaFileAttachment
+{
+	long[1] uid = "0"
+	long[1] size
+	String[1] name
+	String[1] mimeType
+	String[1] description
 }
 
-enum MkvTrackType {
+/* === CHAPTERS ====================== */
+class VilimaFileEdition
+{
+	long[1] uid = "0"
+	boolean[1] flagHidden = "false"
+	boolean[1] flagDefault = "false"
+	contains VilimaFileChapter[] entries
+}
+
+class VilimaFileChapter
+{
+	long[1] uid = "0"
+	long[1] start
+	boolean[1] flagHidden = "false"
+	boolean[1] flagEnabled = "true"
+	contains VilimaFileChapterText[] displays
+}
+
+class VilimaFileChapterText
+{
+	String[1] text
+	String[] languages
+}
+
+/* === TRACKS ======================== */
+enum VilimaFileTrackType
+{
 	VIDEO
 	AUDIO
 	COMPLEX
@@ -74,10 +115,11 @@ enum MkvTrackType {
 	UNKNOWN
 }
 
-class MkvTrack {
+class VilimaFileTrack
+{
 	int number
 	long uid
-	MkvTrackType ^type
+	VilimaFileTrackType ^type
 	boolean flagEnabled = "true"
 	boolean flagDefault = "true"
 	boolean flagForced = "false"
@@ -103,38 +145,15 @@ class MkvTrack {
 	int audioChannels = "1"
 }
 
-class MkvTag {
-	long ^typeValue = "50"
-	String ^type
-	contains MkvTagEntry[] entries
+/* =================================== */
+/* =================================== */
+class VilimaCatalog {
+	contains VilimaContentType[] contentTypes
+	contains VilimaGenre[] genres
 }
 
-class MkvTagEntry {
-	String name
-	String language
-	boolean flagDefault
-	String string
-	contains MkvTagEntry[] entries
+class VilimaContent {
+	String[1] path
+	contains VilimaFile[] files
 }
 
-/*
- * - fourcc
- *   + xvid
- *   + mp42
- * - avc
- *   + profiles [77=Main, 100=High]
- *   + levels [31=3.1, 41=4.1]
-abstract class Codec {
-	String[1] ^id
-	String[1] name
-}
-class VideoCodec extends Codec {
-	String[1] ^type
-	String description
-}
-class AudioCodec extends Codec {
-}
-
-class SubtitleCodec extends Codec {
-}
- */

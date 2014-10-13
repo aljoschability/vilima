@@ -7,12 +7,17 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.di.Persist;
+import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
@@ -23,11 +28,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.PageBook;
 
-import com.aljoschability.vilima.MkvFile;
-import com.aljoschability.vilima.MkvTag;
 import com.aljoschability.vilima.MkvTagEntry;
+import com.aljoschability.vilima.VilimaFile;
+import com.aljoschability.vilima.VilimaFileTagRaw;
 
 public class MetadataPart {
+	@Inject
+	private MDirtyable dirtyable;
+
 	private final Map<String, Control> controls;
 
 	private PageBook book;
@@ -37,6 +45,13 @@ public class MetadataPart {
 	private Composite unknownComposite;
 
 	private Text fullText;
+
+	private VilimaFile input;
+
+	@Persist
+	public void doSave(IProgressMonitor monitor) {
+		System.out.println("we should save now!");
+	}
 
 	public MetadataPart() {
 		controls = new LinkedHashMap<>();
@@ -171,6 +186,16 @@ public class MetadataPart {
 
 		Text titleData = new Text(movieComposite, SWT.BORDER);
 		titleData.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
+		titleData.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				// String before = titleData.getText();
+				// String after = null;
+				// System.out.println(input);
+				//
+				// dirtyable.setDirty(true);
+			}
+		});
 		controls.put("movie.title", titleData);
 
 		// date
@@ -201,8 +226,8 @@ public class MetadataPart {
 		fullText.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 	}
 
-	private String getReleaseDate(MkvFile file) {
-		for (MkvTag tag : file.getTags()) {
+	private String getReleaseDate(VilimaFile file) {
+		for (VilimaFileTagRaw tag : file.getTags()) {
 			for (MkvTagEntry entry : tag.getEntries()) {
 				String value = findTagValue(entry, "DATE_RELEASE");
 				if (value != null) {
@@ -215,7 +240,7 @@ public class MetadataPart {
 
 	private String findTagValue(MkvTagEntry entry, String name) {
 		if (name.equals(entry.getName())) {
-			return entry.getString();
+			return entry.getValue();
 		}
 
 		for (MkvTagEntry child : entry.getEntries()) {
@@ -228,8 +253,8 @@ public class MetadataPart {
 		return null;
 	}
 
-	private String getMovieTitle(MkvFile file) {
-		for (MkvTag tag : file.getTags()) {
+	private String getMovieTitle(VilimaFile file) {
+		for (VilimaFileTagRaw tag : file.getTags()) {
 			for (MkvTagEntry entry : tag.getEntries()) {
 				String value = findTagValue(entry, "TITLE");
 				if (value != null) {
@@ -240,28 +265,35 @@ public class MetadataPart {
 		return "<not set>";
 	}
 
-	private void show(MkvFile file) {
+	private void show(VilimaFile file) {
+		if (file == null) {
+			((Text) controls.get("movie.title")).setText("");
+			((Text) controls.get("movie.date")).setText("");
+
+			fullText.setText("");
+
+			return;
+		}
+
 		((Text) controls.get("movie.title")).setText(getMovieTitle(file));
 		((Text) controls.get("movie.date")).setText(getReleaseDate(file));
 
 		fullText.setText(parseFull(file));
-
-		System.out.println("showing " + file);
 	}
 
-	private String parseFull(MkvFile file) {
+	private String parseFull(VilimaFile file) {
 		StringBuilder builder = new StringBuilder();
-		for (MkvTag tag : file.getTags()) {
+		for (VilimaFileTagRaw tag : file.getTags()) {
 			parseFullTag(builder, tag);
 		}
 
 		return builder.toString();
 	}
 
-	private void parseFullTag(StringBuilder builder, MkvTag tag) {
-		builder.append(tag.getTypeValue());
+	private void parseFullTag(StringBuilder builder, VilimaFileTagRaw tag) {
+		builder.append(tag.getTarget());
 		builder.append(" (");
-		builder.append(tag.getType());
+		builder.append(tag.getTargetText());
 		builder.append("):");
 		builder.append("\n");
 
@@ -277,7 +309,7 @@ public class MetadataPart {
 
 		builder.append(entry.getName());
 		builder.append("=");
-		builder.append(entry.getString());
+		builder.append(entry.getValue());
 		builder.append("\n");
 
 		for (MkvTagEntry child : entry.getEntries()) {
@@ -287,13 +319,17 @@ public class MetadataPart {
 
 	@Inject
 	public void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
+		input = null;
+
 		if (selection != null && selection.size() == 1) {
 			Object selected = selection.getFirstElement();
-			if (selected instanceof MkvFile) {
-				show((MkvFile) selected);
+			if (selected instanceof VilimaFile) {
+				input = (VilimaFile) selected;
 			}
-		} else {
-			System.out.println("empty selection or none selected!");
+		}
+
+		if (book != null && !book.isDisposed()) {
+			show(input);
 		}
 	}
 }

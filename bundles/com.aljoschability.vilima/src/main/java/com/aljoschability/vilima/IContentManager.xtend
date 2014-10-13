@@ -7,7 +7,7 @@ interface IContentManager {
 
 	def void setPath(String path)
 
-	def void add(MkvFile file)
+	def void add(VilimaFile file)
 
 	def VilimaContent getContent()
 

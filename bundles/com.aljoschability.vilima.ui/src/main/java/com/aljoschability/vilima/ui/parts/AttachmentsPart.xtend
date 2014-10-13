@@ -1,7 +1,5 @@
 package com.aljoschability.vilima.ui.parts;
 
-import com.aljoschability.vilima.MkvFile
-import com.aljoschability.vilima.VilimaAttachment
 import com.aljoschability.vilima.format.VilimaFormatter
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -22,13 +20,15 @@ import org.eclipse.swt.graphics.Image
 import java.util.Map
 import org.eclipse.swt.widgets.Display
 import javax.annotation.PreDestroy
+import com.aljoschability.vilima.VilimaFile
+import com.aljoschability.vilima.VilimaFileAttachment
 
 class AttachmentsPart {
 	@Inject Display display
 
 	TableViewer viewer
 
-	MkvFile input
+	VilimaFile input
 
 	val Map<String, Image> fileImages
 
@@ -65,15 +65,15 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaAttachment) {
-					return String.valueOf(element.name)
+				if (element instanceof VilimaFileAttachment) {
+					return String.valueOf(element.getName)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof VilimaAttachment) {
-					val name = element.name
+				if (element instanceof VilimaFileAttachment) {
+					val name = element.getName
 					if (name != null) {
 						val index = name.indexOf(".")
 						if (index != -1) {
@@ -99,8 +99,8 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaAttachment) {
-					return VilimaFormatter::fileSize(element.size)
+				if (element instanceof VilimaFileAttachment) {
+					return VilimaFormatter::fileSize(element.getSize)
 				}
 				return ""
 			}
@@ -118,9 +118,9 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaAttachment) {
-					if (element.mimeType != null) {
-						return element.mimeType
+				if (element instanceof VilimaFileAttachment) {
+					if (element.getMimeType != null) {
+						return element.getMimeType
 					}
 				}
 				return ""
@@ -139,9 +139,9 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaAttachment) {
-					if (element.description != null) {
-						return element.description
+				if (element instanceof VilimaFileAttachment) {
+					if (element.getDescription != null) {
+						return element.getDescription
 					}
 				}
 				return ""
@@ -168,7 +168,7 @@ class AttachmentsPart {
 
 		if (selection != null && selection.size() == 1) {
 			val selected = selection.firstElement
-			if (selected instanceof MkvFile) {
+			if (selected instanceof VilimaFile) {
 				input = selected
 			}
 		}
@@ -190,7 +190,7 @@ class AttachmentsPart {
 
 class VilimaAttachmentsViewerContentProvider extends ArrayContentProvider {
 	override getElements(Object element) {
-		if (element instanceof MkvFile) {
+		if (element instanceof VilimaFile) {
 			return element.attachments
 		}
 
