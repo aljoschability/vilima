@@ -62,17 +62,6 @@ public class MatroskaReader {
 		// close file seeker
 		seeker.dispose();
 
-		// parse the read tags
-		// for (MkvTag tag : file.getTags()) {
-		// for (MkvTagEntry entry : tag.getEntries()) {
-		// if (entry.getName().equals("CONTENT_TYPE")) {
-		// VilimaContentType contentType = VilimaFactory.eINSTANCE.createVilimaContentType();
-		// file.setContentType(contentType);
-		// System.out.println(entry.getString());
-		// }
-		// }
-		// }
-
 		// TODO: debug
 		final String elapsed = DEBUG_NF.format((System.nanoTime() - started) / 1000000d);
 		System.out.println("'" + file.getName() + "' has been read in " + elapsed + "ms.");
