@@ -71,18 +71,6 @@
       <children xsi:type="menu:ToolBar" xmi:id="_cQ8ZEE-PEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.toolbar.1">
         <children xsi:type="menu:HandledToolItem" xmi:id="_eHH3kE-PEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.about" label="Save" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/file/save.png" command="_ekqZpgc0EeOgF6k0_n958Q"/>
         <children xsi:type="menu:ToolControl" xmi:id="_7yaRME-OEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.toolcontrol.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.controls.PerspectiveControl"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_1a08sE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="All" command="_QTiWcE-QEeSmnYfQADCQZw">
-          <parameters xmi:id="_1a08sU-REeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.all"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_f0v3AE-PEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="Movies" command="_QTiWcE-QEeSmnYfQADCQZw">
-          <parameters xmi:id="_ETTewE-QEeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.movies"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_DrZUwE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="TV Shows" command="_QTiWcE-QEeSmnYfQADCQZw">
-          <parameters xmi:id="_DrZUwU-REeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.shows"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_yThNgE-REeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.handledtoolitem.movies" label="Other" command="_QTiWcE-QEeSmnYfQADCQZw">
-          <parameters xmi:id="_yThNgU-REeSmnYfQADCQZw" elementId="" name="com.aljoschability.vilima.parameters.perspective" value="com.aljoschability.vilima.rcp.perspective.other"/>
-        </children>
       </children>
     </trimBars>
   </children>

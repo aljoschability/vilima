@@ -11,7 +11,6 @@ final class Activator extends AbstractCoreActivator {
 
 	override protected initialize() {
 		Activator::INSTANCE = this
-
 	}
 
 	override protected dispose() {
