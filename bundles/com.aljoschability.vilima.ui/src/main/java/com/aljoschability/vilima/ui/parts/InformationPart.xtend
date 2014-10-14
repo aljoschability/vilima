@@ -14,12 +14,12 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
-import com.aljoschability.vilima.VilimaFile
+import com.aljoschability.vilima.MkFile
 
 class InformationPart {
 	val Map<String, Label> labelsMap = newLinkedHashMap
 
-	VilimaFile input
+	MkFile input
 
 	@PostConstruct
 	def void create(Composite parent) {
@@ -112,7 +112,7 @@ class InformationPart {
 		labelsMap.put("segment.date", dateData)
 	}
 
-	def private show(VilimaFile file) {
+	def private show(MkFile file) {
 		if (file == null) {
 			for (key : labelsMap.keySet) {
 				val label = labelsMap.get(key)
@@ -123,15 +123,17 @@ class InformationPart {
 			return
 		}
 
-		labelsMap.get("file.name").text = String::valueOf(file.getFileName)
-		labelsMap.get("file.path").text = String::valueOf(file.getFilePath)
-		labelsMap.get("file.size").text = String::valueOf(VilimaFormatter::fileSize(file.getFileSize))
-		labelsMap.get("file.modified").text = String::valueOf(VilimaFormatter::date(file.getFileDate))
+		labelsMap.get("file.name").text = String::valueOf(file.getName)
+		labelsMap.get("file.path").text = String::valueOf(file.getPath)
+		labelsMap.get("file.size").text = String::valueOf(VilimaFormatter::fileSize(file.getSize))
+		labelsMap.get("file.modified").text = String::valueOf(VilimaFormatter::date(file.getDateModified))
 
-		labelsMap.get("segment.title").text = String::valueOf(file.getSegmentTitle)
-		labelsMap.get("segment.date").text = String::valueOf(VilimaFormatter::date(file.getSegmentDate))
-		labelsMap.get("segment.muxingApp").text = String::valueOf(file.getSegmentMuxingApp)
-		labelsMap.get("segment.writingApp").text = String::valueOf(file.getSegmentWritingApp)
+		if (file.getInfo != null) {
+			labelsMap.get("segment.title").text = String::valueOf(file.getInfo.getTitle)
+			labelsMap.get("segment.date").text = String::valueOf(VilimaFormatter::date(file.getInfo.getDate))
+			labelsMap.get("segment.muxingApp").text = String::valueOf(file.getInfo.getMuxingApp)
+			labelsMap.get("segment.writingApp").text = String::valueOf(file.getInfo.getWritingApp)
+		}
 	}
 
 	@Inject
@@ -140,7 +142,7 @@ class InformationPart {
 
 		if (selection != null && selection.size() == 1) {
 			val selected = selection.getFirstElement();
-			if (selected instanceof VilimaFile) {
+			if (selected instanceof MkFile) {
 				input = selected
 			}
 		}

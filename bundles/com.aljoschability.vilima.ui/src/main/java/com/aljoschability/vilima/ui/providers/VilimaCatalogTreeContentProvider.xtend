@@ -1,14 +1,13 @@
 package com.aljoschability.vilima.ui.providers
 
-import com.aljoschability.vilima.VilimaCatalog
+import com.aljoschability.vilima.VilimaLibrary
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ITreeContentProvider
 
 class VilimaCatalogTreeContentProvider extends ArrayContentProvider implements ITreeContentProvider {
-
 	override getElements(Object element) {
 		val list = newArrayList
-		if (element instanceof VilimaCatalog) {
+		if (element instanceof VilimaLibrary) {
 			list += new VilimaCatalogTreeNode("Genres", element.genres)
 		}
 		return list

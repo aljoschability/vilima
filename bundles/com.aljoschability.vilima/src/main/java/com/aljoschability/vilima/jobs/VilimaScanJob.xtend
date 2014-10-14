@@ -72,11 +72,11 @@ class VilimaFileWalker extends SimpleFileVisitor<Path> {
 		if (path.toString.toLowerCase.endsWith(".mkv")) {
 			val realFile = path.toFile
 
-			val file = VilimaFactory::eINSTANCE.createVilimaFile
-			file.fileName = realFile.name
-			file.filePath = realFile.parent
-			file.fileDate = realFile.lastModified
-			file.fileSize = realFile.length
+			val file = VilimaFactory::eINSTANCE.createMkFile
+			file.name = realFile.name
+			file.path = realFile.parent
+			file.dateModified = realFile.lastModified
+			file.size = realFile.length
 
 			manager.add(file)
 		}

@@ -15,9 +15,9 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
-import com.aljoschability.vilima.VilimaFile
-import com.aljoschability.vilima.VilimaFileEdition
-import com.aljoschability.vilima.VilimaFileChapter
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkFileEdition
+import com.aljoschability.vilima.MkFileChapter
 
 class ChaptersPart {
 	TableViewer viewer
@@ -50,9 +50,9 @@ class ChaptersPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileChapter) {
+				if (element instanceof MkFileChapter) {
 					val b = new StringBuilder()
-					for (display : element.displays) {
+					for (display : element.texts) {
 						b.append(display.getText)
 						b.append(" (")
 						b.append(display.getLanguages)
@@ -77,11 +77,11 @@ class ChaptersPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileEdition) {
+				if (element instanceof MkFileEdition) {
 					return "Edition " + element.getUid
 				}
 
-				if (element instanceof VilimaFileChapter) {
+				if (element instanceof MkFileChapter) {
 					return VilimaFormatter::getTime(element.getStart / 1000000)
 				}
 
@@ -96,7 +96,7 @@ class ChaptersPart {
 
 		if (selection != null && selection.size == 1) {
 			val selected = selection.firstElement
-			if (selected instanceof VilimaFile) {
+			if (selected instanceof MkFile) {
 				if (selected.editions.size == 1) {
 					input = selected.editions.get(0)
 				}
@@ -111,8 +111,8 @@ class ChaptersPart {
 
 class VilimaChaptersViewerContentProvider extends ArrayContentProvider {
 	override getElements(Object element) {
-		if (element instanceof VilimaFileEdition) {
-			return element.entries
+		if (element instanceof MkFileEdition) {
+			return element.chapters
 		}
 
 		return newArrayOfSize(0)

@@ -1,4 +1,5 @@
-@GenModel(nonNLSMarkers="true", complianceLevel="7.0", editDirectory="/com.aljoschability.vilima.edit/src/main/xcore")
+@GenModel(nonNLSMarkers="true",
+	complianceLevel="7.0")
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
@@ -6,127 +7,63 @@ class VilimaLibrary
 {
 	contains VilimaContentType[] contentTypes
 	contains VilimaGenre[] genres
-	contains VilimaFile[] files
+	contains MkFile[] files
 }
 
 class VilimaContentType
 {
 	String[1] name
-	refers VilimaFile[] files opposite contentType
+	refers MkFile[] files opposite contentType
 }
 
 class VilimaGenre
 {
 	String[1] name
-	refers VilimaFile[] files opposite genres
+	refers MkFile[] files opposite genres
 }
 
-class VilimaFile
+class MkFile
 {
-	String[1] filePath
-	String[1] fileName
-	long[1] fileSize
-	long[1] fileDate
-	String segmentUid = "0"
-	String segmentPreviousUid
-	String segmentNextUid
-	String segmentTitle
-	String segmentMuxingApp
-	String segmentWritingApp
-	long segmentDuration ="-1"
-	long segmentDate ="-1"
-	contains VilimaFileTrack[] tracks
-	contains VilimaFileAttachment[] attachments
-	contains VilimaFileEdition[] editions
-	contains VilimaFileTagRaw[] tags
+	String[1] path
+	String[1] name
+	long[1] size
+	long[1] dateModified
+	contains MkFileInfo[1] info
+	contains MkFileTrack[] tracks
+	contains MkFileAttachment[] attachments
+	contains MkFileEdition[] editions
+	contains MkFileTag[] tags
 	// actual bidirectional
 	refers VilimaContentType contentType opposite files
 	refers VilimaGenre[] genres opposite files
 }
 
-/* === TAGS ========================== */
-abstract class VilimaShowTag
+/* === INFO ========================== */
+class MkFileInfo
 {
-	String show
-	int season
-	int episode
+	long duration ="-1"
+	long date ="-1"
+	String uid
+	String previousUid
+	String nextUid
 	String title
-}
-
-class VilimaFileTagRaw
-{
-	int target = "50"
-	String targetText
-	contains MkvTagEntry[] entries
-}
-
-class MkvTagEntry
-{
-	String[1] name
-	String[1] language = "und"
-	boolean[1] flagDefault = "true"
-	String value
-	contains MkvTagEntry[] entries
-}
-
-/* === ATTACHMENTS =================== */
-class VilimaFileAttachment
-{
-	long[1] uid = "0"
-	long[1] size
-	String[1] name
-	String[1] mimeType
-	String[1] description
-}
-
-/* === CHAPTERS ====================== */
-class VilimaFileEdition
-{
-	long[1] uid = "0"
-	boolean[1] flagHidden = "false"
-	boolean[1] flagDefault = "false"
-	contains VilimaFileChapter[] entries
-}
-
-class VilimaFileChapter
-{
-	long[1] uid = "0"
-	long[1] start
-	boolean[1] flagHidden = "false"
-	boolean[1] flagEnabled = "true"
-	contains VilimaFileChapterText[] displays
-}
-
-class VilimaFileChapterText
-{
-	String[1] text
-	String[] languages
+	String muxingApp
+	String writingApp
 }
 
 /* === TRACKS ======================== */
-enum VilimaFileTrackType
+class MkFileTrack
 {
-	VIDEO
-	AUDIO
-	COMPLEX
-	LOGO
-	SUBTITLE
-	CONTROL
-	UNKNOWN
-}
-
-class VilimaFileTrack
-{
-	int number
-	long uid
-	VilimaFileTrackType ^type
-	boolean flagEnabled = "true"
-	boolean flagDefault = "true"
-	boolean flagForced = "false"
-	boolean flagLacing = "true"
+	int[1] number = "0"
+	long[1] uid = "0"
+	MkFileTrackType[1] ^type = "UNKNOWN"
+	boolean[1] flagEnabled = "true"
+	boolean[1] flagDefault = "true"
+	boolean[1] flagForced = "false"
+	boolean[1] flagLacing = "true"
 	String name
 	String language = "eng"
-	String codecId
+	String[1] codecId
 	String codecPrivate
 	String codecName
 	boolean videoFlagInterlaced = "false"
@@ -145,15 +82,64 @@ class VilimaFileTrack
 	int audioChannels = "1"
 }
 
-/* =================================== */
-/* =================================== */
-class VilimaCatalog {
-	contains VilimaContentType[] contentTypes
-	contains VilimaGenre[] genres
+enum MkFileTrackType
+{
+	UNKNOWN
+	VIDEO
+	AUDIO
+	COMPLEX
+	LOGO
+	SUBTITLE
+	CONTROL
 }
 
-class VilimaContent {
-	String[1] path
-	contains VilimaFile[] files
+/* === ATTACHMENTS =================== */
+class MkFileAttachment
+{
+	long[1] uid = "0"
+	long[1] size
+	String[1] name
+	String[1] mimeType
+	String[1] description
 }
 
+/* === CHAPTERS ====================== */
+class MkFileEdition
+{
+	long[1] uid = "0"
+	boolean[1] flagHidden = "false"
+	boolean[1] flagDefault = "false"
+	contains MkFileChapter[] chapters
+}
+
+class MkFileChapter
+{
+	long[1] uid = "0"
+	long[1] start = "-1"
+	boolean[1] flagHidden = "false"
+	boolean[1] flagEnabled = "true"
+	contains MkFileChapterText[] texts
+}
+
+class MkFileChapterText
+{
+	String[1] text
+	String[] languages
+}
+
+/* === TAGS ========================== */
+class MkFileTag
+{
+	int target = "50"
+	String targetText
+	contains MkFileTagEntry[] entries
+}
+
+class MkFileTagEntry
+{
+	String[1] name
+	String[1] language = "und"
+	boolean[1] languageDefault = "true"
+	String value
+	contains MkFileTagEntry[] entries
+}

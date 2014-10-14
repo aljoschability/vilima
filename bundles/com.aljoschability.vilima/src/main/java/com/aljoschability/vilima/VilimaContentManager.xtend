@@ -1,32 +1,35 @@
 package com.aljoschability.vilima
 
-import org.eclipse.e4.core.di.annotations.Creatable
 import org.eclipse.e4.core.services.events.IEventBroker
 import org.eclipse.emf.ecore.util.EcoreUtil
 
-@Creatable
 class VilimaContentManager implements IContentManager {
 	IEventBroker broker
 
-	VilimaContent content
+	VilimaLibrary library
+
+	@Deprecated String path
 
 	new(IEventBroker broker) {
 		this.broker = broker
 
-		content = VilimaFactory::eINSTANCE.createVilimaContent
+		library = VilimaFactory::eINSTANCE.createVilimaLibrary()
 	}
 
 	override clear() {
-		for (file : content.files) {
-			EcoreUtil::delete(file)
-		}
+		val delete = newHashSet()
+		delete.addAll(content.files)
 
 		content.files.clear
+
+		for (file : delete) {
+			EcoreUtil::delete(file)
+		}
 
 		refresh()
 	}
 
-	override add(VilimaFile file) {
+	override add(MkFile file) {
 		content.files += file
 	}
 
@@ -35,14 +38,15 @@ class VilimaContentManager implements IContentManager {
 	}
 
 	override getPath() {
-		return content.path
+		println("VilimaContentManager#getPath() does not function")
+		return path
 	}
 
 	override setPath(String path) {
-		content.path = path
+		this.path = path
 	}
 
 	override getContent() {
-		return content
+		return library
 	}
 }

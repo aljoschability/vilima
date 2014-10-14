@@ -1,8 +1,9 @@
 package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.IContentManager
-import com.aljoschability.vilima.VilimaContent
+import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.VilimaEventTopics
+import com.aljoschability.vilima.VilimaLibrary
 import com.aljoschability.vilima.VilimaPackage
 import com.aljoschability.vilima.format.VilimaFormatter
 import com.aljoschability.vilima.ui.providers.VilimaContentProvider
@@ -23,7 +24,6 @@ import org.eclipse.swt.program.Program
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Tree
 import org.eclipse.swt.widgets.TreeColumn
-import com.aljoschability.vilima.VilimaFile
 
 class TableMoviesPart {
 	@Inject IContentManager manager
@@ -52,16 +52,15 @@ class TableMoviesPart {
 		createIconColumn()
 
 		// the file name
-		createStringColumn("Name", 140, VilimaPackage.Literals.VILIMA_FILE__FILE_NAME)
+		createStringColumn("Name", 140, VilimaPackage.Literals.MK_FILE__NAME)
 
 		// the title of the segment
-		createStringColumn("Title", 60, VilimaPackage.Literals.VILIMA_FILE__SEGMENT_TITLE)
-
+		//createStringColumn("Title", 60, VilimaPackage.Literals.VILIMA_FILE__SEGMENT_TITLE)
 		// relevant file contents
 		createTagsColumn()
 
 		// the file size
-		createSizeColumn("Size", 63, VilimaPackage.Literals.VILIMA_FILE__FILE_SIZE)
+		createSizeColumn("Size", 63, VilimaPackage.Literals.MK_FILE__SIZE)
 
 		// the segment duration
 		createDurationColumn("Duration", 66)
@@ -79,7 +78,7 @@ class TableMoviesPart {
 		val viewerColumn = new TreeViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
+				if (element instanceof MkFile) {
 					val value = element.tags.size
 					if (value > 0) {
 						return String.valueOf(value)
@@ -124,8 +123,10 @@ class TableMoviesPart {
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
-					return VilimaFormatter::getTime(element.getSegmentDuration)
+				if (element instanceof MkFile) {
+					if (element.getInfo != null) {
+						return VilimaFormatter::getTime(element.getInfo.getDuration)
+					}
 				}
 				return ""
 			}
@@ -203,7 +204,7 @@ class TableMoviesPart {
 	}
 
 	@Inject @Optional
-	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) VilimaContent content) {
+	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) VilimaLibrary content) {
 		if (viewer != null) {
 			viewer.input = content
 		}

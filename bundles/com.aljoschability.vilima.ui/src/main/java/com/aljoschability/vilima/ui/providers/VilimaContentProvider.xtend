@@ -1,15 +1,15 @@
 package com.aljoschability.vilima.ui.providers
 
+import com.aljoschability.vilima.IContentManager
+import com.aljoschability.vilima.VilimaLibrary
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ITreeContentProvider
-import com.aljoschability.vilima.IContentManager
-import com.aljoschability.vilima.VilimaContent
 
 class VilimaContentProvider extends ArrayContentProvider implements ITreeContentProvider {
 	IContentManager manager
 
 	override getElements(Object element) {
-		if (element instanceof VilimaContent) {
+		if (element instanceof VilimaLibrary) {
 			return element.files
 		}
 

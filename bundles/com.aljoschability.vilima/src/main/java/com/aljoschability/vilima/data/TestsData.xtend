@@ -2,9 +2,9 @@ package com.aljoschability.vilima.data
 
 import java.util.Comparator
 import org.eclipse.emf.ecore.EStructuralFeature
-import com.aljoschability.vilima.VilimaFile
+import com.aljoschability.vilima.MkFile
 
-abstract class AbstractVilimaColumn implements Comparator<VilimaFile> {
+abstract class AbstractVilimaColumn implements Comparator<MkFile> {
 }
 
 class VilimaStringColumn extends AbstractVilimaColumn {
@@ -14,7 +14,7 @@ class VilimaStringColumn extends AbstractVilimaColumn {
 		this.feature = feature
 	}
 
-	override compare(VilimaFile a, VilimaFile b) {
+	override compare(MkFile a, MkFile b) {
 		val aFeature = a.eGet(feature) as String
 		val bFeature = b.eGet(feature) as String
 

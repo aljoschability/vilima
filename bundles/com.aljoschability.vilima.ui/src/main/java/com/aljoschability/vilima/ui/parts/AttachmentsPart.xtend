@@ -20,15 +20,15 @@ import org.eclipse.swt.graphics.Image
 import java.util.Map
 import org.eclipse.swt.widgets.Display
 import javax.annotation.PreDestroy
-import com.aljoschability.vilima.VilimaFile
-import com.aljoschability.vilima.VilimaFileAttachment
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkFileAttachment
 
 class AttachmentsPart {
 	@Inject Display display
 
 	TableViewer viewer
 
-	VilimaFile input
+	MkFile input
 
 	val Map<String, Image> fileImages
 
@@ -65,14 +65,14 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileAttachment) {
+				if (element instanceof MkFileAttachment) {
 					return String.valueOf(element.getName)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof VilimaFileAttachment) {
+				if (element instanceof MkFileAttachment) {
 					val name = element.getName
 					if (name != null) {
 						val index = name.indexOf(".")
@@ -99,7 +99,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileAttachment) {
+				if (element instanceof MkFileAttachment) {
 					return VilimaFormatter::fileSize(element.getSize)
 				}
 				return ""
@@ -118,7 +118,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileAttachment) {
+				if (element instanceof MkFileAttachment) {
 					if (element.getMimeType != null) {
 						return element.getMimeType
 					}
@@ -139,7 +139,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileAttachment) {
+				if (element instanceof MkFileAttachment) {
 					if (element.getDescription != null) {
 						return element.getDescription
 					}
@@ -168,7 +168,7 @@ class AttachmentsPart {
 
 		if (selection != null && selection.size() == 1) {
 			val selected = selection.firstElement
-			if (selected instanceof VilimaFile) {
+			if (selected instanceof MkFile) {
 				input = selected
 			}
 		}
@@ -190,7 +190,7 @@ class AttachmentsPart {
 
 class VilimaAttachmentsViewerContentProvider extends ArrayContentProvider {
 	override getElements(Object element) {
-		if (element instanceof VilimaFile) {
+		if (element instanceof MkFile) {
 			return element.attachments
 		}
 

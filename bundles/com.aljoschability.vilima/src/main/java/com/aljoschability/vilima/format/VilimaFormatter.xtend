@@ -2,14 +2,14 @@ package com.aljoschability.vilima.format
 
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import com.aljoschability.vilima.VilimaFileTrack
+import com.aljoschability.vilima.MkFileTrack
 
 class VilimaFormatter {
 	static val DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
 	static val SIZE_FORMAT = NumberFormat::getNumberInstance
 
-	def static String getTrackInfo(VilimaFileTrack track) {
+	def static String getTrackInfo(MkFileTrack track) {
 		if (track.getCodecId.startsWith("A_")) {
 			return '''«track.getCodecId.substring(2)» («track.getAudioChannels» channels)'''
 		}
@@ -59,9 +59,29 @@ class VilimaFormatter {
 			val minutes = ((duration / (1000 * 60)) % 60);
 			val hours = ((duration / (1000 * 60 * 60)) % 24);
 
-			val format = "%d:%02d:%02d,%03d"
+			val builder = new StringBuilder
+			if (hours > 0) {
+				builder.append(hours)
+				builder.append(":")
+			}
 
-			return String.format(format, hours, minutes, seconds, ms)
+			if (builder.length > 0 || minutes > 0) {
+				builder.append(String.format("%02d", minutes))
+				builder.append(":")
+			}
+
+			if (builder.length > 0 || seconds > 0) {
+				builder.append(String.format("%02d", seconds))
+				builder.append(",")
+			}
+
+			if (builder.length > 0 || ms > 0) {
+				builder.append(String.format("%03d", ms))
+			}
+
+			// val format = "%d:%02d:%02d,%03d"
+			// return String.format(format, hours, minutes, seconds, ms)
+			return builder.toString()
 		}
 
 		return ""

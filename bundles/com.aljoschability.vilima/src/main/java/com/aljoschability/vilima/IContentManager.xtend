@@ -7,9 +7,9 @@ interface IContentManager {
 
 	def void setPath(String path)
 
-	def void add(VilimaFile file)
+	def void add(MkFile file)
 
-	def VilimaContent getContent()
+	def VilimaLibrary getContent()
 
 	def void refresh()
 }

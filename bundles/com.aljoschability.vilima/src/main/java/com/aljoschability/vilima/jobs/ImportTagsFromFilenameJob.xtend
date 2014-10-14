@@ -5,10 +5,10 @@ import org.eclipse.core.runtime.IProgressMonitor
 import java.util.Collection
 import java.io.File
 import java.util.regex.Pattern
-import com.aljoschability.vilima.VilimaFile
+import com.aljoschability.vilima.MkFile
 
 class ImportTagsFromFilenameJob extends Job {
-	new(Collection<VilimaFile> files, String pattern) {
+	new(Collection<MkFile> files, String pattern) {
 		super("import tags from file name")
 	}
 

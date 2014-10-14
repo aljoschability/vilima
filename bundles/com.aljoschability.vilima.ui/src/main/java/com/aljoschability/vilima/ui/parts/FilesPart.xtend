@@ -1,7 +1,8 @@
 package com.aljoschability.vilima.ui.parts
 
-import com.aljoschability.vilima.VilimaContent
+import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.VilimaEventTopics
+import com.aljoschability.vilima.VilimaLibrary
 import com.aljoschability.vilima.format.VilimaFormatter
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -20,7 +21,6 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
-import com.aljoschability.vilima.VilimaFile
 
 class FilesPart {
 	@Inject Display display
@@ -75,8 +75,8 @@ class FilesPart {
 			Image image
 
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
-					return String.valueOf(element.getFileName)
+				if (element instanceof MkFile) {
+					return String.valueOf(element.getName)
 				}
 				return ""
 			}
@@ -110,10 +110,12 @@ class FilesPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
-					val value = element.getSegmentTitle
-					if (value != null) {
-						return String.valueOf(value)
+				if (element instanceof MkFile) {
+					if (element.getInfo != null) {
+						val value = element.getInfo.getTitle
+						if (value != null) {
+							return value
+						}
 					}
 				}
 				return ""
@@ -132,7 +134,7 @@ class FilesPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
+				if (element instanceof MkFile) {
 					val value = element.tags.size
 					if (value > 0) {
 						return String.valueOf(value)
@@ -154,8 +156,8 @@ class FilesPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
-					return VilimaFormatter::fileSize(element.getFileSize)
+				if (element instanceof MkFile) {
+					return VilimaFormatter::fileSize(element.getSize)
 				}
 				return ""
 			}
@@ -173,8 +175,10 @@ class FilesPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFile) {
-					return VilimaFormatter::getTime(element.getSegmentDuration)
+				if (element instanceof MkFile) {
+					if (element.getInfo != null) {
+						return VilimaFormatter::getTime(element.getInfo.getDuration)
+					}
 				}
 				return ""
 			}
@@ -182,7 +186,7 @@ class FilesPart {
 	}
 
 	@Inject @Optional
-	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) VilimaContent content) {
+	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) VilimaLibrary content) {
 		input = content.files
 
 		if (viewer != null && !viewer.control.disposed) {

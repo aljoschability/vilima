@@ -27,7 +27,7 @@ class CatalogPart {
 	private static def createDummyInput() {
 		val f = VilimaFactory::eINSTANCE
 
-		val cat = f.createVilimaCatalog
+		val cat = f.createVilimaLibrary
 
 		var genre = f.createVilimaGenre
 		genre.name = "Mystery"

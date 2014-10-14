@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.PageBook;
 
-import com.aljoschability.vilima.MkvTagEntry;
-import com.aljoschability.vilima.VilimaFile;
-import com.aljoschability.vilima.VilimaFileTagRaw;
+import com.aljoschability.vilima.MkFileTagEntry;
+import com.aljoschability.vilima.MkFile;
+import com.aljoschability.vilima.MkFileTag;
 
 public class MetadataPart {
 	@Inject
@@ -46,7 +46,7 @@ public class MetadataPart {
 
 	private Text fullText;
 
-	private VilimaFile input;
+	private MkFile input;
 
 	@Persist
 	public void doSave(IProgressMonitor monitor) {
@@ -226,9 +226,9 @@ public class MetadataPart {
 		fullText.setLayoutData(GridDataFactory.fillDefaults().grab(true, true).create());
 	}
 
-	private String getReleaseDate(VilimaFile file) {
-		for (VilimaFileTagRaw tag : file.getTags()) {
-			for (MkvTagEntry entry : tag.getEntries()) {
+	private String getReleaseDate(MkFile file) {
+		for (MkFileTag tag : file.getTags()) {
+			for (MkFileTagEntry entry : tag.getEntries()) {
 				String value = findTagValue(entry, "DATE_RELEASE");
 				if (value != null) {
 					return value;
@@ -238,12 +238,12 @@ public class MetadataPart {
 		return "<not set>";
 	}
 
-	private String findTagValue(MkvTagEntry entry, String name) {
+	private String findTagValue(MkFileTagEntry entry, String name) {
 		if (name.equals(entry.getName())) {
 			return entry.getValue();
 		}
 
-		for (MkvTagEntry child : entry.getEntries()) {
+		for (MkFileTagEntry child : entry.getEntries()) {
 			String value = findTagValue(child, "DATE_RELEASE");
 			if (value != null) {
 				return value;
@@ -253,9 +253,9 @@ public class MetadataPart {
 		return null;
 	}
 
-	private String getMovieTitle(VilimaFile file) {
-		for (VilimaFileTagRaw tag : file.getTags()) {
-			for (MkvTagEntry entry : tag.getEntries()) {
+	private String getMovieTitle(MkFile file) {
+		for (MkFileTag tag : file.getTags()) {
+			for (MkFileTagEntry entry : tag.getEntries()) {
 				String value = findTagValue(entry, "TITLE");
 				if (value != null) {
 					return value;
@@ -265,7 +265,7 @@ public class MetadataPart {
 		return "<not set>";
 	}
 
-	private void show(VilimaFile file) {
+	private void show(MkFile file) {
 		if (file == null) {
 			((Text) controls.get("movie.title")).setText("");
 			((Text) controls.get("movie.date")).setText("");
@@ -281,28 +281,28 @@ public class MetadataPart {
 		fullText.setText(parseFull(file));
 	}
 
-	private String parseFull(VilimaFile file) {
+	private String parseFull(MkFile file) {
 		StringBuilder builder = new StringBuilder();
-		for (VilimaFileTagRaw tag : file.getTags()) {
+		for (MkFileTag tag : file.getTags()) {
 			parseFullTag(builder, tag);
 		}
 
 		return builder.toString();
 	}
 
-	private void parseFullTag(StringBuilder builder, VilimaFileTagRaw tag) {
+	private void parseFullTag(StringBuilder builder, MkFileTag tag) {
 		builder.append(tag.getTarget());
 		builder.append(" (");
 		builder.append(tag.getTargetText());
 		builder.append("):");
 		builder.append("\n");
 
-		for (MkvTagEntry entry : tag.getEntries()) {
+		for (MkFileTagEntry entry : tag.getEntries()) {
 			parseFullTagEntry(builder, entry, 1);
 		}
 	}
 
-	private void parseFullTagEntry(StringBuilder builder, MkvTagEntry entry, int indent) {
+	private void parseFullTagEntry(StringBuilder builder, MkFileTagEntry entry, int indent) {
 		for (int i = 0; i < indent; i++) {
 			builder.append("\t");
 		}
@@ -312,7 +312,7 @@ public class MetadataPart {
 		builder.append(entry.getValue());
 		builder.append("\n");
 
-		for (MkvTagEntry child : entry.getEntries()) {
+		for (MkFileTagEntry child : entry.getEntries()) {
 			parseFullTagEntry(builder, child, indent + 1);
 		}
 	}
@@ -323,8 +323,8 @@ public class MetadataPart {
 
 		if (selection != null && selection.size() == 1) {
 			Object selected = selection.getFirstElement();
-			if (selected instanceof VilimaFile) {
-				input = (VilimaFile) selected;
+			if (selected instanceof MkFile) {
+				input = (MkFile) selected;
 			}
 		}
 

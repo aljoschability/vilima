@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
 
-import com.aljoschability.vilima.VilimaFile
-import com.aljoschability.vilima.VilimaFileTrack
-import static com.aljoschability.vilima.VilimaFileTrackType.*
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkFileTrack
+import static com.aljoschability.vilima.MkFileTrackType.*
 
 class TracksPart {
 	Object input
@@ -38,8 +38,8 @@ class TracksPart {
 		viewer.contentProvider = ArrayContentProvider::getInstance()
 		viewer.comparator = new ViewerComparator() {
 			override compare(Viewer viewer, Object a, Object b) {
-				if (a instanceof VilimaFileTrack) {
-					if (b instanceof VilimaFileTrack) {
+				if (a instanceof MkFileTrack) {
+					if (b instanceof MkFileTrack) {
 						return Integer.compare(a.getNumber, b.getNumber)
 					}
 				}
@@ -65,14 +65,14 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileTrack) {
+				if (element instanceof MkFileTrack) {
 					return VilimaFormatter::getTrackInfo(element)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof VilimaFileTrack) {
+				if (element instanceof MkFileTrack) {
 					switch (element.getType) {
 						case VIDEO: {
 							return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
@@ -104,7 +104,7 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileTrack) {
+				if (element instanceof MkFileTrack) {
 					return VilimaFormatter::getLanguage(element.getLanguage)
 				}
 				return ""
@@ -122,7 +122,7 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof VilimaFileTrack) {
+				if (element instanceof MkFileTrack) {
 					val name = element.getName
 					if (name != null) {
 						return name
@@ -139,7 +139,7 @@ class TracksPart {
 
 		if (selection != null && selection.size() == 1) {
 			val element = selection.firstElement
-			if (element instanceof VilimaFile) {
+			if (element instanceof MkFile) {
 				input = element.tracks
 			}
 		}
