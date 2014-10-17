@@ -12,4 +12,6 @@ interface IContentManager {
 	def VilimaLibrary getContent()
 
 	def void refresh()
+
+	def VilimaLibrary getLibrary()
 }

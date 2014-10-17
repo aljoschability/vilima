@@ -4,11 +4,12 @@ import com.aljoschability.vilima.VilimaLibrary
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ITreeContentProvider
 
-class VilimaCatalogTreeContentProvider extends ArrayContentProvider implements ITreeContentProvider {
+class VilimaLibraryTreeContentProvider extends ArrayContentProvider implements ITreeContentProvider {
 	override getElements(Object element) {
 		val list = newArrayList
 		if (element instanceof VilimaLibrary) {
 			list += new VilimaCatalogTreeNode("Genres", element.genres)
+			list += new VilimaCatalogTreeNode("Content Types", element.contentTypes)
 		}
 		return list
 	}

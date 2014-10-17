@@ -21,8 +21,9 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
+import java.util.List
 
-class FilesPart {
+class TableAllPart {
 	@Inject Display display
 	@Inject ESelectionService selectionService
 
@@ -50,6 +51,15 @@ class FilesPart {
 		// the title of the segment
 		createSegmentTitleColumn()
 
+		// global tags
+		createContentTypeColumn()
+
+		createGenresColumn()
+
+		createTitleColumn()
+
+		createDateColumn()
+
 		// relevant file contents
 		createTagsColumn()
 
@@ -60,6 +70,106 @@ class FilesPart {
 		createDurationColumn()
 
 		viewer.input = input
+	}
+
+	def private void createDateColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 100
+		column.text = "Date"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkFile) {
+					var value = findTagString(element, 50, "DATE_RELEASED")
+					if (value == "") {
+						value = findTagString(element, 60, "DATE_RELEASED")
+					}
+					if (value == "") {
+						value = findTagString(element, 70, "DATE_RELEASED")
+					}
+					return value
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createContentTypeColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 160
+		column.text = "Content Type"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkFile) {
+					return findTagString(element, 50, "CONTENT_TYPE")
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createGenresColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 100
+		column.text = "Genres"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkFile) {
+					val b = new StringBuilder
+
+					for (genre : findTagStrings(element, 70, "GENRE")) {
+						b.append(genre)
+						b.append(", ")
+					}
+					for (genre : findTagStrings(element, 60, "GENRE")) {
+						b.append(genre)
+						b.append(", ")
+					}
+					for (genre : findTagStrings(element, 50, "GENRE")) {
+						b.append(genre)
+						b.append(", ")
+					}
+
+					if (b.length != 0) {
+						return b.toString().substring(0, b.length - 2)
+					}
+				}
+				return ""
+			}
+		}
+	}
+
+	def private void createTitleColumn() {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = 160
+		column.text = "Title"
+
+		val viewerColumn = new TableViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				if (element instanceof MkFile) {
+					return findTagString(element, 50, "TITLE")
+				}
+				return ""
+			}
+		}
 	}
 
 	def createFileNameColumn() {
@@ -192,5 +302,32 @@ class FilesPart {
 		if (viewer != null && !viewer.control.disposed) {
 			viewer.input = input
 		}
+	}
+
+	def private static String findTagString(MkFile file, int level, String name) {
+		for (tag : file.tags) {
+			if (tag.getTarget == level) {
+				for (entry : tag.entries) {
+					if (entry.getName == name) {
+						return entry.getValue
+					}
+				}
+			}
+		}
+		return ""
+	}
+
+	def private static List<String> findTagStrings(MkFile file, int level, String name) {
+		val list = newArrayList
+		for (tag : file.tags) {
+			if (tag.getTarget == level) {
+				for (entry : tag.entries) {
+					if (entry.getName == name) {
+						list += entry.getValue
+					}
+				}
+			}
+		}
+		return list
 	}
 }

@@ -1,5 +1,5 @@
 @GenModel(nonNLSMarkers="true",
-	complianceLevel="7.0")
+	complianceLevel="7.0", editDirectory="/com.aljoschability.vilima.edit/src/main/xcore")
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
@@ -20,6 +20,7 @@ class VilimaGenre
 {
 	String[1] name
 	refers MkFile[] files opposite genres
+	refers VilimaMovie[] movies opposite genres
 }
 
 class MkFile
@@ -142,4 +143,12 @@ class MkFileTagEntry
 	boolean[1] languageDefault = "true"
 	String value
 	contains MkFileTagEntry[] entries
+}
+
+/* === FUCK ========================== */
+abstract class VilimaMovie
+{
+	String[1] title
+	String dateRealeased
+	refers VilimaGenre[] genres opposite movies
 }

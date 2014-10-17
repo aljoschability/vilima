@@ -49,4 +49,8 @@ class VilimaContentManager implements IContentManager {
 	override getContent() {
 		return library
 	}
+
+	override getLibrary() {
+		return library
+	}
 }

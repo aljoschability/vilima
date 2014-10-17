@@ -1,14 +1,11 @@
 package com.aljoschability.vilima.reading;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.text.NumberFormat;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collection;
 
-import com.aljoschability.vilima.MkFileTagEntry;
-import com.aljoschability.vilima.VilimaFactory;
 import com.aljoschability.vilima.MkFile;
 import com.aljoschability.vilima.MkFileAttachment;
 import com.aljoschability.vilima.MkFileChapter;
@@ -16,45 +13,54 @@ import com.aljoschability.vilima.MkFileChapterText;
 import com.aljoschability.vilima.MkFileEdition;
 import com.aljoschability.vilima.MkFileInfo;
 import com.aljoschability.vilima.MkFileTag;
+import com.aljoschability.vilima.MkFileTagEntry;
 import com.aljoschability.vilima.MkFileTrack;
 import com.aljoschability.vilima.MkFileTrackType;
+import com.aljoschability.vilima.VilimaContentType;
+import com.aljoschability.vilima.VilimaFactory;
+import com.aljoschability.vilima.VilimaGenre;
+import com.aljoschability.vilima.VilimaLibrary;
 
 public class MatroskaReader {
-	private static NumberFormat DEBUG_NF = NumberFormat.getNumberInstance();
-
 	private static char[] HEX = "0123456789ABCDEF".toCharArray();
+
+	private final VilimaLibrary library;
 
 	private MkFile file;
 	private MatroskaFileSeeker seeker;
 
-	private Map<Long, String> elements;
-	private Map<Long, MatroskaNode> seeks;
+	private Collection<Long> seeks;
+	private Collection<Long> positions;
 	private long seekOffset;
 
-	public void readFile(MkFile file) throws IOException {
-		DEBUG_NF.setMinimumFractionDigits(2);
-		DEBUG_NF.setMaximumFractionDigits(2);
-		final long started = System.nanoTime();
+	public MatroskaReader(VilimaLibrary library) {
+		this.library = library;
+	}
 
-		this.file = file;
+	public MkFile readFile(Path path) throws IOException {
+		file = VilimaFactory.eINSTANCE.createMkFile();
+		file.setName(path.getFileName().toString());
+		file.setPath(path.getParent().toString());
+		file.setDateModified(path.toFile().lastModified());
+		file.setSize(path.toFile().length());
 
 		// reset
-		elements = new LinkedHashMap<>();
-		seeks = new LinkedHashMap<>();
+		seeks = new ArrayList<>();
+		positions = new ArrayList<>();
 		seekOffset = -1;
 
-		seeker = new MatroskaFileSeeker(Paths.get(file.getPath(), file.getName()));
+		seeker = new MatroskaFileSeeker(path);
 
 		// parse the file
 		readFile();
 
 		// remove already read elements
-		for (Long position : elements.keySet()) {
+		for (Long position : positions) {
 			seeks.remove(position);
 		}
 
 		// read the referenced elements
-		for (Long position : seeks.keySet()) {
+		for (Long position : seeks) {
 			EbmlElement element = seeker.nextElement(position);
 			readSegmentNode((EbmlMasterElement) element);
 		}
@@ -62,9 +68,7 @@ public class MatroskaReader {
 		// close file seeker
 		seeker.dispose();
 
-		// TODO: debug
-		final String elapsed = DEBUG_NF.format((System.nanoTime() - started) / 1000000d);
-		System.out.println("'" + file.getName() + "' has been read in " + elapsed + "ms.");
+		return file;
 	}
 
 	private void readFile() throws IOException {
@@ -114,28 +118,24 @@ public class MatroskaReader {
 	}
 
 	private boolean readSegmentNode(EbmlMasterElement element) throws IOException {
+		positions.add(seeker.getPosition() - element.getHeaderSize());
+
 		if (MatroskaNode.SeekHead.matches(element)) {
-			elements.put(seeker.getPosition() - element.getHeaderSize(), "SeekHead");
 			readSeekHead(element);
 		} else if (MatroskaNode.Info.matches(element)) {
-			elements.put(seeker.getPosition() - element.getHeaderSize(), "Info");
 			if (file.getInfo() != null) {
-				throw new RuntimeException();
+				throw new RuntimeException("Info already exists.");
 			}
 			file.setInfo(readInfo(element));
 		} else if (MatroskaNode.Cluster.matches(element)) {
 			return false;
 		} else if (MatroskaNode.Tracks.matches(element)) {
-			elements.put(seeker.getPosition() - element.getHeaderSize(), "Tracks");
 			readTracks(element);
 		} else if (MatroskaNode.Attachments.matches(element)) {
-			elements.put(seeker.getPosition() - element.getHeaderSize(), "Attachments");
 			readAttachments(element);
 		} else if (MatroskaNode.Chapters.matches(element)) {
-			elements.put(seeker.getPosition() - element.getHeaderSize(), "Chapters");
 			readChapters(element);
 		} else if (MatroskaNode.Tags.matches(element)) {
-			elements.put(seeker.getPosition() - element.getHeaderSize(), "Tags");
 			readTags(element);
 		}
 
@@ -171,7 +171,7 @@ public class MatroskaReader {
 		// ignore cluster
 		MatroskaNode node = MatroskaNode.get(id);
 		if (!MatroskaNode.Cluster.equals(node)) {
-			seeks.put(position + seekOffset, node);
+			seeks.add(position + seekOffset);
 		}
 	}
 
@@ -442,7 +442,10 @@ public class MatroskaReader {
 			if (MatroskaNode.Targets.matches(element)) {
 				global = readTagTargets((EbmlMasterElement) element, tag);
 			} else if (MatroskaNode.SimpleTag.matches(element)) {
-				tag.getEntries().add(readTagsSimpleTag((EbmlMasterElement) element));
+				MkFileTagEntry entry = readTagsSimpleTag((EbmlMasterElement) element);
+				if (entry != null) {
+					tag.getEntries().add(entry);
+				}
 			}
 
 			seeker.skip(element);
@@ -492,7 +495,44 @@ public class MatroskaReader {
 			seeker.skip(element);
 		}
 
+		if ("CONTENT_TYPE".equals(tag.getName())) {
+			file.setContentType(getOrCreateContentType(tag.getValue()));
+			// return null;
+		}
+		if ("GENRE".equals(tag.getName())) {
+			file.getGenres().add(getOrCreateGenre(tag.getValue()));
+			// return null;
+		}
+
 		return tag;
+	}
+
+	private VilimaContentType getOrCreateContentType(String value) {
+		for (VilimaContentType existing : library.getContentTypes()) {
+			if (existing.getName().equals(value)) {
+				return existing;
+			}
+		}
+
+		VilimaContentType type = VilimaFactory.eINSTANCE.createVilimaContentType();
+		type.setName(value);
+		library.getContentTypes().add(type);
+
+		return type;
+	}
+
+	private VilimaGenre getOrCreateGenre(String value) {
+		for (VilimaGenre existing : library.getGenres()) {
+			if (existing.getName().equals(value)) {
+				return existing;
+			}
+		}
+
+		VilimaGenre type = VilimaFactory.eINSTANCE.createVilimaGenre();
+		type.setName(value);
+		library.getGenres().add(type);
+
+		return type;
 	}
 
 	public static String bytesToHex(byte[] bytes) {
