@@ -12,17 +12,20 @@ import org.eclipse.jface.viewers.LabelProvider
 import com.aljoschability.vilima.MkFileTag
 import com.aljoschability.vilima.MkFileTagEntry
 import org.eclipse.jface.layout.GridDataFactory
+import org.eclipse.jface.layout.GridLayoutFactory
 
-class DataAllPart {
+class TagsTypeNonePart {
 	Composite composite
 
 	TreeViewer viewer
 
 	def void create(Composite parent) {
-		this.composite = parent
+		composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(GridLayoutFactory.swtDefaults().numColumns(2).create());
+		composite.setLayoutData(GridDataFactory.fillDefaults().grab(true, false).create());
 
 		// tree
-		val tree = new Tree(parent, SWT::BORDER)
+		val tree = new Tree(composite, SWT::BORDER)
 		tree.layoutData = GridDataFactory::fillDefaults.grab(true, true).create
 
 		viewer = new TreeViewer(tree)
