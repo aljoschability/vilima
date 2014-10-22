@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkFileEdition
-import com.aljoschability.vilima.MkFileChapter
+import com.aljoschability.vilima.MkChapter
+import com.aljoschability.vilima.MkEdition
 
 class ChaptersPart {
 	TableViewer viewer
@@ -50,7 +50,7 @@ class ChaptersPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileChapter) {
+				if (element instanceof MkChapter) {
 					val b = new StringBuilder()
 					for (display : element.texts) {
 						b.append(display.getText)
@@ -77,11 +77,11 @@ class ChaptersPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileEdition) {
+				if (element instanceof MkEdition) {
 					return "Edition " + element.getUid
 				}
 
-				if (element instanceof MkFileChapter) {
+				if (element instanceof MkChapter) {
 					return VilimaFormatter::getTime(element.getStart / 1000000)
 				}
 
@@ -111,7 +111,7 @@ class ChaptersPart {
 
 class VilimaChaptersViewerContentProvider extends ArrayContentProvider {
 	override getElements(Object element) {
-		if (element instanceof MkFileEdition) {
+		if (element instanceof MkEdition) {
 			return element.chapters
 		}
 

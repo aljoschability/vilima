@@ -21,7 +21,7 @@ import java.util.Map
 import org.eclipse.swt.widgets.Display
 import javax.annotation.PreDestroy
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkFileAttachment
+import com.aljoschability.vilima.MkAttachment
 
 class AttachmentsPart {
 	@Inject Display display
@@ -65,14 +65,14 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileAttachment) {
+				if (element instanceof MkAttachment) {
 					return String.valueOf(element.getName)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof MkFileAttachment) {
+				if (element instanceof MkAttachment) {
 					val name = element.getName
 					if (name != null) {
 						val index = name.indexOf(".")
@@ -99,7 +99,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileAttachment) {
+				if (element instanceof MkAttachment) {
 					return VilimaFormatter::fileSize(element.getSize)
 				}
 				return ""
@@ -118,7 +118,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileAttachment) {
+				if (element instanceof MkAttachment) {
 					if (element.getMimeType != null) {
 						return element.getMimeType
 					}
@@ -139,7 +139,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileAttachment) {
+				if (element instanceof MkAttachment) {
 					if (element.getDescription != null) {
 						return element.getDescription
 					}

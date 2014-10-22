@@ -291,8 +291,8 @@ class TableShowsPart {
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if (element instanceof MkFile) {
-					if (element.getInfo != null) {
-						return VilimaFormatter::getTime(element.getInfo.getDuration)
+					if (element.getInformation != null) {
+						return VilimaFormatter::getTime(element.getInformation.getDuration)
 					}
 				}
 				return ""

@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
 
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkFileTrack
-import static com.aljoschability.vilima.MkFileTrackType.*
+import static com.aljoschability.vilima.MkTrackType.*
+import com.aljoschability.vilima.MkTrack
 
 class TracksPart {
 	Object input
@@ -38,8 +38,8 @@ class TracksPart {
 		viewer.contentProvider = ArrayContentProvider::getInstance()
 		viewer.comparator = new ViewerComparator() {
 			override compare(Viewer viewer, Object a, Object b) {
-				if (a instanceof MkFileTrack) {
-					if (b instanceof MkFileTrack) {
+				if (a instanceof MkTrack) {
+					if (b instanceof MkTrack) {
 						return Integer.compare(a.getNumber, b.getNumber)
 					}
 				}
@@ -65,14 +65,14 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileTrack) {
+				if (element instanceof MkTrack) {
 					return VilimaFormatter::getTrackInfo(element)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof MkFileTrack) {
+				if (element instanceof MkTrack) {
 					switch (element.getType) {
 						case VIDEO: {
 							return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
@@ -104,7 +104,7 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileTrack) {
+				if (element instanceof MkTrack) {
 					return VilimaFormatter::getLanguage(element.getLanguage)
 				}
 				return ""
@@ -122,7 +122,7 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFileTrack) {
+				if (element instanceof MkTrack) {
 					val name = element.getName
 					if (name != null) {
 						return name

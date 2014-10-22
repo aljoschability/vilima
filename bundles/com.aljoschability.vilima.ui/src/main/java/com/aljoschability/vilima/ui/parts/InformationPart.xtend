@@ -128,11 +128,11 @@ class InformationPart {
 		labelsMap.get("file.size").text = String::valueOf(VilimaFormatter::fileSize(file.getSize))
 		labelsMap.get("file.modified").text = String::valueOf(VilimaFormatter::date(file.getDateModified))
 
-		if (file.getInfo != null) {
-			labelsMap.get("segment.title").text = String::valueOf(file.getInfo.getTitle)
-			labelsMap.get("segment.date").text = String::valueOf(VilimaFormatter::date(file.getInfo.getDate))
-			labelsMap.get("segment.muxingApp").text = String::valueOf(file.getInfo.getMuxingApp)
-			labelsMap.get("segment.writingApp").text = String::valueOf(file.getInfo.getWritingApp)
+		if (file.getInformation != null) {
+			labelsMap.get("segment.title").text = String::valueOf(file.getInformation.getTitle)
+			labelsMap.get("segment.date").text = String::valueOf(VilimaFormatter::date(file.getInformation.getDate))
+			labelsMap.get("segment.muxingApp").text = String::valueOf(file.getInformation.getMuxingApp)
+			labelsMap.get("segment.writingApp").text = String::valueOf(file.getInformation.getWritingApp)
 		}
 	}
 

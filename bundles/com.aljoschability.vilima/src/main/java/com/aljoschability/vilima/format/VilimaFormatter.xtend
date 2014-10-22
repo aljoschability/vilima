@@ -2,14 +2,14 @@ package com.aljoschability.vilima.format
 
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import com.aljoschability.vilima.MkFileTrack
+import com.aljoschability.vilima.MkTrack
 
 class VilimaFormatter {
 	static val DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
 	static val SIZE_FORMAT = NumberFormat::getNumberInstance
 
-	def static String getTrackInfo(MkFileTrack track) {
+	def static String getTrackInfo(MkTrack track) {
 		if (track.getCodecId.startsWith("A_")) {
 			return '''«track.getCodecId.substring(2)» («track.getAudioChannels» channels)'''
 		}

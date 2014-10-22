@@ -7,15 +7,15 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.aljoschability.vilima.MkFile;
-import com.aljoschability.vilima.MkFileAttachment;
-import com.aljoschability.vilima.MkFileChapter;
-import com.aljoschability.vilima.MkFileChapterText;
-import com.aljoschability.vilima.MkFileEdition;
-import com.aljoschability.vilima.MkFileInfo;
-import com.aljoschability.vilima.MkFileTag;
-import com.aljoschability.vilima.MkFileTagEntry;
-import com.aljoschability.vilima.MkFileTrack;
-import com.aljoschability.vilima.MkFileTrackType;
+import com.aljoschability.vilima.MkAttachment;
+import com.aljoschability.vilima.MkChapter;
+import com.aljoschability.vilima.MkChapterText;
+import com.aljoschability.vilima.MkEdition;
+import com.aljoschability.vilima.MkInformation;
+import com.aljoschability.vilima.MkTag;
+import com.aljoschability.vilima.MkTagEntry;
+import com.aljoschability.vilima.MkTrack;
+import com.aljoschability.vilima.MkTrackType;
 import com.aljoschability.vilima.VilimaContentType;
 import com.aljoschability.vilima.VilimaFactory;
 import com.aljoschability.vilima.VilimaGenre;
@@ -123,10 +123,10 @@ public class MatroskaReader {
 		if (MatroskaNode.SeekHead.matches(element)) {
 			readSeekHead(element);
 		} else if (MatroskaNode.Info.matches(element)) {
-			if (file.getInfo() != null) {
+			if (file.getInformation() != null) {
 				throw new RuntimeException("Info already exists.");
 			}
-			file.setInfo(readInfo(element));
+			file.setInformation(readInfo(element));
 		} else if (MatroskaNode.Cluster.matches(element)) {
 			return false;
 		} else if (MatroskaNode.Tracks.matches(element)) {
@@ -175,8 +175,8 @@ public class MatroskaReader {
 		}
 	}
 
-	private MkFileInfo readInfo(EbmlMasterElement parent) throws IOException {
-		MkFileInfo segment = VilimaFactory.eINSTANCE.createMkFileInfo();
+	private MkInformation readInfo(EbmlMasterElement parent) throws IOException {
+		MkInformation segment = VilimaFactory.eINSTANCE.createMkInformation();
 
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -203,7 +203,7 @@ public class MatroskaReader {
 			} else if (MatroskaNode.Duration.matches(element)) {
 				double value = seeker.readDouble((EbmlDataElement) element);
 
-				segment.setDuration((long) value);
+				segment.setDuration(value);
 			} else if (MatroskaNode.PrevUID.matches(element)) {
 				byte[] value = seeker.readBytes((EbmlDataElement) element);
 
@@ -232,7 +232,7 @@ public class MatroskaReader {
 	}
 
 	private void readTrackEntry(EbmlMasterElement parent) throws IOException {
-		MkFileTrack track = VilimaFactory.eINSTANCE.createMkFileTrack();
+		MkTrack track = VilimaFactory.eINSTANCE.createMkTrack();
 
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -278,7 +278,7 @@ public class MatroskaReader {
 		file.getTracks().add(track);
 	}
 
-	private void readTrackAudioDetails(EbmlMasterElement parent, MkFileTrack track) throws IOException {
+	private void readTrackAudioDetails(EbmlMasterElement parent, MkTrack track) throws IOException {
 		EbmlElement element = null;
 
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -296,7 +296,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readTrackVideoDetails(EbmlMasterElement parent, MkFileTrack track) throws IOException {
+	private void readTrackVideoDetails(EbmlMasterElement parent, MkTrack track) throws IOException {
 		EbmlElement element = null;
 
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -326,7 +326,7 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.AttachedFile.matches(element)) {
-				MkFileAttachment attachment = VilimaFactory.eINSTANCE.createMkFileAttachment();
+				MkAttachment attachment = VilimaFactory.eINSTANCE.createMkAttachment();
 
 				readAttachedFile((EbmlMasterElement) element, attachment);
 
@@ -337,7 +337,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readAttachedFile(EbmlMasterElement parent, MkFileAttachment attachment) throws IOException {
+	private void readAttachedFile(EbmlMasterElement parent, MkAttachment attachment) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.FileDescription.matches(element)) {
@@ -358,7 +358,7 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.EditionEntry.matches(element)) {
-				MkFileEdition chapter = VilimaFactory.eINSTANCE.createMkFileEdition();
+				MkEdition chapter = VilimaFactory.eINSTANCE.createMkEdition();
 
 				readEditionEntry((EbmlMasterElement) element, chapter);
 
@@ -369,13 +369,13 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readEditionEntry(EbmlMasterElement parent, MkFileEdition chapter) throws IOException {
+	private void readEditionEntry(EbmlMasterElement parent, MkEdition chapter) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.EditionUID.matches(element)) {
 				chapter.setUid(seeker.readLong((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapterAtom.matches(element)) {
-				MkFileChapter entry = VilimaFactory.eINSTANCE.createMkFileChapter();
+				MkChapter entry = VilimaFactory.eINSTANCE.createMkChapter();
 
 				readChapterAtom((EbmlMasterElement) element, entry);
 
@@ -386,13 +386,13 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readChapterAtom(EbmlMasterElement parent, MkFileChapter entry) throws IOException {
+	private void readChapterAtom(EbmlMasterElement parent, MkChapter entry) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.ChapterTimeStart.matches(element)) {
 				entry.setStart(seeker.readLong((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapterDisplay.matches(element)) {
-				MkFileChapterText display = VilimaFactory.eINSTANCE.createMkFileChapterText();
+				MkChapterText display = VilimaFactory.eINSTANCE.createMkChapterText();
 
 				readChapterDisplay((EbmlMasterElement) element, display);
 
@@ -403,7 +403,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readChapterDisplay(EbmlMasterElement parent, MkFileChapterText display) throws IOException {
+	private void readChapterDisplay(EbmlMasterElement parent, MkChapterText display) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.ChapString.matches(element)) {
@@ -422,7 +422,7 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.Tag.matches(element)) {
-				MkFileTag tag = VilimaFactory.eINSTANCE.createMkFileTag();
+				MkTag tag = VilimaFactory.eINSTANCE.createMkTag();
 
 				// only add when tags are global (not track-specific)
 				if (readTag((EbmlMasterElement) element, tag)) {
@@ -434,7 +434,7 @@ public class MatroskaReader {
 		}
 	}
 
-	private boolean readTag(EbmlMasterElement parent, MkFileTag tag) throws IOException {
+	private boolean readTag(EbmlMasterElement parent, MkTag tag) throws IOException {
 		boolean global = true;
 
 		EbmlElement element = null;
@@ -442,7 +442,7 @@ public class MatroskaReader {
 			if (MatroskaNode.Targets.matches(element)) {
 				global = readTagTargets((EbmlMasterElement) element, tag);
 			} else if (MatroskaNode.SimpleTag.matches(element)) {
-				MkFileTagEntry entry = readTagsSimpleTag((EbmlMasterElement) element);
+				MkTagEntry entry = readTagsSimpleTag((EbmlMasterElement) element);
 				if (entry != null) {
 					tag.getEntries().add(entry);
 				}
@@ -454,7 +454,7 @@ public class MatroskaReader {
 		return global;
 	}
 
-	private boolean readTagTargets(EbmlMasterElement parent, MkFileTag tag) throws IOException {
+	private boolean readTagTargets(EbmlMasterElement parent, MkTag tag) throws IOException {
 		boolean global = true;
 
 		EbmlElement element = null;
@@ -479,8 +479,8 @@ public class MatroskaReader {
 		return global;
 	}
 
-	private MkFileTagEntry readTagsSimpleTag(EbmlMasterElement parent) throws IOException {
-		MkFileTagEntry tag = VilimaFactory.eINSTANCE.createMkFileTagEntry();
+	private MkTagEntry readTagsSimpleTag(EbmlMasterElement parent) throws IOException {
+		MkTagEntry tag = VilimaFactory.eINSTANCE.createMkTagEntry();
 
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -496,11 +496,11 @@ public class MatroskaReader {
 		}
 
 		if ("CONTENT_TYPE".equals(tag.getName())) {
-			file.setContentType(getOrCreateContentType(tag.getValue()));
+			// file.setContentType(getOrCreateContentType(tag.getValue()));
 			// return null;
 		}
 		if ("GENRE".equals(tag.getName())) {
-			file.getGenres().add(getOrCreateGenre(tag.getValue()));
+			// file.getGenres().add(getOrCreateGenre(tag.getValue()));
 			// return null;
 		}
 
@@ -545,7 +545,7 @@ public class MatroskaReader {
 		return new String(hexChars);
 	}
 
-	private static void rewriteCodecPrivate(MkFileTrack track) {
+	public static void rewriteCodecPrivate(MkTrack track) {
 		if (track.getCodecPrivate() != null) {
 			// reconstruct byte array
 			String[] split = track.getCodecPrivate().substring(1, track.getCodecPrivate().length() - 2).split(", ");
@@ -568,26 +568,26 @@ public class MatroskaReader {
 		}
 	}
 
-	private static MkFileTrackType convertTrackType(byte value) {
+	public static MkTrackType convertTrackType(byte value) {
 		switch (value) {
 		case 0x01:
-			return MkFileTrackType.VIDEO;
+			return MkTrackType.VIDEO;
 		case 0x02:
-			return MkFileTrackType.AUDIO;
+			return MkTrackType.AUDIO;
 		case 0x03:
-			return MkFileTrackType.COMPLEX;
+			return MkTrackType.COMPLEX;
 		case 0x10:
-			return MkFileTrackType.LOGO;
+			return MkTrackType.LOGO;
 		case 0x11:
-			return MkFileTrackType.SUBTITLE;
+			return MkTrackType.SUBTITLE;
 		case 0x20:
-			return MkFileTrackType.CONTROL;
+			return MkTrackType.CONTROL;
 		default:
 			throw new RuntimeException("cannot convert track type from " + value);
 		}
 	}
 
-	private static String convertBinaryToString(byte[] value) {
+	public static String convertBinaryToString(byte[] value) {
 		return Arrays.toString(value);
 	}
 }

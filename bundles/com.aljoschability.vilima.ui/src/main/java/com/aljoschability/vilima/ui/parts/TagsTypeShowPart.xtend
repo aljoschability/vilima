@@ -1,7 +1,6 @@
 package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkFileTagEntry
 import java.util.List
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
@@ -10,6 +9,7 @@ import org.eclipse.swt.widgets.Combo
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
+import com.aljoschability.vilima.MkTagEntry
 
 class TagsTypeShowPart {
 	Combo titleControl
@@ -117,6 +117,10 @@ class TagsTypeShowPart {
 	}
 
 	def setInput(List<MkFile> files) {
+		if (titleControl == null || titleControl.disposed) {
+			return
+		}
+
 		setTitleInput(files)
 		setSubtitleInput(files)
 		setDateInput(files)
@@ -203,12 +207,12 @@ class TagsTypeShowPart {
 		}
 	}
 
-	def private String findTagValue(MkFileTagEntry entry, String name) {
+	def private String findTagValue(MkTagEntry entry, String name) {
 		if (name.equals(entry.getName())) {
 			return entry.getValue();
 		}
 
-		for (MkFileTagEntry child : entry.getEntries()) {
+		for (MkTagEntry child : entry.getEntries()) {
 			val value = findTagValue(child, name);
 			if (value != null) {
 				return value;
@@ -221,11 +225,11 @@ class TagsTypeShowPart {
 	def private static List<String> findTagStrings(MkFile file, int level, String name) {
 		val list = newArrayList
 		for (tag : file.tags) {
-			if (tag.target == level) {
+			if (tag.getTarget == level) {
 				for (entry : tag.entries) {
-					if (entry.name == name) {
-						if (entry.value != null) {
-							list += entry.value
+					if (entry.getName == name) {
+						if (entry.getValue != null) {
+							list += entry.getValue
 						}
 					}
 				}

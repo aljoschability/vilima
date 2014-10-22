@@ -1,8 +1,9 @@
 package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkFileTagEntry
+import com.aljoschability.vilima.helpers.VilimaTagHelper
 import java.util.List
+import java.util.Map
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
 import org.eclipse.swt.SWT
@@ -12,229 +13,149 @@ import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
 
 class TagsTypeMoviePart {
+	Composite composite
+
 	Combo titleControl
-	Combo subtitleControl
 	Combo dateControl
 	Combo genresControl
 
-	Composite composite
-
 	Combo imdbControl
-
 	Combo traktControl
-
 	Combo tmdbControl
 
 	def void create(Composite parent) {
 		composite = new Composite(parent, SWT::NONE)
-		composite.layout = GridLayoutFactory::fillDefaults.numColumns(2).create
-		composite.layoutData = GridDataFactory.fillDefaults.grab(true, false).create
+		composite.layout = GridLayoutFactory::fillDefaults.create
+		composite.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+
+		// information group
+		createInformationGroup(composite)
+
+		// identifiers group
+		createIdentificationGroup(composite)
+	}
+
+	def private void createInformationGroup(Composite parent) {
+		val group = createGroup(parent, "Information")
 
 		// title
-		val titleLabel = new Label(composite, SWT::TRAIL)
-		titleLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		titleLabel.text = "Title"
+		createLabel(group, "Title")
 
-		titleControl = new Combo(composite, SWT::DROP_DOWN)
-		titleControl.layoutData = GridDataFactory.fillDefaults.grab(true, false).create
+		titleControl = createCombo(group)
 		titleControl.addModifyListener([e|setValue(50, "TITLE", titleControl.text)])
 
-		// subtitle
-		val subtitleLabel = new Label(composite, SWT::TRAIL)
-		subtitleLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		subtitleLabel.text = "Subtitle"
-
-		subtitleControl = new Combo(composite, SWT::DROP_DOWN)
-		subtitleControl.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
-		subtitleControl.addModifyListener([e|setValue(50, "SUBTITLE", subtitleControl.text)])
-
 		// date
-		val dateLabel = new Label(composite, SWT::NONE)
-		dateLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		dateLabel.text = "Date"
+		createLabel(group, "Release")
 
-		dateControl = new Combo(composite, SWT::DROP_DOWN);
-		dateControl.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		dateControl = createCombo(group)
 		dateControl.addModifyListener([e|setValue(50, "DATE_RELEASE", dateControl.text)])
 
 		// genres
-		val genresLabel = new Label(composite, SWT::TRAIL)
-		genresLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		genresLabel.text = "Genres"
+		createLabel(group, "Genres")
 
-		genresControl = new Combo(composite, SWT::DROP_DOWN);
-		genresControl.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		genresControl = createCombo(group)
 		genresControl.addModifyListener([e|setValues(50, "GENRE", genresControl.text, ",")])
-
-		// identifiers group
-		createIdentifiersGroup(composite)
 	}
 
-	def private void createIdentifiersGroup(Composite parent) {
-		val group = new Group(composite, SWT::NONE)
-		group.layout = GridLayoutFactory::swtDefaults.numColumns(2).create
-		group.layoutData = GridDataFactory::fillDefaults.span(2, 1).create
-		group.text = "Identifiers"
+	def private void createIdentificationGroup(Composite parent) {
+		val group = createGroup(parent, "Identification")
 
 		// IMDB
-		val imdbLabel = new Label(group, SWT::TRAIL)
-		imdbLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		imdbLabel.text = "IMDB"
+		createLabel(group, "IMDB")
 
-		imdbControl = new Combo(group, SWT::DROP_DOWN);
-		imdbControl.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		imdbControl = createCombo(group)
 		imdbControl.addModifyListener([e|setValues(50, "IMDB", imdbControl.text, ",")])
 
 		// TMDB
-		val tmdbLabel = new Label(group, SWT::TRAIL)
-		tmdbLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		tmdbLabel.text = "TMDB"
+		createLabel(group, "TMDB")
 
-		tmdbControl = new Combo(group, SWT::DROP_DOWN);
-		tmdbControl.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		tmdbControl = createCombo(group)
 		tmdbControl.addModifyListener([e|setValues(50, "TMDB", tmdbControl.text, ",")])
 
 		// TRAKT
-		val traktLabel = new Label(group, SWT::TRAIL)
-		traktLabel.layoutData = GridDataFactory.fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
-		traktLabel.text = "Trakt"
+		createLabel(group, "Trakt")
 
-		traktControl = new Combo(group, SWT::DROP_DOWN);
-		traktControl.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		traktControl = createCombo(group)
 		traktControl.addModifyListener([e|setValues(50, "TRAKT", traktControl.text, ",")])
 	}
 
 	def private void setValue(int level, String name, String value) {
-		if (value != null && !value.empty) {
+		if (value != null && !value.empty && value != "<multiple>") {
 			println('''Set "«level»:«name»" to "«value»".''')
 		}
 	}
 
 	def private void setValues(int level, String name, String value, String separator) {
-		if (value != null && !value.empty) {
+		if (value != null && !value.empty && value != "<multiple>") {
 			println('''Set "«level»:«name»" to "«value»" (splitted by «separator»).''')
 		}
 	}
 
-	def setInput(List<MkFile> files) {
-		setTitleInput(files)
-		setSubtitleInput(files)
-		setDateInput(files)
-		setGenresInput(files)
+	def void setInput(List<MkFile> files) {
+		if (titleControl == null || titleControl.disposed) {
+			return
+		}
+
+		fillCombo(files, titleControl, 50, "TITLE")
+		fillCombo(files, dateControl, 50, "DATE_RELEASED")
+
+		//fillCombo(files, genresControl, 50, "GENRE")
+		fillCombo(files, imdbControl, 50, "IMDB")
+		fillCombo(files, tmdbControl, 50, "TMDB")
+		fillCombo(files, traktControl, 50, "TRAKT")
 	}
 
-	def private void setTitleInput(List<MkFile> files) {
-		val List<String> items = newArrayList
+	def private void fillCombo(List<MkFile> files, Combo control, int target, String name) {
+		val Map<MkFile, String> values = newLinkedHashMap
 
-		for (file : files) {
-			items += findTagStrings(file, 50, "TITLE")
-		}
-
-		titleControl.items = items
-
-		if (items.empty) {
-			titleControl.text = ""
-		} else if (items.size == 1) {
-			titleControl.text = items.get(0)
-		} else {
-			titleControl.text = "<multiple>"
-		}
-	}
-
-	def private void setSubtitleInput(List<MkFile> files) {
-		val List<String> items = newArrayList
-
-		for (file : files) {
-			items += findTagStrings(file, 50, "SUBTITLE")
-		}
-
-		subtitleControl.items = items
-
-		if (items.empty) {
-			subtitleControl.text = ""
-		} else if (items.size == 1) {
-			subtitleControl.text = items.get(0)
-		} else {
-			subtitleControl.text = "<multiple>"
-		}
-	}
-
-	def private void setDateInput(List<MkFile> files) {
-		val List<String> items = newArrayList
-
-		for (file : files) {
-			items += findTagStrings(file, 50, "DATE_RELEASED")
-		}
-
-		dateControl.items = items
-
-		if (items.empty) {
-			dateControl.text = ""
-		} else if (items.size == 1) {
-			dateControl.text = items.get(0)
-		} else {
-			dateControl.text = "<multiple>"
-		}
-	}
-
-	def private void setGenresInput(List<MkFile> files) {
-		val List<String> items = newArrayList
-
-		for (file : files) {
-			val strings = findTagStrings(file, 50, "GENRE")
-			if (!strings.empty) {
-				val builder = new StringBuilder
-				for (genre : strings) {
-					builder.append(genre)
-					builder.append(", ")
-				}
-				items += builder.substring(0, builder.length - 2)
-			}
-		}
-
-		genresControl.items = items
-
-		if (items.empty) {
-			genresControl.text = ""
-		} else if (items.size == 1) {
-			genresControl.text = items.get(0)
-		} else {
-			genresControl.text = "<multiple>"
-		}
-	}
-
-	def private String findTagValue(MkFileTagEntry entry, String name) {
-		if (name.equals(entry.getName())) {
-			return entry.getValue();
-		}
-
-		for (MkFileTagEntry child : entry.getEntries()) {
-			val value = findTagValue(child, name);
-			if (value != null) {
-				return value;
-			}
-		}
-
-		return null;
-	}
-
-	def private static List<String> findTagStrings(MkFile file, int level, String name) {
-		val list = newArrayList
-		for (tag : file.tags) {
-			if (tag.target == level) {
-				for (entry : tag.entries) {
-					if (entry.name == name) {
-						if (entry.value != null) {
-							list += entry.value
-						}
-					}
+		if (files != null) {
+			for (file : files) {
+				val tagValues = VilimaTagHelper::getValues(file, name, target)
+				if (tagValues.empty) {
+					values.put(file, "")
+				} else if (tagValues.size == 1) {
+					values.put(file, tagValues.get(0))
+				} else {
+					println("found more than one or no value for tag:" + name)
 				}
 			}
 		}
-		return list
+
+		control.items = values.values
+
+		if (values.empty) {
+			control.text = ""
+		} else if (values.size == 1) {
+			control.text = values.values.get(0)
+		} else {
+			control.text = "<multiple>"
+		}
+
 	}
 
 	def Composite getControl() {
 		return composite
+	}
+
+	def private static Group createGroup(Composite parent, String text) {
+		val group = new Group(parent, SWT::NONE)
+		group.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		group.layout = GridLayoutFactory::swtDefaults.numColumns(2).create
+		group.text = text
+
+		return group
+	}
+
+	def private static void createLabel(Composite parent, String text) {
+		val label = new Label(parent, SWT::TRAIL)
+		label.layoutData = GridDataFactory::fillDefaults.align(SWT::TRAIL, SWT::CENTER).create
+		label.text = text
+	}
+
+	def private static Combo createCombo(Composite parent) {
+		val combo = new Combo(parent, SWT::DROP_DOWN)
+		combo.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+
+		return combo
 	}
 }

@@ -3,46 +3,28 @@
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
-class VilimaLibrary
-{
-	contains VilimaContentType[] contentTypes
-	contains VilimaGenre[] genres
-	contains MkFile[] files
-}
-
-class VilimaContentType
-{
-	String[1] name
-	refers MkFile[] files opposite contentType
-}
-
-class VilimaGenre
-{
-	String[1] name
-	refers MkFile[] files opposite genres
-	refers VilimaMovie[] movies opposite genres
-}
-
+/**
+ * This represents a matroska file and contains all information after the actual file has been read.
+ */
 class MkFile
 {
 	String[1] path
 	String[1] name
 	long[1] size
 	long[1] dateModified
-	contains MkFileInfo[1] info
-	contains MkFileTrack[] tracks
-	contains MkFileAttachment[] attachments
-	contains MkFileEdition[] editions
-	contains MkFileTag[] tags
-	// actual bidirectional
-	refers VilimaContentType contentType opposite files
-	refers VilimaGenre[] genres opposite files
+	contains MkInformation[1] information
+	contains MkTrack[] tracks
+	contains MkAttachment[] attachments
+	contains MkEdition[] editions
+	contains MkTag[] tags
 }
 
-/* === INFO ========================== */
-class MkFileInfo
+/**
+ * This contains all the information about the segment of a matroska file.
+ */
+class MkInformation
 {
-	long duration ="-1"
+	double duration ="-1"
 	long date ="-1"
 	String uid
 	String previousUid
@@ -53,11 +35,11 @@ class MkFileInfo
 }
 
 /* === TRACKS ======================== */
-class MkFileTrack
+class MkTrack
 {
 	int[1] number = "0"
 	long[1] uid = "0"
-	MkFileTrackType[1] ^type = "UNKNOWN"
+	MkTrackType[1] ^type = "UNKNOWN"
 	boolean[1] flagEnabled = "true"
 	boolean[1] flagDefault = "true"
 	boolean[1] flagForced = "false"
@@ -83,7 +65,7 @@ class MkFileTrack
 	int audioChannels = "1"
 }
 
-enum MkFileTrackType
+enum MkTrackType
 {
 	UNKNOWN
 	VIDEO
@@ -95,7 +77,7 @@ enum MkFileTrackType
 }
 
 /* === ATTACHMENTS =================== */
-class MkFileAttachment
+class MkAttachment
 {
 	long[1] uid = "0"
 	long[1] size
@@ -105,47 +87,67 @@ class MkFileAttachment
 }
 
 /* === CHAPTERS ====================== */
-class MkFileEdition
+class MkEdition
 {
 	long[1] uid = "0"
 	boolean[1] flagHidden = "false"
 	boolean[1] flagDefault = "false"
-	contains MkFileChapter[] chapters
+	contains MkChapter[] chapters
 }
 
-class MkFileChapter
+class MkChapter
 {
 	long[1] uid = "0"
 	long[1] start = "-1"
 	boolean[1] flagHidden = "false"
 	boolean[1] flagEnabled = "true"
-	contains MkFileChapterText[] texts
+	contains MkChapterText[] texts
 }
 
-class MkFileChapterText
+class MkChapterText
 {
 	String[1] text
 	String[] languages
 }
 
 /* === TAGS ========================== */
-class MkFileTag
+class MkTag
 {
 	int target = "50"
 	String targetText
-	contains MkFileTagEntry[] entries
+	contains MkTagEntry[] entries
 }
 
-class MkFileTagEntry
+class MkTagEntry
 {
 	String[1] name
+	String value
 	String[1] language = "und"
 	boolean[1] languageDefault = "true"
-	String value
-	contains MkFileTagEntry[] entries
+	contains MkTagEntry[] entries
 }
 
 /* === FUCK ========================== */
+class VilimaLibrary
+{
+	contains VilimaContentType[] contentTypes
+	contains VilimaGenre[] genres
+	contains MkFile[] files
+}
+
+class VilimaContentType
+{
+	String[1] name
+	refers MkFile[] files
+}
+
+class VilimaGenre
+{
+	String[1] name
+	refers MkFile[] files
+	refers VilimaMovie[] movies opposite genres
+}
+
 abstract class VilimaMovie
 {
 	String[1] title

@@ -9,10 +9,10 @@ import org.eclipse.swt.SWT
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ITreeContentProvider
 import org.eclipse.jface.viewers.LabelProvider
-import com.aljoschability.vilima.MkFileTag
-import com.aljoschability.vilima.MkFileTagEntry
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
+import com.aljoschability.vilima.MkTag
+import com.aljoschability.vilima.MkTagEntry
 
 class TagsTypeNonePart {
 	Composite composite
@@ -35,6 +35,10 @@ class TagsTypeNonePart {
 	}
 
 	def setInput(List<MkFile> files) {
+		if (viewer == null || viewer.control.disposed) {
+			return
+		}
+
 		if (files != null && files.size == 1) {
 			viewer.input = files.get(0)
 		} else {
@@ -57,11 +61,11 @@ class DataAllPartContentProvider extends ArrayContentProvider implements ITreeCo
 			return element.tags
 		}
 
-		if (element instanceof MkFileTag) {
+		if (element instanceof MkTag) {
 			return element.entries
 		}
 
-		if (element instanceof MkFileTagEntry) {
+		if (element instanceof MkTagEntry) {
 			return element.entries
 		}
 
@@ -79,12 +83,24 @@ class DataAllPartContentProvider extends ArrayContentProvider implements ITreeCo
 
 class DataAllPartLabelProvider extends LabelProvider {
 	override getText(Object element) {
-		if (element instanceof MkFileTag) {
-			return '''Tag[«element.target»] («element.targetText»)'''
+		if (element instanceof MkTag) {
+			val text = new StringBuilder
+
+			text.append('''Tag («element.getTarget»)''')
+			if (element.getTargetText != null) {
+				text.append(''' [«element.getTargetText»]''')
+			}
+
+			return text.toString
 		}
 
-		if (element instanceof MkFileTagEntry) {
-			return '''«element.name»=«element.value» («element.language»)'''
+		if (element instanceof MkTagEntry) {
+			val text = new StringBuilder
+			text.append('''«element.getName» = «element.getValue»''')
+			if (element.getLanguage != null && element.getLanguage != "und") {
+				text.append(''' [«element.getLanguage»]''')
+			}
+			return text.toString
 		}
 
 		return super.getText(element)
