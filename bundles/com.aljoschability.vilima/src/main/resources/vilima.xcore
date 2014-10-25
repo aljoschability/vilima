@@ -115,16 +115,16 @@ class MkTag
 {
 	int target = "50"
 	String targetText
-	contains MkTagEntry[] entries
+	contains MkTagNode[] nodes
 }
 
-class MkTagEntry
+class MkTagNode
 {
 	String[1] name
 	String value
 	String[1] language = "und"
 	boolean[1] languageDefault = "true"
-	contains MkTagEntry[] entries
+	contains MkTagNode[] nodes
 }
 
 /* === FUCK ========================== */

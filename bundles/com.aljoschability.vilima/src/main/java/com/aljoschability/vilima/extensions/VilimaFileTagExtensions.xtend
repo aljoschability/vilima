@@ -5,7 +5,7 @@ import javax.inject.Inject
 import com.aljoschability.vilima.VilimaFactory
 import java.nio.file.Path
 import org.eclipse.core.runtime.IProgressMonitor
-import com.aljoschability.vilima.MkTagEntry
+import com.aljoschability.vilima.MkTagNode
 
 interface VilimaCreator {
 	def MkFile createMkFile(Path path, IProgressMonitor monitor)

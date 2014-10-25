@@ -2,6 +2,9 @@ package com.aljoschability.vilima.reading;
 
 import java.util.Arrays;
 
+import com.aljoschability.vilima.helpers.MatroskaReader;
+import com.aljoschability.vilima.helpers.MkReaderByter;
+
 public class EbmlUnknownElement extends EbmlElement {
 	private final byte[] id;
 
@@ -10,7 +13,7 @@ public class EbmlUnknownElement extends EbmlElement {
 
 		this.id = id;
 
-		System.out.println("NULL TYPE FOR byte[]=" + Arrays.toString(id) + " hex=" + MatroskaReader.bytesToHex(id));
+		System.out.println("NULL TYPE FOR byte[]=" + Arrays.toString(id) + " hex=" + MkReaderByter.bytesToHex(id));
 	}
 
 	public byte[] getId() {

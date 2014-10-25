@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Combo
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
-import com.aljoschability.vilima.MkTagEntry
+import com.aljoschability.vilima.MkTagNode
 
 class TagsTypeShowPart {
 	Combo titleControl
@@ -207,12 +207,12 @@ class TagsTypeShowPart {
 		}
 	}
 
-	def private String findTagValue(MkTagEntry entry, String name) {
+	def private String findTagValue(MkTagNode entry, String name) {
 		if (name.equals(entry.getName())) {
 			return entry.getValue();
 		}
 
-		for (MkTagEntry child : entry.getEntries()) {
+		for (MkTagNode child : entry.getNodes()) {
 			val value = findTagValue(child, name);
 			if (value != null) {
 				return value;
@@ -226,7 +226,7 @@ class TagsTypeShowPart {
 		val list = newArrayList
 		for (tag : file.tags) {
 			if (tag.getTarget == level) {
-				for (entry : tag.entries) {
+				for (entry : tag.nodes) {
 					if (entry.getName == name) {
 						if (entry.getValue != null) {
 							list += entry.getValue

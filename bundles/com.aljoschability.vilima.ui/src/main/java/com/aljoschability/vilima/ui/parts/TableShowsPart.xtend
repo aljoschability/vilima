@@ -312,7 +312,7 @@ class TableShowsPart {
 	def private static String findTagString(MkFile file, int level, String name) {
 		for (tag : file.tags) {
 			if (tag.getTarget == level) {
-				for (entry : tag.entries) {
+				for (entry : tag.nodes) {
 					if (entry.getName == name) {
 						return entry.getValue
 					}
@@ -326,7 +326,7 @@ class TableShowsPart {
 		val list = newArrayList
 		for (tag : file.tags) {
 			if (tag.getTarget == level) {
-				for (entry : tag.entries) {
+				for (entry : tag.nodes) {
 					if (entry.getName == name) {
 						list += entry.getValue
 					}

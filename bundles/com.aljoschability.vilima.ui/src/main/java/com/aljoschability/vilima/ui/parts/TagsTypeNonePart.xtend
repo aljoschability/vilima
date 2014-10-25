@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.LabelProvider
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
 import com.aljoschability.vilima.MkTag
-import com.aljoschability.vilima.MkTagEntry
+import com.aljoschability.vilima.MkTagNode
 
 class TagsTypeNonePart {
 	Composite composite
@@ -62,11 +62,11 @@ class DataAllPartContentProvider extends ArrayContentProvider implements ITreeCo
 		}
 
 		if (element instanceof MkTag) {
-			return element.entries
+			return element.nodes
 		}
 
-		if (element instanceof MkTagEntry) {
-			return element.entries
+		if (element instanceof MkTagNode) {
+			return element.nodes
 		}
 
 		return newArrayOfSize(0)
@@ -94,7 +94,7 @@ class DataAllPartLabelProvider extends LabelProvider {
 			return text.toString
 		}
 
-		if (element instanceof MkTagEntry) {
+		if (element instanceof MkTagNode) {
 			val text = new StringBuilder
 			text.append('''«element.getName» = «element.getValue»''')
 			if (element.getLanguage != null && element.getLanguage != "und") {

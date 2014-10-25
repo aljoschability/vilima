@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption;
 
 import com.google.common.base.Charsets;
 
-public class MatroskaFileSeeker {
+public final class MatroskaFileSeeker {
 	private static long UNIX_EPOCH_DELAY = 978307200;
 
 	private final SeekableByteChannel channel;
@@ -206,7 +206,7 @@ public class MatroskaFileSeeker {
 		throw new RuntimeException();
 	}
 
-	public long readLong(EbmlDataElement element) throws IOException {
+	public long readInteger(EbmlDataElement element) throws IOException {
 		readBytes(element);
 
 		switch (element.getType()) {

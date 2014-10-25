@@ -1,7 +1,7 @@
 package com.aljoschability.vilima.jobs
 
 import com.aljoschability.vilima.IContentManager
-import com.aljoschability.vilima.reading.MatroskaReader
+import com.aljoschability.vilima.reading.MatroskaFileReader
 import java.io.File
 import java.io.IOException
 import java.nio.file.FileVisitResult
@@ -61,11 +61,12 @@ class VilimaScanJob extends Job {
 
 		val library = manager.library
 
-		val reader = new MatroskaReader(library)
+		val reader = new MatroskaFileReader
 		for (file : walker.files) {
 			val started = System.nanoTime();
 
-			manager.add(reader.readFile(file.toPath))
+			manager.add(reader.readFile(file))
+			//manager.add(reader.readFile(file.toPath))
 
 			// TODO: debug
 			val elapsed = DEBUG_NF.format((System.nanoTime() - started) / 1000000d);

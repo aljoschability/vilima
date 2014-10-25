@@ -4,7 +4,7 @@ import com.aljoschability.vilima.MkFile
 import java.util.List
 import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.MkTag
-import com.aljoschability.vilima.MkTagEntry
+import com.aljoschability.vilima.MkTagNode
 
 class VilimaTagHelper {
 	private new() {
@@ -34,12 +34,12 @@ class VilimaTagHelper {
 		return values
 	}
 
-	def static List<MkTagEntry> getEntries(MkFile file, String name, int... targets) {
-		val List<MkTagEntry> entries = newArrayList
+	def static List<MkTagNode> getEntries(MkFile file, String name, int... targets) {
+		val List<MkTagNode> entries = newArrayList
 
 		for (tag : file.tags) {
 			if (targets.contains(tag.getTarget)) {
-				for (entry : tag.entries) {
+				for (entry : tag.nodes) {
 					if (entry.getName == name) {
 						entries += entry
 					}
@@ -56,9 +56,9 @@ class VilimaTagHelper {
 			throw new RuntimeException('''more than one entry to edit for "«name»"!''')
 		}
 
-		var MkTagEntry entry = null
+		var MkTagNode entry = null
 		if (entries.empty) {
-			entry = VilimaFactory::eINSTANCE.createMkTagEntry
+			entry = VilimaFactory::eINSTANCE.createMkTagNode
 			entry.name = name
 		} else {
 			entry = entries.get(0)
@@ -68,7 +68,7 @@ class VilimaTagHelper {
 
 		for (tag : file.tags) {
 			if (tag.getTarget == target) {
-				tag.entries += entry
+				tag.nodes += entry
 			}
 		}
 	}
@@ -84,32 +84,32 @@ class VilimaTagHelper {
 	def private static void removeEntries(MkTag tag, String name) {
 		val collection = newArrayList
 
-		for (entry : tag.entries) {
+		for (entry : tag.nodes) {
 			if (name == entry.getName) {
 				collection += entry
 			} else {
-				for (child : entry.entries) {
+				for (child : entry.nodes) {
 					removeEntries(entry, name)
 				}
 			}
 		}
 
-		tag.entries -= collection
+		tag.nodes -= collection
 	}
 
-	def private static void removeEntries(MkTagEntry entry, String name) {
+	def private static void removeEntries(MkTagNode entry, String name) {
 		val collection = newArrayList
 
-		for (child : entry.entries) {
+		for (child : entry.nodes) {
 			if (name == child.getName) {
 				collection += entry
 			} else {
-				for (child2 : entry.entries) {
+				for (child2 : entry.nodes) {
 					removeEntries(child, name)
 				}
 			}
 		}
 
-		entry.entries -= collection
+		entry.nodes -= collection
 	}
 }

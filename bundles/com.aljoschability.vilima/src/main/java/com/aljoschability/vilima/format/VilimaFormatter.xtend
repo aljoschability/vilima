@@ -52,7 +52,7 @@ class VilimaFormatter {
 		return DATE_FORMATTER.format(timestamp)
 	}
 
-	def static String getTime(long duration) {
+	def static String getTime(double duration) {
 		if (duration >= 0) {
 			val ms = duration % 1000
 			val seconds = (duration / 1000) % 60;

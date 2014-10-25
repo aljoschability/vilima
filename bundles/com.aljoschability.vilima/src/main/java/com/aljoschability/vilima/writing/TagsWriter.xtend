@@ -5,7 +5,7 @@ import com.google.common.base.Charsets
 import com.google.common.io.Files
 import java.io.File
 import com.aljoschability.vilima.MkTag
-import com.aljoschability.vilima.MkTagEntry
+import com.aljoschability.vilima.MkTagNode
 
 class TagsWriter {
 	StringBuilder builder
@@ -50,12 +50,12 @@ class TagsWriter {
 	def private void writeTag(MkTag tag, int indent) {
 		writeTagTargets(tag, indent)
 
-		for (entry : tag.entries) {
+		for (entry : tag.nodes) {
 			writeTagEntry(entry, indent)
 		}
 	}
 
-	def private void writeTagEntry(MkTagEntry entry, int indent) {
+	def private void writeTagEntry(MkTagNode entry, int indent) {
 		start("Simple", indent)
 		appendTag("Name", entry.getName, indent + 1)
 		appendTag("String", entry.getValue, indent + 1)
