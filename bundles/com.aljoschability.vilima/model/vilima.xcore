@@ -1,5 +1,5 @@
 @GenModel(nonNLSMarkers="true",
-	complianceLevel="7.0", editDirectory="/com.aljoschability.vilima.edit/src/main/xcore")
+	complianceLevel="7.0")
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
