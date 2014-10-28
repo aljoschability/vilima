@@ -1,11 +1,10 @@
 package com.aljoschability.vilima.extensions
 
 import com.aljoschability.vilima.MkFile
-import javax.inject.Inject
 import com.aljoschability.vilima.VilimaFactory
 import java.nio.file.Path
+import javax.inject.Inject
 import org.eclipse.core.runtime.IProgressMonitor
-import com.aljoschability.vilima.MkTagNode
 
 interface VilimaCreator {
 	def MkFile createMkFile(Path path, IProgressMonitor monitor)

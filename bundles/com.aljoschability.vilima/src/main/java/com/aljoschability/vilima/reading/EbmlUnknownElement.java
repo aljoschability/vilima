@@ -2,7 +2,6 @@ package com.aljoschability.vilima.reading;
 
 import java.util.Arrays;
 
-import com.aljoschability.vilima.helpers.MatroskaReader;
 import com.aljoschability.vilima.helpers.MkReaderByter;
 
 public class EbmlUnknownElement extends EbmlElement {

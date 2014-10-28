@@ -6,16 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.aljoschability.vilima.MkFile;
 import com.aljoschability.vilima.MkAttachment;
 import com.aljoschability.vilima.MkChapter;
 import com.aljoschability.vilima.MkChapterText;
 import com.aljoschability.vilima.MkEdition;
+import com.aljoschability.vilima.MkFile;
 import com.aljoschability.vilima.MkInformation;
 import com.aljoschability.vilima.MkTag;
 import com.aljoschability.vilima.MkTagNode;
 import com.aljoschability.vilima.MkTrack;
-import com.aljoschability.vilima.MkTrackType;
 import com.aljoschability.vilima.VilimaContentType;
 import com.aljoschability.vilima.VilimaFactory;
 import com.aljoschability.vilima.VilimaGenre;
