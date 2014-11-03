@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: com.aljoschability.vilima.dapo.trakt;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Bundle-Vendor: Aljoschability
-Bundle-Name: Vilima Data Provider: The Movie Database
+Bundle-Vendor: %bundle.vendor
+Bundle-Name: %bundle.name
 Bundle-Activator: com.aljoschability.vilima.dapro.tmdb.Activator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
