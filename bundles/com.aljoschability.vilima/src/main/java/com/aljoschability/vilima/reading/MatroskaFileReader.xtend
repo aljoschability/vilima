@@ -286,7 +286,7 @@ class MatroskaFileReader {
 		}
 
 		// XXX: rewrite
-		MatroskaReader::rewriteCodecPrivate(track);
+		MatroskaReader::rewriteCodecPrivate(track)
 	}
 
 	def private void fillVideo(EbmlElement parent, MkTrack track) {
@@ -499,16 +499,16 @@ class MatroskaFileReader {
 					tag.targetText = element.readString
 				}
 				case MatroskaNode::TagTrackUID.id: {
-					println("added non-global tag")
+					println(this + "added non-global tag")
 				}
 				case MatroskaNode::TagEditionUID.id: {
-					println("added non-global tag")
+					println(this + "added non-global tag")
 				}
 				case MatroskaNode::TagChapterUID.id: {
-					println("added non-global tag")
+					println(this + "added non-global tag")
 				}
 				case MatroskaNode::TagAttachmentUID.id: {
-					println("added non-global tag")
+					println(this + "added non-global tag")
 				}
 			}
 

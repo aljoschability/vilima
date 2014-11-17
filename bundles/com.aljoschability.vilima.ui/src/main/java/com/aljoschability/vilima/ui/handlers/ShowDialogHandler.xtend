@@ -8,7 +8,8 @@ import org.eclipse.swt.widgets.Shell
 
 class ShowDialogHandler {
 	@Execute
-	def execute(IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
-		println('''ShowDialogHandler has been called.''')
+	def execute(IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell,
+		@Named(IServiceConstants.ACTIVE_SELECTION) Object selected) {
+		println('''ShowDialogHandler has been called for «selected».''')
 	}
 }

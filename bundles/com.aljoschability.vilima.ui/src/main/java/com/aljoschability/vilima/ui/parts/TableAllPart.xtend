@@ -94,8 +94,11 @@ class TableAllPart {
 
 			override getImage(Object element) {
 				if (image == null) {
-					val data = Program::findProgram("mkv").imageData
-					image = new Image(display, data)
+					val program = Program::findProgram("mkv")
+					if (program != null) {
+						val data = program.imageData
+						image = new Image(display, data)
+					}
 				}
 				return image
 			}

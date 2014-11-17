@@ -14,8 +14,11 @@ import java.util.Collection
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Status
 import org.eclipse.core.runtime.jobs.Job
+import com.google.common.base.Charsets
 
 class VilimaScanJob extends Job {
+	static val LOG_PATH = '''D:\downloads\vilima__log__test.log'''
+
 	static val DEBUG_NF = NumberFormat::getNumberInstance
 
 	IContentManager manager
@@ -54,6 +57,7 @@ class VilimaScanJob extends Job {
       return Status.OK_STATUS;
       */
 		manager.clear();
+		val log = new StringBuilder
 
 		val walker = new VilimaFileWalker
 
@@ -66,14 +70,19 @@ class VilimaScanJob extends Job {
 			val started = System.nanoTime();
 
 			manager.add(reader.readFile(file))
-			//manager.add(reader.readFile(file.toPath))
 
+			//manager.add(reader.readFile(file.toPath))
 			// TODO: debug
 			val elapsed = DEBUG_NF.format((System.nanoTime() - started) / 1000000d);
-			println('''«elapsed»ms needed for "«file.name»".''');
+
+			//val text = '''«elapsed»ms needed for "«file.name»".'''
+			val text = file.name + "\t" + elapsed
+			println(text)
+			log.append(text + "\n")
 		}
 
 		manager.refresh();
+		com.google.common.io.Files::write(log, new File(LOG_PATH), Charsets::UTF_8)
 
 		//		manager.refresh();
 		return Status::OK_STATUS

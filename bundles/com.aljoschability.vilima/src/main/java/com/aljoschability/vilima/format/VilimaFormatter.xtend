@@ -54,10 +54,10 @@ class VilimaFormatter {
 
 	def static String getTime(double duration) {
 		if (duration >= 0) {
-			val ms = duration % 1000
-			val seconds = (duration / 1000) % 60;
-			val minutes = ((duration / (1000 * 60)) % 60);
-			val hours = ((duration / (1000 * 60 * 60)) % 24);
+			val ms = (duration % 1000) as int
+			val seconds = ((duration / 1000) % 60) as int
+			val minutes = ((duration / (1000 * 60)) % 60) as int
+			val hours = ((duration / (1000 * 60 * 60)) % 24) as int
 
 			val builder = new StringBuilder
 			if (hours > 0) {
