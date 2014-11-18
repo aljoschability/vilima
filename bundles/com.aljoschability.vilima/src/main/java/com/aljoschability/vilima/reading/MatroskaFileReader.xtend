@@ -12,10 +12,12 @@ import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.helpers.MatroskaReader
+import com.aljoschability.vilima.helpers.MkReaderByter
 import java.io.File
 import java.util.Arrays
 import java.util.Collection
-import com.aljoschability.vilima.helpers.MkReaderByter
+import java.util.LinkedList
+import java.util.Queue
 
 class MatroskaFileReader {
 	extension ReaderHelper helper = new ReaderHelper
@@ -23,7 +25,8 @@ class MatroskaFileReader {
 	MkFile result
 	MatroskaFileSeeker seeker
 
-	Collection<Long> positionsNeeded
+	Queue<Long> seeks
+
 	Collection<Long> positionsParsed
 	long seekOffset
 
@@ -40,23 +43,30 @@ class MatroskaFileReader {
 	}
 
 	def private void readSeeks() {
-
-		// remove already read elements
-		for (Long position : positionsParsed) {
-			positionsNeeded.remove(position)
+		while (!seeks.empty) {
+			val position = seeks.poll
+			if (!positionsParsed.contains(position)) {
+				val element = seeker.nextElement(position)
+				readSegmentNode(element as EbmlMasterElement)
+			}
 		}
 
-		// read the referenced elements
-		for (Long position : positionsNeeded) {
-			val element = seeker.nextElement(position)
-			readSegmentNode(element as EbmlMasterElement)
-		}
+	// remove already read elements
+	//		for (Long position : positionsParsed) {
+	//			positionsNeeded.remove(position)
+	//		}
+	// read the referenced elements
+	//		for (Long position : positionsNeeded) {
+	//			val element = seeker.nextElement(position)
+	//			readSegmentNode(element as EbmlMasterElement)
+	//		}
 	}
 
 	def private void init(File file) {
 		result = file.createMkFile
 
-		positionsNeeded = newArrayList
+		seeks = new LinkedList
+
 		positionsParsed = newArrayList
 		seekOffset = -1
 
@@ -66,7 +76,8 @@ class MatroskaFileReader {
 	def private void dispose() {
 		seeker.dispose()
 
-		positionsNeeded = null
+		seeks = null
+
 		positionsParsed = null
 		seekOffset = -1
 	}
@@ -191,7 +202,7 @@ class MatroskaFileReader {
 
 		// ignore cluster
 		if (!Arrays::equals(MatroskaNode::Cluster.id, id)) {
-			positionsNeeded += (position + seekOffset)
+			seeks.offer(position + seekOffset)
 		}
 	}
 
