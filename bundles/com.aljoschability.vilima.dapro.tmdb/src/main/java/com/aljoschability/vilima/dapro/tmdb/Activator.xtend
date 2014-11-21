@@ -1,10 +1,10 @@
 package com.aljoschability.vilima.dapro.tmdb
 
-import com.aljoschability.core.runtime.AbstractCoreActivator
-import com.aljoschability.core.runtime.ICoreActivator
+import com.aljoschability.core.ui.runtime.AbstractActivator
+import com.aljoschability.core.ui.runtime.IActivator
 
-class Activator extends AbstractCoreActivator {
-	static ICoreActivator INSTANCE
+class Activator extends AbstractActivator {
+	static IActivator INSTANCE
 
 	override protected initialize() {
 		Activator::INSTANCE = this
