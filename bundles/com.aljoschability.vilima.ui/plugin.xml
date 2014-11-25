@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.aljoschability.vilima.ui.preferences.LanguagesPage"
+            id="com.aljoschability.vilima.ui.page1"
+            name="Lanugages">
+         <keywordReference
+               id="com.aljoschability.vilima.ui.keywordReference1">
+         </keywordReference>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.aljoschability.vilima.ui.preferences.VilimaPreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>

@@ -1,10 +1,12 @@
 package com.aljoschability.vilima.ui;
 
 import com.aljoschability.core.ui.runtime.AbstractActivator
-import com.aljoschability.core.ui.runtime.IActivator
+import com.aljoschability.vilima.scraper.ScraperExtension
+import org.eclipse.swt.graphics.Image
+import org.eclipse.ui.plugin.AbstractUIPlugin
 
 final class Activator extends AbstractActivator {
-	static IActivator INSTANCE
+	static Activator INSTANCE
 
 	def static get() {
 		Activator::INSTANCE
@@ -17,9 +19,32 @@ final class Activator extends AbstractActivator {
 		addImage(VilimaImages::TRACK_TYPE_AUDIO)
 		addImage(VilimaImages::TRACK_TYPE_SUBTITLE)
 
+		val reg = com.aljoschability.vilima.Activator::get.scraperRegistry
+
+		// add movie scraper icons
+		for (mse : reg.movieScraperExtensions) {
+			val pluginId = mse.pluginId
+			val imagePath = mse.imagePath
+			val desc = AbstractUIPlugin::imageDescriptorFromPlugin(pluginId, imagePath)
+
+			imageRegistry.put(pluginId + "/" + imagePath, desc)
+		}
+
+		// add show scraper icons
+		for (sse : reg.showScraperExtensions) {
+			val pluginId = sse.pluginId
+			val imagePath = sse.imagePath
+			val desc = AbstractUIPlugin::imageDescriptorFromPlugin(pluginId, imagePath)
+
+			imageRegistry.put(pluginId + "/" + imagePath, desc)
+		}
 	}
 
 	override protected dispose() {
 		Activator::INSTANCE = null
+	}
+
+	def Image getScraperImage(ScraperExtension ext) {
+		getImage(ext.pluginId + "/" + ext.imagePath)
 	}
 }

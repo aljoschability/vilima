@@ -19,7 +19,7 @@ class ReadDirectoryHandler {
 		val dialog = new DirectoryDialog(shell)
 		dialog.text = "Directory Selection"
 		dialog.message = "Select the directory containing the video files."
-		dialog.filterPath = '''C:\Repositories\arda.maglor\eclipse\vilima\__STUFF__\files'''
+		dialog.filterPath = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files'''
 
 		// check whether something should be read
 		val path = dialog.open
