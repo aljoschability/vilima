@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="com.aljoschability.vilima.scraper">
+		<movieScraper
+			class="com.aljoschability.vilima.scraper.rottentomatoes.RottenTomatoesMovieScraper"
+			id="com.aljoschability.vilima.scraper.rottentomatoes.RottenTomatoesMovieScraper"
+			icon="icons/rottentomatoes.png"
+			name="%extension.name"
+			description="%extension.description"
+			url="%extension.url"/>
+		<showScraper
+			class="com.aljoschability.vilima.scraper.rottentomatoes.RottenTomatoesShowScraper"
+			id="com.aljoschability.vilima.scraper.rottentomatoes.RottenTomatoesShowScraper"
+			icon="icons/rottentomatoes.png"
+			name="%extension.name"
+			description="%extension.description"
+			url="%extension.url"/>
+	</extension>
+</plugin>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="com.aljoschability.vilima.scraper">
+		<movieScraper
+			class="com.aljoschability.vilima.scraper.omdb.OmdbMovieScraper"
+			id="com.aljoschability.vilima.scraper.omdb.OmdbMovieScraper"
+			icon="icons/omdb.png"
+			name="%extension.name"
+			description="%extension.description"
+			url="%extension.url"/>
+		<showScraper
+			class="com.aljoschability.vilima.scraper.omdb.OmdbShowScraper"
+			id="com.aljoschability.vilima.scraper.omdb.OmdbShowScraper"
+			icon="icons/omdb.png"
+			name="%extension.name"
+			description="%extension.description"
+			url="%extension.url"/>
+	</extension>
+</plugin>
