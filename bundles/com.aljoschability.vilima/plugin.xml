@@ -10,6 +10,7 @@
 		Aljoscha Hark <mail@aljoschability.com> - initial API and implementation
 -->
 <plugin>
+   <extension-point id="scraper" name="Meta Data Scraper" schema="schema/scraper.exsd"/>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated vilima -->
       <package
