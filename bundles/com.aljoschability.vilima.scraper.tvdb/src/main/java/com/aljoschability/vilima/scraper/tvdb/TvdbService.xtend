@@ -36,32 +36,6 @@ interface TvdbService {
 	)
 
 	/**
-	 * <p>This interface returns the full episode XML if an episode is found in the series that has the correct air date. This is useful if you are looking up shows that don't contain season and episode info but rather have the date in the title.
-	 * 
-	 * <p>If an empty XML set is returned it means there was no episode in that series with the airdate you specified.
-	 * 
-	 * <p>If there is more than one episode for the series and air date you supplied only one will be returned.
-	 * 
-	 * @param apikey This is the API key that is registered to your application.
-	 * @param seriesid This is the seriesid for the series you want to use for finding episodes.
-	 * @param airdate This is the date the episode aired on you are trying to lookup. This can be supplied in any valid date type. Examples:
-	 * <ul>
-	 * <li>2008-01-01
-	 * <li>2008-1-1
-	 * <li>January 1, 2008
-	 * <li>1/1/2008
-	 * <li>etc
-	 * </ul>
-	 * @param language This field is optional. If it isn't supplied the interface defaults to using 'en' as its language type. When you supply a language id, it will first try to find translation data for the language id you specified. If non can be found it will return English.
-	 */
-	@GET("/api/GetSeriesByRemoteID.php")
-	def SearchSeriesData getEpisodeByAirDate(
-		@Query("seriesid") Integer seriesid,
-		@Query("airdate") String airdate,
-		@Query("language") String language
-	)
-
-	/**
 	 * The Full Series Record contains all of the information available
 	 * about a series including information about all the episodes.
 	 * Please note that this file is often quite large (100's of kb) and

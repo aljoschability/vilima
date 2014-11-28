@@ -25,11 +25,6 @@ class TvdbServiceTests {
 	}
 
 	@Test
-	def void testGetEpisodeByAirDate() {
-		println(service.getEpisodeByAirDate(95011, "2009-09-23", "en"))
-	}
-
-	@Test
 	def void testGetFullSeriesRecord() {
 		println(service.getFullSeriesRecord(95011, "en"))
 	}
