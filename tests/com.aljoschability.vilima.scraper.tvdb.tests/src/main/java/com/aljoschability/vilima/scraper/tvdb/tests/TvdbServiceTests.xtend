@@ -9,18 +9,29 @@ import org.junit.Before
 import org.junit.Test
 import retrofit.RestAdapter
 import retrofit.RestAdapter.LogLevel
+import retrofit.converter.SimpleXMLConverter
 
 class TvdbServiceTests {
 	TvdbService service
 
 	@Test
-	def void testGetShow() {
-		println(service.getShow(76258, "en"))
+	def void testGetSeries() {
+		println(service.getSeries("Modern Family", "en"))
 	}
 
 	@Test
-	def void testSearchShow() {
-		println(service.searchShow("Spartacus", "en"))
+	def void testGetSeriesByRemoteID() {
+		println(service.getSeriesByRemoteID("tt1442437", null, "en"))
+	}
+
+	@Test
+	def void testGetEpisodeByAirDate() {
+		println(service.getEpisodeByAirDate(95011, "2009-09-23", "en"))
+	}
+
+	@Test
+	def void testGetFullSeriesRecord() {
+		println(service.getFullSeriesRecord(95011, "en"))
 	}
 
 	@Before def void start() {
@@ -29,6 +40,7 @@ class TvdbServiceTests {
 		builder.requestInterceptor = [
 			addPathParam("apikey", apiKey)
 		]
+		builder.converter = new SimpleXMLConverter
 
 		val adapter = builder.build
 		adapter.logLevel = LogLevel::FULL
