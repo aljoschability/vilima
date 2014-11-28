@@ -14,12 +14,12 @@ import retrofit.converter.SimpleXMLConverter
 class TvdbServiceTests {
 	TvdbService service
 
-	@Test
+	//	@Test
 	def void testGetSeries() {
 		println(service.getSeries("Modern Family", "en"))
 	}
 
-	@Test
+	//	@Test
 	def void testGetSeriesByRemoteID() {
 		println(service.getSeriesByRemoteID("tt1442437", null, "en"))
 	}
@@ -30,12 +30,14 @@ class TvdbServiceTests {
 	}
 
 	@Before def void start() {
+		val converter = new SimpleXMLConverter(false)
+
 		val builder = new RestAdapter.Builder()
 		builder.endpoint = "http://thetvdb.com"
 		builder.requestInterceptor = [
 			addPathParam("apikey", apiKey)
 		]
-		builder.converter = new SimpleXMLConverter
+		builder.converter = converter
 
 		val adapter = builder.build
 		adapter.logLevel = LogLevel::FULL
