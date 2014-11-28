@@ -8,23 +8,24 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import retrofit.RestAdapter
+import retrofit.RestAdapter.LogLevel
 
 class TmdbServiceTests {
 	TmdbService service
 
-	@Test
-	def void testSearchMovie() {
-		println(service.searchMovie("Matrix", null, null, null, null, null))
+	//@Test
+	def void testGetConfiguration() {
+		println(service.getConfiguration())
 	}
 
-	@Test
-	def void testSearchShow() {
-		println(service.searchShow("Spartacus", null, null, null, null))
-	}
-
-	@Test
+	//@Test
 	def void testGetMovie() {
 		println(service.getMovie(604, null))
+	}
+
+	//@Test
+	def void testGetMovieCollection() {
+		println(service.getMovieCollection(2344, null))
 	}
 
 	@Test
@@ -33,8 +34,18 @@ class TmdbServiceTests {
 	}
 
 	@Test
-	def void testGetSeason() {
-		println(service.getSeason(46296, 1, null))
+	def void testGetShowSeason() {
+		println(service.getShowSeason(46296, 1, null))
+	}
+
+	//@Test
+	def void testSearchMovie() {
+		println(service.searchMovie("Matrix", null, null, null, null, null))
+	}
+
+	//@Test
+	def void testSearchShow() {
+		println(service.searchShow("Spartacus", null, null, null, null))
 	}
 
 	@Before def void start() {
@@ -46,6 +57,7 @@ class TmdbServiceTests {
 		]
 
 		val adapter = builder.build
+		adapter.logLevel = LogLevel::FULL
 
 		service = adapter.create(TmdbService)
 	}
