@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %bundle.name
+Bundle-SymbolicName: com.aljoschability.vilima.scraper.tvrage.tests;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: %bundle.vendor
+Fragment-Host: com.aljoschability.vilima.scraper.tvrage
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.junit

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.aljoschability.vilima.scraper.tvrage;singleton:=true
+Bundle-Version: 0.1.0.qualifier
+Bundle-Vendor: %bundle.vendor
+Bundle-Name: %bundle.name
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtend.lib,
+ com.google.gson,
+ org.simpleframework.simple-xml,
+ com.squareup.okio,
+ com.squareup.okhttp,
+ com.squareup.retrofit,
+ com.squareup.retrofit.converter-simplexml,
+ com.aljoschability.vilima

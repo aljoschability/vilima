@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="com.aljoschability.vilima.scraper">
+		<movieScraper
+			class="com.aljoschability.vilima.scraper.tvrage.TvRageMovieScraper"
+			id="com.aljoschability.vilima.scraper.tvrage.TvRageMovieScraper"
+			icon="icons/tvrage.png"
+			name="%extension.name"
+			description="%extension.description"
+			url="%extension.url"/>
+		<showScraper
+			class="com.aljoschability.vilima.scraper.tvrage.TvRageShowScraper"
+			id="com.aljoschability.vilima.scraper.tvrage.TvRageShowScraper"
+			icon="icons/tvrage.png"
+			name="%extension.name"
+			description="%extension.description"
+			url="%extension.url"/>
+	</extension>
+</plugin>
