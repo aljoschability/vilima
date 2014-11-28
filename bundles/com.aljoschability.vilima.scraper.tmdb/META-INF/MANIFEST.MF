@@ -8,5 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtend.lib,
  com.google.gson,
+ com.squareup.okio,
+ com.squareup.okhttp,
  com.squareup.retrofit,
  com.aljoschability.vilima
