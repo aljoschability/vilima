@@ -13,39 +13,39 @@ import retrofit.RestAdapter.LogLevel
 class TmdbServiceTests {
 	TmdbService service
 
-	@Test
+//	@Test
 	def void testGetConfiguration() {
 		println(service.getConfiguration())
 	}
 
-	@Test
+//	@Test
 	def void testGetMovie() {
 		println(service.getMovie(604, null))
 	}
 
-	@Test
+//	@Test
 	def void testGetMovieCollection() {
 		println(service.getMovieCollection(2344, null))
 	}
 
-	@Test
+//	@Test
 	def void testGetShow() {
 		println(service.getShow(46296, null))
 	}
 
 	@Test
 	def void testGetShowSeason() {
-		println(service.getShowSeason(46296, 1, null))
+		println(service.getShowSeason(32798, 4, null))
 	}
 
-	@Test
+//	@Test
 	def void testSearchMovie() {
 		println(service.searchMovie("Matrix", null, null, null, null, null))
 	}
 
 	@Test
 	def void testSearchShow() {
-		println(service.searchShow("Spartacus", null, null, null, null))
+		println(service.searchShow("Hawaii Five-0", null, null, null, null))
 	}
 
 	@Before def void start() {

@@ -127,6 +127,43 @@ class MkTagNode
 	contains MkTagNode[] nodes
 }
 
+class VilimaMovieCollection
+{
+	String[1] title
+	String[1] summary
+}
+
+//RECORDING_LOCATION
+//PRODUCTION_STUDIO
+//GENRE
+//CONTENT_TYPE
+//SUMMARY
+//KEYWORDS
+//DATE_RELEASED
+class VilimaMovie
+{
+	String[1] title
+	String tagline
+}
+
+/* === FUCK ========================== */
+class ScrapeIdentifier {
+	String[1] ^type
+	String[1] value
+}
+
+class ScrapeMovie
+{
+	contains ScrapeIdentifier[] identifiers
+	String[1] title
+	String tagline
+	String summary
+	Integer runtime
+	Integer voteCount
+	Double votePercentage
+	String releaseDate
+}
+
 /* === FUCK ========================== */
 class VilimaLibrary
 {
@@ -145,12 +182,4 @@ class VilimaGenre
 {
 	String[1] name
 	refers MkFile[] files
-	refers VilimaMovie[] movies opposite genres
-}
-
-abstract class VilimaMovie
-{
-	String[1] title
-	String dateRealeased
-	refers VilimaGenre[] genres opposite movies
 }

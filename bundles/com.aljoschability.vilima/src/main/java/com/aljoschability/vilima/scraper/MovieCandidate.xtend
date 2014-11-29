@@ -19,21 +19,8 @@ interface MovieCandidate {
 	def String getInfoUrl()
 
 	def String getPosterUrl()
-}
-
-interface MovieCandidate2 {
-
-	def Map<String, String> getIdentifiers()
-
-	def String getTitle()
 
 	def String getTagline()
-
-	def String getReleaseDate()
-
-	def String getSummary()
-
-	def List<String> getGenres()
 
 	def String getNetwork()
 
@@ -42,6 +29,4 @@ interface MovieCandidate2 {
 	def Float getRatingPercentage()
 
 	def Integer getRatingCount()
-
-	def String getPosterUrl()
 }
