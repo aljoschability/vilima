@@ -1,10 +1,10 @@
 package com.aljoschability.vilima.ui.parts
 
 //import com.aljoschability.vilima.dapro.tmdb.TmdbProvider
-import com.aljoschability.vilima.scraper.MovieCandidate
+import com.aljoschability.vilima.ScrapeMovie
 import com.aljoschability.vilima.scraper.ScraperRegistry
-import com.aljoschability.vilima.scraper.ShowCandidate
 import com.aljoschability.vilima.ui.Activator
+import java.text.NumberFormat
 import javax.annotation.PostConstruct
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
@@ -19,6 +19,8 @@ import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Text
+
+import static com.aljoschability.vilima.ui.parts.DataProviderPart.*
 
 class DataProviderPart {
 
@@ -55,7 +57,9 @@ class DataProviderPart {
 			button.addSelectionListener(
 				new SelectionAdapter() {
 					override widgetSelected(SelectionEvent e) {
-						mse.scraper.findMovie(searchText.text)
+						if(viewer != null && !viewer.control.disposed) {
+							viewer.input = mse.scraper.findMovie(searchText.text)
+						}
 					}
 				})
 		}
@@ -69,7 +73,9 @@ class DataProviderPart {
 			button.addSelectionListener(
 				new SelectionAdapter() {
 					override widgetSelected(SelectionEvent e) {
-						sse.scraper.findShow(searchText.text)
+						if(viewer != null && !viewer.control.disposed) {
+							viewer.input = sse.scraper.findShow(searchText.text)
+						}
 					}
 				})
 		}
@@ -97,24 +103,46 @@ class DataProviderPart {
 		titleColumn.labelProvider = new ColumnLabelProvider {
 			override getText(Object element) {
 				switch element {
-					MovieCandidate: return element.title
-					ShowCandidate: return element.title
+					ScrapeMovie: return element.title
 				}
 				return super.getText(element)
 			}
 		}
 
-		// title
+		// date
 		val dateColumn = new TreeViewerColumn(viewer, SWT::LEAD)
 		dateColumn.column.text = "Release"
 		dateColumn.column.width = 150
 		dateColumn.labelProvider = new ColumnLabelProvider {
 			override getText(Object element) {
 				switch element {
-					MovieCandidate: return element.releaseDate
-					ShowCandidate: return element.releaseDate
+					ScrapeMovie: return element.releaseDate
 				}
 				return super.getText(element)
+			}
+		}
+
+		// vote
+		val voteColumn = new TreeViewerColumn(viewer, SWT::LEAD)
+		voteColumn.column.text = "Votes"
+		voteColumn.column.width = 150
+		voteColumn.labelProvider = new ColumnLabelProvider {
+			override getText(Object element) {
+				switch element {
+					ScrapeMovie: {
+						if(element.voteCount == null || element.voteCount < 1) {
+							return ""
+						}
+						return '''«format(element.votePercentage)»% by «element.voteCount»'''
+					}
+				}
+				return super.getText(element)
+			}
+
+			def private format(Double percentage) {
+				val nf = NumberFormat::getNumberInstance
+				nf.maximumFractionDigits = 0
+				return nf.format(percentage)
 			}
 		}
 	}
