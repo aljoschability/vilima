@@ -1,5 +1,10 @@
 @GenModel(nonNLSMarkers="true",
-	complianceLevel="7.0", bundleManifest="false")
+	complianceLevel="7.0",
+	bundleManifest="false",
+	suppressEMFModelTags="true",
+	suppressUnsettable="true",
+	updateClasspath="false",
+	pluginKey="")
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
