@@ -11,4 +11,5 @@ Require-Bundle: org.eclipse.xtend.lib,
  com.squareup.okio,
  com.squareup.okhttp,
  com.squareup.retrofit,
- com.aljoschability.vilima
+ com.aljoschability.vilima,
+ org.eclipse.emf.ecore.xmi

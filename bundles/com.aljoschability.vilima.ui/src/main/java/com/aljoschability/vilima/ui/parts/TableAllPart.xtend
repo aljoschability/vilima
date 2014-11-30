@@ -2,7 +2,7 @@ package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.VilimaEventTopics
-import com.aljoschability.vilima.VilimaLibrary
+import com.aljoschability.vilima.XVilimaLibrary
 import com.aljoschability.vilima.format.VilimaFormatter
 import java.util.List
 import javax.annotation.PostConstruct
@@ -266,7 +266,7 @@ class TableAllPart {
 	}
 
 	@Inject @Optional
-	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) VilimaLibrary content) {
+	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) XVilimaLibrary content) {
 		input = content.files
 
 		if (viewer != null && !viewer.control.disposed) {

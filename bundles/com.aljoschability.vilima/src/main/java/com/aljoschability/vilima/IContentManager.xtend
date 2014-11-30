@@ -9,9 +9,9 @@ interface IContentManager {
 
 	def void add(MkFile file)
 
-	def VilimaLibrary getContent()
+	def XVilimaLibrary getContent()
 
 	def void refresh()
 
-	def VilimaLibrary getLibrary()
+	def XVilimaLibrary getLibrary()
 }

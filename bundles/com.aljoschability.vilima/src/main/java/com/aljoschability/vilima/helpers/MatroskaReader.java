@@ -15,10 +15,10 @@ import com.aljoschability.vilima.MkInformation;
 import com.aljoschability.vilima.MkTag;
 import com.aljoschability.vilima.MkTagNode;
 import com.aljoschability.vilima.MkTrack;
-import com.aljoschability.vilima.VilimaContentType;
+import com.aljoschability.vilima.XVilimaContentType;
 import com.aljoschability.vilima.VilimaFactory;
-import com.aljoschability.vilima.VilimaGenre;
-import com.aljoschability.vilima.VilimaLibrary;
+import com.aljoschability.vilima.XVilimaGenre;
+import com.aljoschability.vilima.XVilimaLibrary;
 import com.aljoschability.vilima.reading.EbmlDataElement;
 import com.aljoschability.vilima.reading.EbmlElement;
 import com.aljoschability.vilima.reading.EbmlMasterElement;
@@ -27,7 +27,7 @@ import com.aljoschability.vilima.reading.MatroskaNode;
 
 public class MatroskaReader {
 
-	private final VilimaLibrary library;
+	private final XVilimaLibrary library;
 
 	private MkFile file;
 	private MatroskaFileSeeker seeker;
@@ -37,7 +37,7 @@ public class MatroskaReader {
 	private long seekOffset;
 
 	@Deprecated
-	public MatroskaReader(VilimaLibrary library) {
+	public MatroskaReader(XVilimaLibrary library) {
 		this.library = library;
 	}
 
@@ -511,28 +511,28 @@ public class MatroskaReader {
 		return tag;
 	}
 
-	private VilimaContentType getOrCreateContentType(String value) {
-		for (VilimaContentType existing : library.getContentTypes()) {
+	private XVilimaContentType getOrCreateContentType(String value) {
+		for (XVilimaContentType existing : library.getContentTypes()) {
 			if (existing.getName().equals(value)) {
 				return existing;
 			}
 		}
 
-		VilimaContentType type = VilimaFactory.eINSTANCE.createVilimaContentType();
+		XVilimaContentType type = VilimaFactory.eINSTANCE.createXVilimaContentType();
 		type.setName(value);
 		library.getContentTypes().add(type);
 
 		return type;
 	}
 
-	private VilimaGenre getOrCreateGenre(String value) {
-		for (VilimaGenre existing : library.getGenres()) {
+	private XVilimaGenre getOrCreateGenre(String value) {
+		for (XVilimaGenre existing : library.getGenres()) {
 			if (existing.getName().equals(value)) {
 				return existing;
 			}
 		}
 
-		VilimaGenre type = VilimaFactory.eINSTANCE.createVilimaGenre();
+		XVilimaGenre type = VilimaFactory.eINSTANCE.createXVilimaGenre();
 		type.setName(value);
 		library.getGenres().add(type);
 

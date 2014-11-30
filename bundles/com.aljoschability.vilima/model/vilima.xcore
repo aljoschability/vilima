@@ -1,21 +1,28 @@
 @GenModel(nonNLSMarkers="true",
-	complianceLevel="7.0")
+	complianceLevel="7.0", bundleManifest="false")
 @Ecore(nsURI='http://www.aljoschability.com/vilima/2014')
 package com.aljoschability.vilima
 
-/**
- * This represents a matroska file and contains all information after the actual file has been read.
- */
+/* This represents a Matroska file and contains all information after the actual file has been read. */
 class MkFile
 {
+	/* The path of the file. */
 	String[1] path
+	/* The file name. */
 	String[1] name
-	long[1] size
-	long[1] dateModified
+	/* The size of the file in bytes. */
+	Long[1] size
+	/* The date/time of the last file modification. */
+	Long[1] dateModified
+	/* The segment information of the Matroska container. */
 	contains MkInformation[1] information
+	/* The tracks contained in the Matroska container. */
 	contains MkTrack[] tracks
+	/* The attachment inside the Matroska container. */
 	contains MkAttachment[] attachments
+	/* The editions contained in the Matroska container. */
 	contains MkEdition[] editions
+	/* The tags contained in the Matroska container. */
 	contains MkTag[] tags
 }
 
@@ -127,10 +134,31 @@ class MkTagNode
 	contains MkTagNode[] nodes
 }
 
+/* === LIBRARY ======================== */
+/* An identifier that which is used for example to connect a movie to the appropriate TVDB entry. */
+class VilimaIdentifier {
+	/* The unique name of the identifier */
+	id String[1] ^name
+	/* The value of the identifier */
+	String[1] value
+}
+
+class VilimaLibrary
+{
+	contains VilimaMovie[] movies
+	contains VilimaMovieCollection[] movieCollections
+	contains VilimaShow[] shows
+}
+
 class VilimaMovieCollection
 {
 	String[1] title
 	String[1] summary
+	refers VilimaMovie[] movies opposite collection
+}
+
+class VilimaShow
+{
 }
 
 //RECORDING_LOCATION
@@ -144,17 +172,12 @@ class VilimaMovie
 {
 	String[1] title
 	String tagline
-}
-
-/* === FUCK ========================== */
-class ScrapeIdentifier {
-	String[1] ^type
-	String[1] value
+	refers VilimaMovieCollection collection opposite movies
 }
 
 class ScrapeMovie
 {
-	contains ScrapeIdentifier[] identifiers
+	contains VilimaIdentifier[] identifiers
 	String[1] title
 	String tagline
 	String summary
@@ -162,23 +185,24 @@ class ScrapeMovie
 	Integer voteCount
 	Double votePercentage
 	String releaseDate
+	String posterUrl
 }
 
-/* === FUCK ========================== */
-class VilimaLibrary
+/* === FUCK2 ========================== */
+class XVilimaLibrary
 {
-	contains VilimaContentType[] contentTypes
-	contains VilimaGenre[] genres
+	contains XVilimaContentType[] contentTypes
+	contains XVilimaGenre[] genres
 	contains MkFile[] files
 }
 
-class VilimaContentType
+class XVilimaContentType
 {
 	String[1] name
 	refers MkFile[] files
 }
 
-class VilimaGenre
+class XVilimaGenre
 {
 	String[1] name
 	refers MkFile[] files

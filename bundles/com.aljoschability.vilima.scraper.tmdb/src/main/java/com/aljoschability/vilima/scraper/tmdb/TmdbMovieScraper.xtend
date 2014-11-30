@@ -57,9 +57,11 @@ class TmdbMovieScraper implements MovieScraper {
 		for (r : result.results) {
 			val m = VilimaFactory::eINSTANCE.createScrapeMovie
 			m.title = r.title
+			//m.tagline=r.
 			m.releaseDate = r.release_date
 			m.voteCount = r.vote_count
 			m.votePercentage = (r.vote_average / 10d) * 100d
+			m.posterUrl = "https://image.tmdb.org/t/p/" + "w185" + r.poster_path
 			list += m
 		}
 

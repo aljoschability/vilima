@@ -2,7 +2,7 @@ package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.VilimaEventTopics
-import com.aljoschability.vilima.VilimaLibrary
+import com.aljoschability.vilima.XVilimaLibrary
 import com.aljoschability.vilima.format.VilimaFormatter
 import java.util.List
 import javax.annotation.PostConstruct
@@ -94,14 +94,14 @@ class TableShowsPart {
 			Image image
 
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return String.valueOf(element.getName)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (image == null) {
+				if(image == null) {
 					val data = Program::findProgram("mkv").imageData
 					image = new Image(display, data)
 				}
@@ -109,7 +109,7 @@ class TableShowsPart {
 			}
 
 			override dispose() {
-				if (image != null) {
+				if(image != null) {
 					image.dispose()
 				}
 
@@ -129,7 +129,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return findTagString(element, 70, "TITLE")
 				}
 				return ""
@@ -148,7 +148,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					val b = new StringBuilder
 
 					for (genre : findTagStrings(element, 70, "GENRE")) {
@@ -156,7 +156,7 @@ class TableShowsPart {
 						b.append(", ")
 					}
 
-					if (b.length != 0) {
+					if(b.length != 0) {
 						return b.toString().substring(0, b.length - 2)
 					}
 				}
@@ -177,7 +177,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return findTagString(element, 60, "PART_NUMBER")
 				}
 				return ""
@@ -214,7 +214,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return findTagString(element, 50, "PART_NUMBER")
 				}
 				return ""
@@ -233,7 +233,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return findTagString(element, 50, "TITLE")
 				}
 				return ""
@@ -252,7 +252,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return findTagString(element, 50, "DATE_RELEASE")
 				}
 				return ""
@@ -271,7 +271,7 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
+				if(element instanceof MkFile) {
 					return VilimaFormatter::fileSize(element.getSize)
 				}
 				return ""
@@ -290,8 +290,8 @@ class TableShowsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkFile) {
-					if (element.getInformation != null) {
+				if(element instanceof MkFile) {
+					if(element.getInformation != null) {
 						return VilimaFormatter::getTime(element.getInformation.getDuration)
 					}
 				}
@@ -301,19 +301,19 @@ class TableShowsPart {
 	}
 
 	@Inject @Optional
-	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) VilimaLibrary content) {
+	def handleRefresh(@UIEventTopic(VilimaEventTopics::CONTENT_REFRESH) XVilimaLibrary content) {
 		input = content.files
 
-		if (viewer != null && !viewer.control.disposed) {
+		if(viewer != null && !viewer.control.disposed) {
 			viewer.input = input
 		}
 	}
 
 	def private static String findTagString(MkFile file, int level, String name) {
 		for (tag : file.tags) {
-			if (tag.getTarget == level) {
+			if(tag.getTarget == level) {
 				for (entry : tag.nodes) {
-					if (entry.getName == name) {
+					if(entry.getName == name) {
 						return entry.getValue
 					}
 				}
@@ -325,9 +325,9 @@ class TableShowsPart {
 	def private static List<String> findTagStrings(MkFile file, int level, String name) {
 		val list = newArrayList
 		for (tag : file.tags) {
-			if (tag.getTarget == level) {
+			if(tag.getTarget == level) {
 				for (entry : tag.nodes) {
-					if (entry.getName == name) {
+					if(entry.getName == name) {
 						list += entry.getValue
 					}
 				}

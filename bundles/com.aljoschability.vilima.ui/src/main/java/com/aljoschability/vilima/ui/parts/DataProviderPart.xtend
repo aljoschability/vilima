@@ -21,6 +21,16 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Text
 
 import static com.aljoschability.vilima.ui.parts.DataProviderPart.*
+import org.eclipse.swt.widgets.Label
+import org.eclipse.jface.viewers.IStructuredSelection
+import com.aljoschability.vilima.scraper.MovieCandidate
+import org.eclipse.jface.resource.ImageDescriptor
+import java.net.URL
+import org.eclipse.swt.graphics.Image
+import org.eclipse.swt.widgets.Group
+import org.eclipse.jface.resource.JFaceResources
+import org.eclipse.jface.resource.JFaceColors
+import org.eclipse.swt.graphics.Point
 
 class DataProviderPart {
 
@@ -31,6 +41,12 @@ class DataProviderPart {
 	Text searchText
 
 	TreeViewer viewer
+
+	Label titleText
+
+	Label taglineText
+
+	Label poster
 
 	@PostConstruct
 	def void create(Composite parent) {
@@ -95,6 +111,10 @@ class DataProviderPart {
 		viewer.tree.linesVisible = true
 
 		viewer.contentProvider = new DataProviderContentProvider
+		viewer.addSelectionChangedListener(
+			[
+				handleSelection(viewer.selection as IStructuredSelection)
+			])
 
 		// title
 		val titleColumn = new TreeViewerColumn(viewer, SWT::LEAD)
@@ -145,6 +165,68 @@ class DataProviderPart {
 				return nf.format(percentage)
 			}
 		}
+
+		createDetailPart(composite)
+	}
+
+	def private void createDetailPart(Composite parent) {
+		val group = new Group(parent, SWT::NONE)
+		group.layout = GridLayoutFactory::swtDefaults.numColumns(2).create
+		group.layoutData = GridDataFactory::fillDefaults.grab(true, true).create
+		group.text = "Movie Details"
+
+		// poster
+		val posterComposite = new Composite(group, SWT::BORDER)
+		posterComposite.layout = GridLayoutFactory::fillDefaults.margins(2, 2).create
+		posterComposite.layoutData = GridDataFactory::fillDefaults.create
+		posterComposite.background = JFaceColors::getBannerBackground(posterComposite.display)
+
+		poster = new Label(posterComposite, SWT::NONE)
+		poster.layoutData = GridDataFactory::fillDefaults.hint(185,278) .create
+//		poster.size = new Point(185, 278)
+
+		// data
+		val data = new Composite(group, SWT::NONE)
+		data.layout = GridLayoutFactory::swtDefaults.create
+		data.layoutData = GridDataFactory::fillDefaults.grab(true, true).create
+
+		// title
+		titleText = new Label(data, SWT::LEAD)
+		titleText.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+		titleText.font = JFaceResources::getBannerFont
+
+		// tagline
+		taglineText = new Label(data, SWT::LEAD)
+		titleText.layoutData = GridDataFactory::fillDefaults.grab(true, false).create
+	}
+
+	def private void handleSelection(IStructuredSelection selection) {
+		if(selection.size != 1) {
+			titleText.text = ""
+			taglineText.text = ""
+
+			if(poster.image != null) {
+				val i = poster.image
+				poster.image = null
+				i.dispose
+			}
+
+			return
+		}
+		val movie = selection.firstElement as ScrapeMovie
+
+		titleText.text = movie.title
+		if(movie.tagline != null) {
+			taglineText.text = movie.tagline
+		}
+
+		// poster
+		if(poster.image != null) {
+			val i = poster.image
+			poster.image = null
+			i.dispose
+		}
+		poster.image = ImageDescriptor::createFromURL(new URL(movie.posterUrl)).createImage
 	}
 }
 

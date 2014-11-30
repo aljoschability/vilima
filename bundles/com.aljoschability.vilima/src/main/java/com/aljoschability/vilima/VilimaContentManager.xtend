@@ -6,14 +6,14 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 class VilimaContentManager implements IContentManager {
 	IEventBroker broker
 
-	VilimaLibrary library
+	XVilimaLibrary library
 
 	@Deprecated String path
 
 	new(IEventBroker broker) {
 		this.broker = broker
 
-		library = VilimaFactory::eINSTANCE.createVilimaLibrary()
+		library = VilimaFactory::eINSTANCE.createXVilimaLibrary()
 	}
 
 	override clear() {
