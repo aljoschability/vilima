@@ -85,7 +85,8 @@ public class MatroskaReader {
 
 		element = seeker.nextElement();
 		if (!MatroskaNode.Segment.matches(element)) {
-			throw new RuntimeException("Segment not the second element in the file.");
+			throw new RuntimeException(
+					"Segment not the second element in the file.");
 		}
 
 		readSegment((EbmlMasterElement) element);
@@ -98,7 +99,8 @@ public class MatroskaReader {
 				String value = seeker.readString((EbmlDataElement) element);
 
 				if (!(value.equals("matroska") || value.equals("webm"))) {
-					throw new RuntimeException("EBML document type cannot be read.");
+					throw new RuntimeException(
+							"EBML document type cannot be read.");
 				}
 			}
 
@@ -121,7 +123,8 @@ public class MatroskaReader {
 		}
 	}
 
-	private boolean readSegmentNode(EbmlMasterElement element) throws IOException {
+	private boolean readSegmentNode(EbmlMasterElement element)
+			throws IOException {
 		positions.add(seeker.getPosition() - element.getHeaderSize());
 
 		if (MatroskaNode.SeekHead.matches(element)) {
@@ -249,7 +252,8 @@ public class MatroskaReader {
 
 				track.setUid(value);
 			} else if (MatroskaNode.TrackType.matches(element)) {
-				byte value = (byte) seeker.readInteger((EbmlDataElement) element);
+				byte value = (byte) seeker
+						.readInteger((EbmlDataElement) element);
 
 				track.setType(MkReaderByter.convertTrackType(value));
 			} else if (MatroskaNode.Name.matches(element)) {
@@ -282,7 +286,8 @@ public class MatroskaReader {
 		file.getTracks().add(track);
 	}
 
-	private void readTrackAudioDetails(EbmlMasterElement parent, MkTrack track) throws IOException {
+	private void readTrackAudioDetails(EbmlMasterElement parent, MkTrack track)
+			throws IOException {
 		EbmlElement element = null;
 
 		while ((element = seeker.nextChild(parent)) != null) {
@@ -291,7 +296,7 @@ public class MatroskaReader {
 
 				track.setAudioSamplingFrequency(value);
 			} else if (MatroskaNode.Channels.matches(element)) {
-				short value = (short) seeker.readInteger((EbmlDataElement) element);
+				int value = (int) seeker.readInteger((EbmlDataElement) element);
 
 				track.setAudioChannels(value);
 			}
@@ -300,24 +305,25 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readTrackVideoDetails(EbmlMasterElement parent, MkTrack track) throws IOException {
+	private void readTrackVideoDetails(EbmlMasterElement parent, MkTrack track)
+			throws IOException {
 		EbmlElement element = null;
 
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.PixelWidth.matches(element)) {
-				short value = (short) seeker.readInteger((EbmlDataElement) element);
+				int value = (int) seeker.readInteger((EbmlDataElement) element);
 
 				track.setVideoPixelWidth(value);
 			} else if (MatroskaNode.PixelHeight.matches(element)) {
-				short value = (short) seeker.readInteger((EbmlDataElement) element);
+				int value = (int) seeker.readInteger((EbmlDataElement) element);
 
 				track.setVideoPixelHeight(value);
 			} else if (MatroskaNode.DisplayWidth.matches(element)) {
-				short value = (short) seeker.readInteger((EbmlDataElement) element);
+				int value = (int) seeker.readInteger((EbmlDataElement) element);
 
 				track.setVideoDisplayWidth(value);
 			} else if (MatroskaNode.DisplayHeight.matches(element)) {
-				short value = (short) seeker.readInteger((EbmlDataElement) element);
+				int value = (int) seeker.readInteger((EbmlDataElement) element);
 
 				track.setVideoDisplayHeight(value);
 			}
@@ -330,7 +336,8 @@ public class MatroskaReader {
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.AttachedFile.matches(element)) {
-				MkAttachment attachment = VilimaFactory.eINSTANCE.createMkAttachment();
+				MkAttachment attachment = VilimaFactory.eINSTANCE
+						.createMkAttachment();
 
 				readAttachedFile((EbmlMasterElement) element, attachment);
 
@@ -341,15 +348,19 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readAttachedFile(EbmlMasterElement parent, MkAttachment attachment) throws IOException {
+	private void readAttachedFile(EbmlMasterElement parent,
+			MkAttachment attachment) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.FileDescription.matches(element)) {
-				attachment.setDescription(seeker.readString((EbmlDataElement) element));
+				attachment.setDescription(seeker
+						.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.FileName.matches(element)) {
-				attachment.setName(seeker.readString((EbmlDataElement) element));
+				attachment
+						.setName(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.FileMimeType.matches(element)) {
-				attachment.setMimeType(seeker.readString((EbmlDataElement) element));
+				attachment.setMimeType(seeker
+						.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.FileData.matches(element)) {
 				attachment.setSize(element.getSize());
 			}
@@ -373,7 +384,8 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readEditionEntry(EbmlMasterElement parent, MkEdition chapter) throws IOException {
+	private void readEditionEntry(EbmlMasterElement parent, MkEdition chapter)
+			throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.EditionUID.matches(element)) {
@@ -390,13 +402,15 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readChapterAtom(EbmlMasterElement parent, MkChapter entry) throws IOException {
+	private void readChapterAtom(EbmlMasterElement parent, MkChapter entry)
+			throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.ChapterTimeStart.matches(element)) {
 				entry.setStart(seeker.readInteger((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapterDisplay.matches(element)) {
-				MkChapterText display = VilimaFactory.eINSTANCE.createMkChapterText();
+				MkChapterText display = VilimaFactory.eINSTANCE
+						.createMkChapterText();
 
 				readChapterDisplay((EbmlMasterElement) element, display);
 
@@ -407,13 +421,15 @@ public class MatroskaReader {
 		}
 	}
 
-	private void readChapterDisplay(EbmlMasterElement parent, MkChapterText display) throws IOException {
+	private void readChapterDisplay(EbmlMasterElement parent,
+			MkChapterText display) throws IOException {
 		EbmlElement element;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.ChapString.matches(element)) {
 				display.setText(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapLanguage.matches(element)) {
-				display.getLanguages().add(seeker.readString((EbmlDataElement) element));
+				display.getLanguages().add(
+						seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.ChapCountry.matches(element)) {
 				// TODO: ChapCountry not used
 			}
@@ -438,7 +454,8 @@ public class MatroskaReader {
 		}
 	}
 
-	private boolean readTag(EbmlMasterElement parent, MkTag tag) throws IOException {
+	private boolean readTag(EbmlMasterElement parent, MkTag tag)
+			throws IOException {
 		boolean global = true;
 
 		EbmlElement element = null;
@@ -458,13 +475,15 @@ public class MatroskaReader {
 		return global;
 	}
 
-	private boolean readTagTargets(EbmlMasterElement parent, MkTag tag) throws IOException {
+	private boolean readTagTargets(EbmlMasterElement parent, MkTag tag)
+			throws IOException {
 		boolean global = true;
 
 		EbmlElement element = null;
 		while ((element = seeker.nextChild(parent)) != null) {
 			if (MatroskaNode.TargetTypeValue.matches(element)) {
-				tag.setTarget((int) seeker.readInteger((EbmlDataElement) element));
+				tag.setTarget((int) seeker
+						.readInteger((EbmlDataElement) element));
 			} else if (MatroskaNode.TargetType.matches(element)) {
 				tag.setTargetText(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.TagTrackUID.matches(element)) {
@@ -483,7 +502,8 @@ public class MatroskaReader {
 		return global;
 	}
 
-	private MkTagNode readTagsSimpleTag(EbmlMasterElement parent) throws IOException {
+	private MkTagNode readTagsSimpleTag(EbmlMasterElement parent)
+			throws IOException {
 		MkTagNode tag = VilimaFactory.eINSTANCE.createMkTagNode();
 
 		EbmlElement element = null;
@@ -493,7 +513,8 @@ public class MatroskaReader {
 			} else if (MatroskaNode.TagString.matches(element)) {
 				tag.setValue(seeker.readString((EbmlDataElement) element));
 			} else if (MatroskaNode.SimpleTag.matches(element)) {
-				tag.getNodes().add(readTagsSimpleTag((EbmlMasterElement) element));
+				tag.getNodes().add(
+						readTagsSimpleTag((EbmlMasterElement) element));
 			}
 
 			seeker.skip(element);
@@ -518,7 +539,8 @@ public class MatroskaReader {
 			}
 		}
 
-		XVilimaContentType type = VilimaFactory.eINSTANCE.createXVilimaContentType();
+		XVilimaContentType type = VilimaFactory.eINSTANCE
+				.createXVilimaContentType();
 		type.setName(value);
 		library.getContentTypes().add(type);
 
@@ -542,18 +564,22 @@ public class MatroskaReader {
 	public static void rewriteCodecPrivate(MkTrack track) {
 		if (track.getCodecPrivate() != null) {
 			// reconstruct byte array
-			String[] split = track.getCodecPrivate().substring(1, track.getCodecPrivate().length() - 2).split(", ");
+			String[] split = track.getCodecPrivate()
+					.substring(1, track.getCodecPrivate().length() - 2)
+					.split(", ");
 			byte[] bytes = new byte[split.length];
 			for (int i = 0; i < bytes.length; i++) {
 				bytes[i] = new Byte(split[i]);
 			}
 
 			if ("V_MPEG4/ISO/AVC".equals(track.getCodecId())) {
-				track.setCodecPrivate("Profile=" + bytes[1] + ", Level=" + bytes[3]);
+				track.setCodecPrivate("Profile=" + bytes[1] + ", Level="
+						+ bytes[3]);
 			} else if ("V_MS/VFW/FOURCC".equals(track.getCodecId())) {
 				// System.out.println(Arrays.toString(new byte[] { 'X', 'V',
 				// 'I', 'D' }));
-				track.setCodecPrivate(new String(new byte[] { bytes[16], bytes[17], bytes[18], bytes[19] }));
+				track.setCodecPrivate(new String(new byte[] { bytes[16],
+						bytes[17], bytes[18], bytes[19] }));
 				// [40, 0, 0, 0, -48, 2, 0, 0, 96, 1, 0, 0, 1, 0, 12, 0, 88, 86,
 				// 73, 68, 0, 52, 23,
 				// 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

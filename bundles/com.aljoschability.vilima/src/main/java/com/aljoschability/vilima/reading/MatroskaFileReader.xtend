@@ -332,7 +332,7 @@ class MatroskaFileReader {
 					track.audioSamplingFrequency = element.readDouble
 				}
 				case MatroskaNode::Channels.id: {
-					track.audioChannels = element.readShort
+					track.audioChannels = element.readInt
 				}
 			}
 

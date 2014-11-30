@@ -31,50 +31,82 @@ class MkFile
 	contains MkTag[] tags
 }
 
-/**
- * This contains all the information about the segment of a matroska file.
- */
+/* This contains all the information about the segment of a Matroska container. */
 class MkInformation
 {
-	double duration ="-1"
-	long date ="-1"
+	/* Duration of the segment (based on TimecodeScale). */
+	Double duration = "-1"
+	/* Date of the origin of time-stamp (value 0), i.e. production date. */
+	Long date = "-1"
+	/* A randomly generated unique ID to identify the current segment between many others (128 bits). */
 	String uid
+	/* A unique ID to identify the previous chained segment (128 bits). */
 	String previousUid
+	/* A unique ID to identify the next chained segment (128 bits). */
 	String nextUid
+	/* General name of the segment. */
 	String title
-	String muxingApp
-	String writingApp
+	/* Muxing application or library ("libmatroska-0.4.3"). */
+	String[1] muxingApp
+	/* Writing application ("mkvmerge-0.3.3"). */
+	String[1] writingApp
 }
 
-/* === TRACKS ======================== */
+/* This represents a track of the Matroska container and describes the track with all elements. */
 class MkTrack
 {
-	int[1] number = "0"
-	long[1] uid = "0"
+	/* The track number as used in the Block Header (using more than 127 tracks is not encouraged, though the design allows an unlimited number). */
+	Integer[1] number
+	/* A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file. */
+	Long[1] uid
+	/* The type of the track. */
 	MkTrackType[1] ^type = "UNKNOWN"
-	boolean[1] flagEnabled = "true"
-	boolean[1] flagDefault = "true"
-	boolean[1] flagForced = "false"
-	boolean[1] flagLacing = "true"
+	/* Set if the track is usable. */
+	Boolean[1] flagEnabled = "true"
+	/* Set if that track (audio, video or subs) SHOULD be active if no language found matches the user preference. */
+	Boolean[1] flagDefault = "true"
+	/* Set if that track MUST be active during playback. There can be many forced track for a kind (audio, video or subs), the player should select the one which language matches the user preference or the default + forced track. Overlay MAY happen between a forced and non-forced track of the same kind. */
+	Boolean[1] flagForced = "false"
+	/* Set if the track may contain blocks using lacing. */
+	Boolean[1] flagLacing = "true"
+	/* A human-readable track name. */
 	String name
+	/* Specifies the language of the track in the Matroska languages form. */
 	String language = "eng"
+	/* An ID corresponding to the codec, see the codec page for more info. */
 	String[1] codecId
+	/* Private data only known to the codec. */
 	String codecPrivate
+	/* A human-readable string specifying the codec. */
 	String codecName
-	boolean videoFlagInterlaced = "false"
-	int videoPixelWidth
-	int videoPixelHeight
-	int videoPixelCropBottom = "0"
-	int videoPixelCropTop = "0"
-	int videoPixelCropLeft = "0"
-	int videoPixelCropRight = "0"
-	int videoDisplayWidth
-	int videoDisplayHeight
-	int videoDisplayUnit = "0"
-	int videoAspectRatioType = "0"
-	double audioSamplingFrequency = "8000.0"
-	double audioOutputSamplingFrequency
-	int audioChannels = "1"
+	/* Set if the video is interlaced. */
+	Boolean videoFlagInterlaced = "false"
+	/* Width of the encoded video frames in pixels. */
+	Integer videoPixelWidth
+	/* Height of the encoded video frames in pixels. */
+	Integer videoPixelHeight
+	/* The number of video pixels to remove at the bottom of the image (for HDTV content). */
+	Integer videoPixelCropBottom = "0"
+	/* The number of video pixels to remove at the top of the image. */
+	Integer videoPixelCropTop = "0"
+	/* The number of video pixels to remove on the left of the image. */
+	Integer videoPixelCropLeft = "0"
+	/* The number of video pixels to remove on the right of the image. */
+	Integer videoPixelCropRight = "0"
+	/* Width of the video frames to display. The default value is only valid when DisplayUnit is 0. */
+	Integer videoDisplayWidth
+	/* Height of the video frames to display. The default value is only valid when DisplayUnit is 0. */
+	Integer videoDisplayHeight
+	/* How DisplayWidth & DisplayHeight should be interpreted (0: pixels, 1: centimeters, 2: inches, 3: Display Aspect Ratio). */
+	Integer videoDisplayUnit = "0"
+	/* Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed). */
+	Integer videoAspectRatioType = "0"
+	/* Sampling frequency in Hz. */
+	Double audioSamplingFrequency = "8000.0"
+	/* Real output sampling frequency in Hz (used for SBR techniques). */
+	Double audioOutputSamplingFrequency
+	/* Numbers of channels in the track. */
+	Integer audioChannels = "1"
 }
 
 enum MkTrackType
@@ -88,58 +120,88 @@ enum MkTrackType
 	CONTROL
 }
 
-/* === ATTACHMENTS =================== */
+/* This represents a file attachment */
 class MkAttachment
 {
-	long[1] uid = "0"
-	long[1] size
+	/* Unique ID representing the file, as random as possible. */
+	Long[1] uid
+	/* The size of the attached file. */
+	Long[1] size
+	/* Filename of the attached file. */
 	String[1] name
+	/* MIME type of the file. */
 	String[1] mimeType
+	/* A human-friendly name for the attached file. */
 	String[1] description
 }
 
-/* === CHAPTERS ====================== */
+/* Contains all information about a segment edition. */
 class MkEdition
 {
-	long[1] uid = "0"
-	boolean[1] flagHidden = "false"
-	boolean[1] flagDefault = "false"
+	/* A unique ID to identify the edition. It's useful for tagging an edition. */
+	Long[1] uid = "0"
+	/* If an edition is hidden (1), it should not be available to the user interface (but still to Control Tracks; see flag notes). */
+	Boolean[1] flagHidden = "false"
+	/* If a flag is set (1) the edition should be used as the default one. */
+	Boolean[1] flagDefault = "false"
+	/* Contains the chapters of the edition. */
 	contains MkChapter[] chapters
 }
 
+/* Represents a chapter of an edition. */
 class MkChapter
 {
-	long[1] uid = "0"
-	long[1] start = "-1"
-	boolean[1] flagHidden = "false"
-	boolean[1] flagEnabled = "true"
+	/* A unique ID to identify the Chapter. */
+	Long[1] uid = "0"
+	/* Timestamp of the start of Chapter (not scaled). */
+	Long[1] start = "-1"
+	/* If a chapter is hidden (1), it should not be available to the user interface (but still to Control Tracks; see flag notes). */
+	Boolean[1] flagHidden = "false"
+	/* Specify wether the chapter is enabled. It can be enabled/disabled by a Control Track. When disabled, the movie should skip all the content between the TimeStart and TimeEnd of this chapter (see flag notes). */
+	Boolean[1] flagEnabled = "true"
+	/* Contains all possible strings to use for the chapter display. */
 	contains MkChapterText[] texts
 }
 
+/* Represents a text for a chapter */
 class MkChapterText
 {
+	/* Contains the string to use as the chapter atom. */
 	String[1] text
+	/* The languages corresponding to the string, in the bibliographic ISO-639-2 form. */
 	String[] languages
 }
 
-/* === TAGS ========================== */
+/* Element containing elements specific to Tracks/Chapters. */
 class MkTag
 {
-	int target = "50"
+	/* A number to indicate the logical level of the target. */
+	Integer target
+	/* An informational string that can be used to display the logical level of the target. */
 	String targetText
+	/* The actual nodes that contains the tag data. */
 	contains MkTagNode[] nodes
 }
 
+/* Represents a tag node holding actual information. */
 class MkTagNode
 {
+	/* The name of the Tag that is going to be stored. */
 	String[1] name
+	/* The value of the Tag. */
 	String value
+	/* Specifies the language of the tag specified, in the Matroska languages form. */
 	String[1] language = "und"
-	boolean[1] languageDefault = "true"
+	/* 	Indication to know if this is the default/original language to use for the given tag. */
+	Boolean[1] languageDefault = "true"
+	/* This possibly contains further nested information. */
 	contains MkTagNode[] nodes
 }
 
-/* === LIBRARY ======================== */
+//
+// #############################################################################
+// #############################################################################
+//
 /* An identifier that which is used for example to connect a movie to the appropriate TVDB entry. */
 class VilimaIdentifier {
 	/* The unique name of the identifier */
