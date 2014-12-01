@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         point="org.eclipse.ui.preferencePages">
-      <page
-            class="com.aljoschability.vilima.ui.preferences.LanguagesPage"
-            id="com.aljoschability.vilima.ui.page1"
-            name="Lanugages">
-         <keywordReference
-               id="com.aljoschability.vilima.ui.keywordReference1">
-         </keywordReference>
-      </page>
-   </extension>
+   <extension-point id="column" name="File Table Column" schema="schema/column.exsd"/>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="com.aljoschability.vilima.ui.preferences.VilimaPreferenceInitializer">
       </initializer>
+   </extension>
+
+	<extension point="com.aljoschability.vilima.ui.column">
+		<column
+			id="file/name"
+			name="File Name"
+			class="com.aljoschability.vilima.ui.columns.FileNameColumn"/>
+		<column
+			id="file/size"
+			name="File Size"
+			class="com.aljoschability.vilima.ui.columns.FileSizeColumn"/>
+		<column
+			id="file/datemodified"
+			name="File Modification Date"
+			class="com.aljoschability.vilima.ui.columns.FileDateModifiedColumn"/>
+		<column
+			id="segment/title"
+			name="Segment Title"
+			class="com.aljoschability.vilima.ui.columns.SegmentTitleColumn"/>
+		<column
+			id="segment/duration"
+			name="Segment Duration"
+			class="com.aljoschability.vilima.ui.columns.SegmentDurationColumn"/>
+		<column
+			id="tag/CONTENT_TYPE"
+			name="Content Type"
+			class="com.aljoschability.vilima.ui.columns.TagContentTypeColumn"/>
    </extension>
 
 </plugin>

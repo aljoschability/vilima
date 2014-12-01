@@ -2,14 +2,21 @@ package com.aljoschability.vilima.ui;
 
 import com.aljoschability.core.ui.runtime.AbstractActivator
 import com.aljoschability.vilima.scraper.ScraperExtension
+import com.aljoschability.vilima.ui.columns.ColumnRegistry
 import org.eclipse.swt.graphics.Image
 import org.eclipse.ui.plugin.AbstractUIPlugin
 
 final class Activator extends AbstractActivator {
 	static Activator INSTANCE
 
+	ColumnRegistry columnRegistry
+
 	def static get() {
 		Activator::INSTANCE
+	}
+
+	def ColumnRegistry getColumnRegistry() {
+		columnRegistry
 	}
 
 	override protected initialize() {
@@ -18,6 +25,8 @@ final class Activator extends AbstractActivator {
 		addImage(VilimaImages::TRACK_TYPE_VIDEO)
 		addImage(VilimaImages::TRACK_TYPE_AUDIO)
 		addImage(VilimaImages::TRACK_TYPE_SUBTITLE)
+
+		columnRegistry = new ColumnRegistry
 
 		val reg = com.aljoschability.vilima.Activator::get.scraperRegistry
 
