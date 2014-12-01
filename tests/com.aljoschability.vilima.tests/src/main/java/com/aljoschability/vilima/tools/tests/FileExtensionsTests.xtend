@@ -1,6 +1,6 @@
 package com.aljoschability.vilima.tools.tests
 
-import com.aljoschability.vilima.ext.FileExtensions
+import com.aljoschability.vilima.extensions.FileExtensions
 import org.junit.Test
 
 class FileExensionsTests {
