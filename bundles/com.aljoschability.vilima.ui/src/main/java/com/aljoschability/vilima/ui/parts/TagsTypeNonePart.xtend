@@ -35,11 +35,11 @@ class TagsTypeNonePart {
 	}
 
 	def setInput(List<MkFile> files) {
-		if (viewer == null || viewer.control.disposed) {
+		if(viewer == null || viewer.control.disposed) {
 			return
 		}
 
-		if (files != null && files.size == 1) {
+		if(files != null && files.size == 1) {
 			viewer.input = files.get(0)
 		} else {
 			viewer.input = null
@@ -57,15 +57,15 @@ class DataAllPartContentProvider extends ArrayContentProvider implements ITreeCo
 	}
 
 	override getChildren(Object element) {
-		if (element instanceof MkFile) {
+		if(element instanceof MkFile) {
 			return element.tags
 		}
 
-		if (element instanceof MkTag) {
+		if(element instanceof MkTag) {
 			return element.nodes
 		}
 
-		if (element instanceof MkTagNode) {
+		if(element instanceof MkTagNode) {
 			return element.nodes
 		}
 
@@ -83,21 +83,23 @@ class DataAllPartContentProvider extends ArrayContentProvider implements ITreeCo
 
 class DataAllPartLabelProvider extends LabelProvider {
 	override getText(Object element) {
-		if (element instanceof MkTag) {
+		if(element instanceof MkTag) {
 			val text = new StringBuilder
 
-			text.append('''Tag («element.getTarget»)''')
-			if (element.getTargetText != null) {
+			if(element.target != null) {
+				text.append('''Tag («element.target»)''')
+			}
+			if(element.targetText != null) {
 				text.append(''' [«element.getTargetText»]''')
 			}
 
 			return text.toString
 		}
 
-		if (element instanceof MkTagNode) {
+		if(element instanceof MkTagNode) {
 			val text = new StringBuilder
 			text.append('''«element.getName» = «element.getValue»''')
-			if (element.getLanguage != null && element.getLanguage != "und") {
+			if(element.getLanguage != null && element.getLanguage != "und") {
 				text.append(''' [«element.getLanguage»]''')
 			}
 			return text.toString

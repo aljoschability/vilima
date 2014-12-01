@@ -105,19 +105,19 @@ class TagsTypeShowPart {
 	}
 
 	def private void setValue(int level, String name, String value) {
-		if (value != null && !value.empty) {
+		if(value != null && !value.empty) {
 			println('''Set "«level»:«name»" to "«value»".''')
 		}
 	}
 
 	def private void setValues(int level, String name, String value, String separator) {
-		if (value != null && !value.empty) {
+		if(value != null && !value.empty) {
 			println('''Set "«level»:«name»" to "«value»" (splitted by «separator»).''')
 		}
 	}
 
 	def setInput(List<MkFile> files) {
-		if (titleControl == null || titleControl.disposed) {
+		if(titleControl == null || titleControl.disposed) {
 			return
 		}
 
@@ -136,9 +136,9 @@ class TagsTypeShowPart {
 
 		titleControl.items = items
 
-		if (items.empty) {
+		if(items.empty) {
 			titleControl.text = ""
-		} else if (items.size == 1) {
+		} else if(items.size == 1) {
 			titleControl.text = items.get(0)
 		} else {
 			titleControl.text = "<multiple>"
@@ -154,9 +154,9 @@ class TagsTypeShowPart {
 
 		subtitleControl.items = items
 
-		if (items.empty) {
+		if(items.empty) {
 			subtitleControl.text = ""
-		} else if (items.size == 1) {
+		} else if(items.size == 1) {
 			subtitleControl.text = items.get(0)
 		} else {
 			subtitleControl.text = "<multiple>"
@@ -172,9 +172,9 @@ class TagsTypeShowPart {
 
 		dateControl.items = items
 
-		if (items.empty) {
+		if(items.empty) {
 			dateControl.text = ""
-		} else if (items.size == 1) {
+		} else if(items.size == 1) {
 			dateControl.text = items.get(0)
 		} else {
 			dateControl.text = "<multiple>"
@@ -186,7 +186,7 @@ class TagsTypeShowPart {
 
 		for (file : files) {
 			val strings = findTagStrings(file, 50, "GENRE")
-			if (!strings.empty) {
+			if(!strings.empty) {
 				val builder = new StringBuilder
 				for (genre : strings) {
 					builder.append(genre)
@@ -198,9 +198,9 @@ class TagsTypeShowPart {
 
 		genresControl.items = items
 
-		if (items.empty) {
+		if(items.empty) {
 			genresControl.text = ""
-		} else if (items.size == 1) {
+		} else if(items.size == 1) {
 			genresControl.text = items.get(0)
 		} else {
 			genresControl.text = "<multiple>"
@@ -208,13 +208,13 @@ class TagsTypeShowPart {
 	}
 
 	def private String findTagValue(MkTagNode entry, String name) {
-		if (name.equals(entry.getName())) {
+		if(name.equals(entry.getName())) {
 			return entry.getValue();
 		}
 
 		for (MkTagNode child : entry.getNodes()) {
 			val value = findTagValue(child, name);
-			if (value != null) {
+			if(value != null) {
 				return value;
 			}
 		}
@@ -225,10 +225,10 @@ class TagsTypeShowPart {
 	def private static List<String> findTagStrings(MkFile file, int level, String name) {
 		val list = newArrayList
 		for (tag : file.tags) {
-			if (tag.getTarget == level) {
+			if(tag.target != null && tag.target == level) {
 				for (entry : tag.nodes) {
-					if (entry.getName == name) {
-						if (entry.getValue != null) {
+					if(entry.getName == name) {
+						if(entry.getValue != null) {
 							list += entry.getValue
 						}
 					}

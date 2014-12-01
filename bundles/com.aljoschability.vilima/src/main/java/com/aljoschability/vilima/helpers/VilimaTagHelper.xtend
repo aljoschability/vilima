@@ -13,11 +13,11 @@ class VilimaTagHelper {
 	def static String getValue(MkFile file, String name, int... targets) {
 		val values = getValues(file, name, targets)
 
-		if (values.empty) {
+		if(values.empty) {
 			return null
 		}
 
-		if (values.size > 1) {
+		if(values.size > 1) {
 			throw new RuntimeException('''Multiple values for tag "«name»" not supported!''')
 		}
 
@@ -38,9 +38,9 @@ class VilimaTagHelper {
 		val List<MkTagNode> entries = newArrayList
 
 		for (tag : file.tags) {
-			if (targets.contains(tag.getTarget)) {
+			if(tag.target != null && targets.contains(tag.target)) {
 				for (entry : tag.nodes) {
-					if (entry.getName == name) {
+					if(entry.getName == name) {
 						entries += entry
 					}
 				}
@@ -52,12 +52,12 @@ class VilimaTagHelper {
 
 	def static void setValue(MkFile file, int target, String name, String value) {
 		val entries = getEntries(file, name, target)
-		if (entries.size > 1) {
+		if(entries.size > 1) {
 			throw new RuntimeException('''more than one entry to edit for "«name»"!''')
 		}
 
 		var MkTagNode entry = null
-		if (entries.empty) {
+		if(entries.empty) {
 			entry = VilimaFactory::eINSTANCE.createMkTagNode
 			entry.name = name
 		} else {
@@ -67,7 +67,7 @@ class VilimaTagHelper {
 		entry.value = value
 
 		for (tag : file.tags) {
-			if (tag.getTarget == target) {
+			if(tag.getTarget == target) {
 				tag.nodes += entry
 			}
 		}
@@ -75,7 +75,7 @@ class VilimaTagHelper {
 
 	def static void removeTags(MkFile file, String name, int... targets) {
 		for (tag : file.tags) {
-			if (targets.contains(tag.getTarget)) {
+			if(targets.contains(tag.getTarget)) {
 				removeEntries(tag, name)
 			}
 		}
@@ -85,7 +85,7 @@ class VilimaTagHelper {
 		val collection = newArrayList
 
 		for (entry : tag.nodes) {
-			if (name == entry.getName) {
+			if(name == entry.getName) {
 				collection += entry
 			} else {
 				for (child : entry.nodes) {
@@ -101,7 +101,7 @@ class VilimaTagHelper {
 		val collection = newArrayList
 
 		for (child : entry.nodes) {
-			if (name == child.getName) {
+			if(name == child.getName) {
 				collection += entry
 			} else {
 				for (child2 : entry.nodes) {
