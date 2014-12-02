@@ -82,7 +82,7 @@ class VilimaScanJob extends Job {
 		}
 
 		manager.refresh();
-		com.google.common.io.Files::write(log, new File(LOG_PATH), Charsets::UTF_8)
+		//com.google.common.io.Files::write(log, new File(LOG_PATH), Charsets::UTF_8)
 
 		//		manager.refresh();
 		return Status::OK_STATUS
