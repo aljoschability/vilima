@@ -311,7 +311,7 @@ class TableShowsPart {
 
 	def private static String findTagString(MkFile file, int level, String name) {
 		for (tag : file.tags) {
-			if(tag.getTarget == level) {
+			if(tag.target != null && tag.target == level) {
 				for (entry : tag.nodes) {
 					if(entry.getName == name) {
 						return entry.getValue
