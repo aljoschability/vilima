@@ -118,5 +118,7 @@ class VilimaEditingSupport extends EditingSupport {
 		if(provider.setValue(element as MkFile, value)) {
 			viewer.update(element, null)
 		}
+		
+		
 	}
 }

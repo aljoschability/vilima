@@ -4,6 +4,14 @@ import com.aljoschability.vilima.MkFile
 import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.swt.widgets.Composite
 
+class AbstractTagColumn implements ColumnProvider {
+	
+	override getText(MkFile file) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+}
+
 class TagContentTypeColumn implements EditableColumnProvider {
 	override getCellEditor(Composite parent, MkFile file) {
 		new TextCellEditor(parent)
