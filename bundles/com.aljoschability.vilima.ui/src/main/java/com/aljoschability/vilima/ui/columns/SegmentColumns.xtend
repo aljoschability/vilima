@@ -15,7 +15,11 @@ class SegmentTitleColumn implements EditableColumnProvider {
 	}
 
 	override getValue(MkFile file) {
-		getText(file)
+		val value = getText(file)
+		if(value != null) {
+			return value
+		}
+		return ""
 	}
 
 	override setValue(MkFile file, Object newValue) {
