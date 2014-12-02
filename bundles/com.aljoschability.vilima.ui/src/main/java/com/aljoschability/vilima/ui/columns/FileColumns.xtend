@@ -24,7 +24,8 @@ class FileNameColumn implements EditableColumnProvider {
 		val oldFile = Paths::get(file.path, file.name).toFile
 		val newFile = Paths::get(file.path, value as String).toFile
 
-		if(oldFile != newFile) {
+		// only if not equal name + not existing
+		if(oldFile != newFile && !newFile.exists) {
 			Files::move(oldFile, newFile)
 
 			file.name = value as String
