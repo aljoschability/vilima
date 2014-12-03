@@ -8,9 +8,15 @@ import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.swt.widgets.Composite
 
 class FileNameProvider implements EditableColumnProvider {
+	def String getText(MkFile file) { file?.name ?: "" }
+
+	override compare(MkFile file1, MkFile file2) {
+		return file1.text.compareToIgnoreCase(file2.text)
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
-			override getText(MkFile file) { file.name }
+			override getText(MkFile file) { FileNameProvider.this.getText(file) }
 		}
 	}
 
@@ -19,7 +25,7 @@ class FileNameProvider implements EditableColumnProvider {
 	}
 
 	override getValue(MkFile file) {
-		file.name
+		file.text
 	}
 
 	override setValue(MkFile file, Object value) {
@@ -39,14 +45,26 @@ class FileNameProvider implements EditableColumnProvider {
 }
 
 class FileFolderProvider implements ColumnProvider {
+	def String getText(MkFile file) { file?.path ?: "" }
+
+	override compare(MkFile file1, MkFile file2) {
+		return file1.text.compareToIgnoreCase(file2.text)
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
-			override getText(MkFile file) { file.path }
+			override getText(MkFile file) { FileFolderProvider.this.getText(file) }
 		}
 	}
 }
 
 class FileSizeProvider implements ColumnProvider {
+	def Long getValue(MkFile file) { file?.size ?: -1l }
+
+	override compare(MkFile file1, MkFile file2) {
+		return file1.value <=> file2.value
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { VilimaFormatter::fileSize(file.size) }
@@ -55,6 +73,20 @@ class FileSizeProvider implements ColumnProvider {
 }
 
 class FileCreationDateTimeProvider implements ColumnProvider {
+	def Long getValue(MkFile file) { file?.dateCreated }
+
+	override compare(MkFile file1, MkFile file2) {
+		val value1 = file1.value
+		val value2 = file2.value
+		if(value1 != null) {
+			return value1 <=> value2
+		}
+		if(value2 != null) {
+			return -value2 <=> value1
+		}
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) {
@@ -65,6 +97,20 @@ class FileCreationDateTimeProvider implements ColumnProvider {
 }
 
 class FileModificationDateTimeProvider implements ColumnProvider {
+	def Long getValue(MkFile file) { file?.dateModified }
+
+	override compare(MkFile file1, MkFile file2) {
+		val value1 = file1.value
+		val value2 = file2.value
+		if(value1 != null) {
+			return value1 <=> value2
+		}
+		if(value2 != null) {
+			return -value2 <=> value1
+		}
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { VilimaFormatter::date(file?.dateModified) }

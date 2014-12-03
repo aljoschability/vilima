@@ -5,6 +5,11 @@ import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.format.VilimaFormatter
 
 class TrackCodecsColumn implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) {
@@ -26,6 +31,11 @@ class TrackCodecsColumn implements ColumnProvider {
 }
 
 class VideoTrackCodecsProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) {
@@ -45,6 +55,11 @@ class VideoTrackCodecsProvider implements ColumnProvider {
 }
 
 class VideoTrackHdProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) {

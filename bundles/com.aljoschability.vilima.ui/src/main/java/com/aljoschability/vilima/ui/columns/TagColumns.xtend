@@ -7,6 +7,11 @@ import org.eclipse.swt.widgets.Composite
 import static extension com.aljoschability.vilima.ui.columns.TagContentTypeColumn.*
 
 class TagContentTypeColumn implements EditableColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getCellEditor(Composite parent, MkFile file) {
 		new TextCellEditor(parent)
 	}

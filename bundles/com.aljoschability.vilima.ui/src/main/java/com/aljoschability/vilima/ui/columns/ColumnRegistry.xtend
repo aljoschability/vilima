@@ -175,7 +175,10 @@ class ColumnRegistry {
 }
 
 interface ColumnProvider {
+	@Deprecated
 	def CellLabelProvider getLabelProvider()
+
+	def int compare(MkFile a, MkFile b)
 }
 
 interface EditableColumnProvider extends ColumnProvider {

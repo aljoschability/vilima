@@ -19,4 +19,9 @@ class AttachmentCoverProvider implements ColumnProvider {
 			}
 		}
 	}
+
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
 }

@@ -30,6 +30,7 @@ import org.eclipse.jface.window.Window
 import org.eclipse.swt.SWT
 import org.eclipse.swt.events.SelectionAdapter
 import org.eclipse.swt.events.SelectionEvent
+import org.eclipse.swt.events.SelectionListener
 import org.eclipse.swt.graphics.Point
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Menu
@@ -46,6 +47,8 @@ class TableMoviesPart {
 	IDialogSettings settings
 
 	TreeViewer viewer
+
+	SelectionListener sortListener
 
 	new() {
 		initializeDialogSettings()
@@ -136,6 +139,8 @@ class TableMoviesPart {
 				}
 			])
 
+		viewer.comparator = new VilimaFileComparator
+
 		// customize editing behavior
 		val strategy = new VilimaViewerEditorActivationStrategy(viewer)
 		val features = ColumnViewerEditor::KEEP_EDITOR_ON_DOUBLE_CLICK.bitwiseOr(ColumnViewerEditor::TABBING_HORIZONTAL)
@@ -175,11 +180,14 @@ class TableMoviesPart {
 		for (treeColumnIndex : viewer.tree.columnOrder) {
 			val treeColumn = viewer.tree.columns.get(treeColumnIndex)
 
-			val column = VilimaFactory::eINSTANCE.createVilimaColumn
-			column.id = (treeColumn.data as ColumnExtension).id
-			column.width = treeColumn.width
+			// store only movable columns
+			if(treeColumn.moveable) {
+				val column = VilimaFactory::eINSTANCE.createVilimaColumn
+				column.id = (treeColumn.data as ColumnExtension).id
+				column.width = treeColumn.width
 
-			configuration.columns += column
+				configuration.columns += column
+			}
 		}
 		return configuration
 	}
@@ -189,7 +197,9 @@ class TableMoviesPart {
 
 		// remove columns
 		for (col : viewer.tree.columns) {
-			col.dispose
+			if(col.moveable) {
+				col.dispose
+			}
 		}
 
 		// add columns
@@ -203,6 +213,7 @@ class TableMoviesPart {
 			column.column.width = col.width
 			column.column.text = ce.name
 			column.column.data = ce
+			column.column.addSelectionListener(getSelectionListener())
 
 			column.labelProvider = ce.provider.labelProvider
 
@@ -212,6 +223,28 @@ class TableMoviesPart {
 		}
 
 		viewer.tree.redraw = true
+	}
+
+	def private SelectionListener getSelectionListener() {
+		if(sortListener == null) {
+			sortListener = new SelectionAdapter {
+				override widgetSelected(SelectionEvent e) {
+					val column = e.widget as TreeColumn
+
+					// new sort direction
+					var direction = SWT::UP
+					if(viewer.tree.sortColumn == column && viewer.tree.sortDirection == SWT::UP) {
+						direction = SWT::DOWN
+					}
+
+					viewer.tree.sortDirection = direction
+					viewer.tree.sortColumn = column
+
+					viewer.refresh
+				}
+			}
+		}
+		return sortListener
 	}
 
 	def private void createEmptyColumn() {

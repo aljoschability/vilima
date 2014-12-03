@@ -7,6 +7,11 @@ import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.swt.widgets.Composite
 
 class SegmentTitleColumn implements EditableColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getCellEditor(Composite parent, MkFile file) {
 		new TextCellEditor(parent)
 	}
@@ -37,6 +42,11 @@ class SegmentTitleColumn implements EditableColumnProvider {
 }
 
 class SegmentDurationProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { VilimaFormatter::getTime(file?.information?.duration) }
@@ -45,6 +55,11 @@ class SegmentDurationProvider implements ColumnProvider {
 }
 
 class SegmentDateProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { VilimaFormatter::date(file?.information?.date) }
@@ -53,6 +68,11 @@ class SegmentDateProvider implements ColumnProvider {
 }
 
 class SegmentUidProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { file?.information?.uid }
@@ -63,6 +83,11 @@ class SegmentUidProvider implements ColumnProvider {
 }
 
 class SegmentPreviousUidProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { file?.information?.previousUid }
@@ -73,6 +98,11 @@ class SegmentPreviousUidProvider implements ColumnProvider {
 }
 
 class SegmentNextUidProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { file?.information?.nextUid }
@@ -83,6 +113,11 @@ class SegmentNextUidProvider implements ColumnProvider {
 }
 
 class SegmentMuxingAppProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { file?.information?.muxingApp }
@@ -91,6 +126,11 @@ class SegmentMuxingAppProvider implements ColumnProvider {
 }
 
 class SegmentWritingAppProvider implements ColumnProvider {
+	override compare(MkFile a, MkFile b) {
+		println('''did not really sort, returned 0''')
+		return 0
+	}
+
 	override getLabelProvider() {
 		new MkFileLabelProvider {
 			override getText(MkFile file) { file?.information?.writingApp }
