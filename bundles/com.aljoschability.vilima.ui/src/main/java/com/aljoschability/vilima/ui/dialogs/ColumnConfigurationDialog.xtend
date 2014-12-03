@@ -28,6 +28,9 @@ import org.eclipse.jface.viewers.IStructuredSelection
 import com.aljoschability.vilima.VilimaFactory
 import org.eclipse.swt.dnd.DND
 import org.eclipse.swt.dnd.Transfer
+import java.util.ArrayList
+import java.util.Collection
+import org.eclipse.jface.viewers.ISelection
 
 class ColumnConfigurationDialog extends TitleAreaDialog {
 	val static COLUMN_WIDTH_ACTIVE_TITLE = "COLUMN_WIDTH_ACTIVE_TITLE"
@@ -117,6 +120,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 				}
 			}
 		}
+		inactiveViewer.addDoubleClickListener([e|handleAddColumns(e.selection.selectedColumnExtension)])
 
 		inactiveViewer.input = Activator::get.columnRegistry.columnCategories
 	}
@@ -163,6 +167,8 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		}
 		widthColumn.editingSupport = new WidthColumnEditingSupport(activeViewer)
 
+		activeViewer.addDoubleClickListener([e|handleRemoveColumns(e.selection.selectedVilimaColumns)])
+
 		activeViewer.input = configuration
 	}
 
@@ -183,21 +189,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		addButton.addSelectionListener(
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
-					val before = configuration.columns.size
-
-					val selection = inactiveViewer.selection as IStructuredSelection
-					selection.iterator.forEach [
-						if(it instanceof ColumnExtension) {
-							val column = VilimaFactory::eINSTANCE.createVilimaColumn
-							column.id = it.id
-							column.width = it.width
-							configuration.columns += column
-						}
-					]
-
-					if(configuration.columns.size != before) {
-						activeViewer.refresh
-					}
+					handleAddColumns(inactiveViewer.selectedColumnExtension)
 				}
 			})
 
@@ -208,18 +200,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		removeButton.addSelectionListener(
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
-					val before = configuration.columns.size
-
-					val selection = activeViewer.selection as IStructuredSelection
-					for (element : selection.toArray) {
-						if(element instanceof VilimaColumn) {
-							configuration.columns -= element
-						}
-					}
-
-					if(configuration.columns.size != before) {
-						activeViewer.refresh
-					}
+					handleRemoveColumns(activeViewer.selectedVilimaColumns)
 				}
 			})
 
@@ -235,19 +216,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		upButton.addSelectionListener(
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
-					val selection = activeViewer.selection as IStructuredSelection
-
-					var changed = false
-
-					for (element : selection.toArray) {
-						val index = configuration.columns.indexOf(element)
-						configuration.columns.move(index - 1, element as VilimaColumn)
-						changed = true
-					}
-
-					if(changed) {
-						activeViewer.refresh
-					}
+					handleMoveColumns(activeViewer.selectedVilimaColumns, true)
 				}
 			})
 
@@ -258,21 +227,48 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		downButton.addSelectionListener(
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
-					val selection = activeViewer.selection as IStructuredSelection
-
-					var changed = false
-
-					for (element : selection.toArray) {
-						val index = configuration.columns.indexOf(element)
-						configuration.columns.move(index + 1, element as VilimaColumn)
-						changed = true
-					}
-
-					if(changed) {
-						activeViewer.refresh
-					}
+					handleMoveColumns(activeViewer.selectedVilimaColumns, false)
 				}
 			})
+	}
+
+	def private void handleAddColumns(Collection<ColumnExtension> extensions) {
+		val before = configuration.columns.size
+
+		for (e : extensions) {
+			val column = VilimaFactory::eINSTANCE.createVilimaColumn
+			column.id = e.id
+			column.width = e.width
+			configuration.columns += column
+		}
+
+		if(configuration.columns.size != before) {
+			activeViewer.refresh
+		}
+	}
+
+	def private void handleRemoveColumns(Collection<VilimaColumn> elements) {
+		val before = configuration.columns.size
+
+		configuration.columns -= elements
+
+		if(configuration.columns.size != before) {
+			activeViewer.refresh
+		}
+	}
+
+	def private void handleMoveColumns(Collection<VilimaColumn> elements, boolean up) {
+		var changed = false
+
+		for (element : elements) {
+			val index = configuration.columns.indexOf(element) + (if(up) -1 else 1)
+			configuration.columns.move(index, element as VilimaColumn)
+			changed = true
+		}
+
+		if(changed) {
+			activeViewer.refresh
+		}
 	}
 
 	def private void initializeDialogSettings() {
@@ -307,4 +303,21 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 	override protected getDialogBoundsSettings() { settings }
 
 	override protected isResizable() { true }
+
+	/* ************************************************************ */
+	def private static Collection<ColumnExtension> getSelectedColumnExtension(TreeViewer viewer) {
+		viewer.selection.selectedColumnExtension
+	}
+
+	def private static Collection<ColumnExtension> getSelectedColumnExtension(ISelection selection) {
+		(selection as IStructuredSelection).iterator.filter(ColumnExtension).toList
+	}
+
+	def private static Collection<VilimaColumn> getSelectedVilimaColumns(TreeViewer viewer) {
+		viewer.selection.selectedVilimaColumns
+	}
+
+	def private static Collection<VilimaColumn> getSelectedVilimaColumns(ISelection selection) {
+		(selection as IStructuredSelection).iterator.filter(VilimaColumn).toList
+	}
 }
