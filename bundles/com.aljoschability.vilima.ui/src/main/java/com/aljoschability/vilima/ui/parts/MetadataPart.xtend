@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.jface.viewers.CellLabelProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
 import com.aljoschability.vilima.MkTagNode
+import com.aljoschability.vilima.MkTag
 
 class MetadataPart {
 	MkFile input
@@ -44,10 +45,13 @@ class MetadataPart {
 		val descriptionColumn = new TreeViewerColumn(viewer, SWT::LEAD)
 		descriptionColumn.column.resizable = true
 		descriptionColumn.column.text = "Description"
-		descriptionColumn.column.width = 300
+		descriptionColumn.column.width = 120
 		descriptionColumn.labelProvider = new ColumnLabelProvider {
 			override getText(Object element) {
 				switch element {
+					MkTag: {
+						return '''Tag'''
+					}
 					MkTagNode: {
 						return String.valueOf(element.name)
 					}
@@ -60,10 +64,13 @@ class MetadataPart {
 		val valueColumn = new TreeViewerColumn(viewer, SWT::LEAD)
 		valueColumn.column.resizable = true
 		valueColumn.column.text = "Value"
-		valueColumn.column.width = 200
+		valueColumn.column.width = 160
 		valueColumn.labelProvider = new ColumnLabelProvider {
 			override getText(Object element) {
 				switch element {
+					MkTag: {
+						return '''«element.target»:«element.targetText»'''
+					}
 					MkTagNode: {
 						return String.valueOf(element.value)
 					}
@@ -76,10 +83,13 @@ class MetadataPart {
 		val langColumn = new TreeViewerColumn(viewer, SWT::LEAD)
 		langColumn.column.resizable = true
 		langColumn.column.text = "Language"
-		langColumn.column.width = 200
+		langColumn.column.width = 100
 		langColumn.labelProvider = new ColumnLabelProvider {
 			override getText(Object element) {
 				switch element {
+					MkTag: {
+						return ""
+					}
 					MkTagNode: {
 						return String.valueOf(element.language)
 					}
@@ -101,14 +111,14 @@ class MetadataPart {
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
 		input = null
 
-		if (selection != null && selection.size() == 1) {
+		if(selection != null && selection.size() == 1) {
 			val selected = selection.getFirstElement();
-			if (selected instanceof MkFile) {
+			if(selected instanceof MkFile) {
 				input = selected
 			}
 		}
 
-		if (viewer != null && !viewer.control.disposed) {
+		if(viewer != null && !viewer.control.disposed) {
 			show(input)
 		}
 	}
