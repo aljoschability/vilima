@@ -7,6 +7,8 @@ import com.aljoschability.vilima.MkChapterText
 import com.aljoschability.vilima.MkChapter
 import com.aljoschability.vilima.MkEdition
 import com.aljoschability.vilima.MkAttachment
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributeView
 
 interface IMkFactory {
 	def MkFile createFile(Path path)
@@ -31,8 +33,11 @@ class MkFactoryImpl implements IMkFactory {
 
 		mkv.path = file.parent
 		mkv.name = file.name
-		mkv.dateModified = file.lastModified
-		mkv.size = file.length
+
+		val attributes = Files::getFileAttributeView(path, BasicFileAttributeView).readAttributes
+		mkv.dateModified = attributes.lastModifiedTime.toMillis
+		mkv.dateCreated = attributes.creationTime.toMillis
+		mkv.size = attributes.size
 
 		return mkv
 	}

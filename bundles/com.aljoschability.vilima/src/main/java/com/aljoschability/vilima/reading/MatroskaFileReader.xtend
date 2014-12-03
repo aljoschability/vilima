@@ -14,6 +14,8 @@ import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.helpers.MatroskaReader
 import com.aljoschability.vilima.helpers.MkReaderByter
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
 import java.util.Collection
 import java.util.LinkedList
@@ -43,9 +45,9 @@ class MatroskaFileReader {
 	}
 
 	def private void readSeeks() {
-		while (!seeks.empty) {
+		while(!seeks.empty) {
 			val position = seeks.poll
-			if (!positionsParsed.contains(position)) {
+			if(!positionsParsed.contains(position)) {
 				val element = seeker.nextElement(position)
 				readSegmentNode(element as EbmlMasterElement)
 			}
@@ -84,14 +86,14 @@ class MatroskaFileReader {
 
 	def private void readFile() {
 		var element = seeker.nextElement();
-		if (!MatroskaNode::EBML.matches(element)) {
+		if(!MatroskaNode::EBML.matches(element)) {
 			throw new RuntimeException("EBML root element could not be read.")
 		}
 
 		readDocType(element as EbmlMasterElement)
 
 		element = seeker.nextElement()
-		if (!MatroskaNode::Segment.matches(element)) {
+		if(!MatroskaNode::Segment.matches(element)) {
 			throw new RuntimeException("Segment not the second element in the file.")
 		}
 
@@ -99,14 +101,14 @@ class MatroskaFileReader {
 	}
 
 	def private void readDocType(EbmlMasterElement parent) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
 				case MatroskaNode::DocType.id: {
 					val value = element.readString
 
-					if (value != "matroska" && value != "webm") {
+					if(value != "matroska" && value != "webm") {
 						throw new RuntimeException("EBML document type cannot be read.")
 					}
 				}
@@ -120,9 +122,9 @@ class MatroskaFileReader {
 		seekOffset = seeker.position
 
 		var EbmlElement element = null
-		while ((element = seeker.nextChild(parent)) != null) {
-			if (element instanceof EbmlMasterElement) {
-				if (!readSegmentNode(element as EbmlMasterElement)) {
+		while((element = seeker.nextChild(parent)) != null) {
+			if(element instanceof EbmlMasterElement) {
+				if(!readSegmentNode(element as EbmlMasterElement)) {
 					return;
 				}
 			}
@@ -139,7 +141,7 @@ class MatroskaFileReader {
 				element.parseSeekHead
 			}
 			case MatroskaNode::Info.id: {
-				if (result.information != null) {
+				if(result.information != null) {
 					throw new RuntimeException("Info already exists.")
 				}
 
@@ -168,7 +170,7 @@ class MatroskaFileReader {
 	}
 
 	def private void parseSeekHead(EbmlElement parent) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -185,7 +187,7 @@ class MatroskaFileReader {
 		var byte[] id = null
 		var long position = -1
 
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -201,13 +203,13 @@ class MatroskaFileReader {
 		}
 
 		// ignore cluster
-		if (!Arrays::equals(MatroskaNode::Cluster.id, id)) {
+		if(!Arrays::equals(MatroskaNode::Cluster.id, id)) {
 			seeks.offer(position + seekOffset)
 		}
 	}
 
 	def private void fill(EbmlElement parent, MkInformation information) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -244,7 +246,7 @@ class MatroskaFileReader {
 	}
 
 	def private void parseTracks(EbmlElement parent) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -260,7 +262,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkTrack track) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -301,7 +303,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fillVideo(EbmlElement parent, MkTrack track) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -324,7 +326,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fillAudio(EbmlElement parent, MkTrack track) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -341,7 +343,7 @@ class MatroskaFileReader {
 	}
 
 	def private void parseAttachments(EbmlElement parent) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -358,7 +360,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkAttachment attachment) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -381,7 +383,7 @@ class MatroskaFileReader {
 	}
 
 	def private void parseChapters(EbmlMasterElement parent) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -398,7 +400,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkEdition edition) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -419,7 +421,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkChapter chapter) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -440,7 +442,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkChapterText text) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -460,7 +462,7 @@ class MatroskaFileReader {
 	}
 
 	def private void parseTags(EbmlElement parent) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -478,7 +480,7 @@ class MatroskaFileReader {
 	}
 
 	def private fill(EbmlElement parent, MkTag tag) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element.id {
@@ -499,7 +501,7 @@ class MatroskaFileReader {
 	}
 
 	def private void parseTagTargets(EbmlElement parent, MkTag tag) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 
 			switch element. id {
@@ -528,7 +530,7 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkTagNode node) {
-		while (parent.hasNext) {
+		while(parent.hasNext) {
 			val element = parent.nextChild
 			switch element.id {
 				case MatroskaNode::TagName.id: {
@@ -601,7 +603,7 @@ class MatroskaFileReader {
 	}
 
 	def private boolean hasNext(EbmlElement element) {
-		if (element instanceof EbmlMasterElement) {
+		if(element instanceof EbmlMasterElement) {
 			return element.hasNext
 		}
 
@@ -615,8 +617,11 @@ class ReaderHelper {
 
 		result.name = file.name
 		result.path = file.parent
-		result.dateModified = file.lastModified
-		result.size = file.length
+
+		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
+		result.dateModified = attributes.lastModifiedTime.toMillis
+		result.dateCreated = attributes.creationTime.toMillis
+		result.size = attributes.size
 
 		return result
 	}

@@ -10,16 +10,16 @@ class VilimaFormatter {
 	static val SIZE_FORMAT = NumberFormat::getNumberInstance
 
 	def static String getTrackInfo(MkTrack track) {
-		if (track.getCodecId.startsWith("A_")) {
+		if(track.getCodecId.startsWith("A_")) {
 			return '''«track.getCodecId.substring(2)» («track.getAudioChannels» channels)'''
 		}
 
-		if (track.getCodecId.startsWith("S_")) {
+		if(track.getCodecId.startsWith("S_")) {
 			return track.getCodecId.substring(2)
 		}
 
-		if (track.getCodecId.startsWith("V_")) {
-			if (track.getCodecId == "V_MS/VFW/FOURCC") {
+		if(track.getCodecId.startsWith("V_")) {
+			if(track.getCodecId == "V_MS/VFW/FOURCC") {
 				return '''«track.getCodecId.substring(2)» («track.getCodecPrivate»)'''
 			}
 			return track.getCodecId.substring(2)
@@ -28,12 +28,16 @@ class VilimaFormatter {
 		return track.toString()
 	}
 
-	def static String fileSize(long size) {
+	def static String fileSize(Long size) {
+		if(size == null) {
+			return null
+		}
+
 		SIZE_FORMAT.maximumFractionDigits = 2
 
 		var i = 1
 		var result = size as double
-		while (result > 1024) {
+		while(result > 1024) {
 			result /= 1024d
 			i++
 		}
@@ -48,35 +52,50 @@ class VilimaFormatter {
 		return SIZE_FORMAT.format(result) + " " + unit
 	}
 
-	def static String date(long timestamp) {
+	def static String date(Long timestamp) {
+		if(timestamp == null) {
+			return null
+		}
 		return DATE_FORMATTER.format(timestamp)
 	}
 
-	def static String getTime(double duration) {
-		if (duration >= 0) {
+	def static String getTime(Double duration) {
+		getTime(duration, false)
+	}
+
+	def static String getTime(Double duration, boolean showMillis) {
+		if(duration == null) {
+			return ""
+		}
+
+		if(duration >= 0) {
 			val ms = (duration % 1000) as int
 			val seconds = ((duration / 1000) % 60) as int
 			val minutes = ((duration / (1000 * 60)) % 60) as int
 			val hours = ((duration / (1000 * 60 * 60)) % 24) as int
 
 			val builder = new StringBuilder
-			if (hours > 0) {
+			if(hours > 0) {
 				builder.append(hours)
 				builder.append(":")
 			}
 
-			if (builder.length > 0 || minutes > 0) {
-				builder.append(String.format("%02d", minutes))
-				builder.append(":")
-			}
+			//			if(builder.length > 0|| minutes > 0 ) {
+			builder.append(String.format("%02d", minutes))
+			builder.append(":")
 
-			if (builder.length > 0 || seconds > 0) {
+			//			}
+			if(builder.length > 0 || seconds > 0) {
 				builder.append(String.format("%02d", seconds))
-				builder.append(",")
+				if(showMillis) {
+					builder.append(",")
+				}
 			}
 
-			if (builder.length > 0 || ms > 0) {
-				builder.append(String.format("%03d", ms))
+			if(showMillis) {
+				if(builder.length > 0 || ms > 0) {
+					builder.append(String.format("%03d", ms))
+				}
 			}
 
 			// val format = "%d:%02d:%02d,%03d"
@@ -88,11 +107,11 @@ class VilimaFormatter {
 	}
 
 	def static String getLanguage(String code) {
-		if (code == null || code == "eng") {
+		if(code == null || code == "eng") {
 			return '''English («code»)'''
 		}
 
-		if (code == "und") {
+		if(code == "und") {
 			return ""
 		}
 

@@ -1,7 +1,9 @@
 package com.aljoschability.vilima.helpers;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributeView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,8 +47,14 @@ public class MatroskaReader {
 		file = VilimaFactory.eINSTANCE.createMkFile();
 		file.setName(path.getFileName().toString());
 		file.setPath(path.getParent().toString());
-		file.setDateModified(path.toFile().lastModified());
-		file.setSize(path.toFile().length());
+
+		BasicFileAttributeView attributes = Files.getFileAttributeView(path,
+				BasicFileAttributeView.class);
+		file.setDateModified(attributes.readAttributes().lastModifiedTime()
+				.toMillis());
+		file.setDateCreated(attributes.readAttributes().creationTime()
+				.toMillis());
+		file.setSize(attributes.readAttributes().size());
 
 		// reset
 		seeks = new ArrayList<>();
