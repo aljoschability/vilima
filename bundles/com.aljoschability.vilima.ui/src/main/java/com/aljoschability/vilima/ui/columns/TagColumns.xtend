@@ -4,38 +4,14 @@ import com.aljoschability.vilima.MkFile
 import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.swt.widgets.Composite
 
-class AbstractTagColumn implements ColumnProvider {
-	
-	override getText(MkFile file) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-	
-}
+import static extension com.aljoschability.vilima.ui.columns.TagContentTypeColumn.*
 
 class TagContentTypeColumn implements EditableColumnProvider {
 	override getCellEditor(Composite parent, MkFile file) {
 		new TextCellEditor(parent)
 	}
 
-	override getText(MkFile file) {
-		var String text = null
-		for (tag : file.tags) {
-			for (node : tag.nodes) {
-				if(node.name == "CONTENT_TYPE") {
-					text = node.value
-				}
-			}
-		}
-		return text
-	}
-
-	override getValue(MkFile file) {
-		val value = getText(file)
-		if(value != null) {
-			return value
-		}
-		return ""
-	}
+	override getValue(MkFile file) { file.contentType }
 
 	override setValue(MkFile file, Object newValue) {
 		val oldValue = getValue(file)
@@ -49,5 +25,24 @@ class TagContentTypeColumn implements EditableColumnProvider {
 		}
 
 		return false
+	}
+
+	def private static String getContentType(MkFile file) {
+		var String text = null
+		for (tag : file.tags) {
+			for (node : tag.nodes) {
+				if(node.name == "CONTENT_TYPE") {
+					text = node.value
+				}
+			}
+		}
+		return text ?: ""
+
+	}
+
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file.contentType }
+		}
 	}
 }

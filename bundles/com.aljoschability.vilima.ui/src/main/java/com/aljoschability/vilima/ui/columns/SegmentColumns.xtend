@@ -1,25 +1,24 @@
 package com.aljoschability.vilima.ui.columns
 
-import org.eclipse.swt.widgets.Composite
 import com.aljoschability.vilima.MkFile
-import org.eclipse.jface.viewers.TextCellEditor
 import com.aljoschability.vilima.format.VilimaFormatter
+import org.eclipse.jface.resource.JFaceResources
+import org.eclipse.jface.viewers.TextCellEditor
+import org.eclipse.swt.widgets.Composite
 
 class SegmentTitleColumn implements EditableColumnProvider {
 	override getCellEditor(Composite parent, MkFile file) {
 		new TextCellEditor(parent)
 	}
 
-	override getText(MkFile file) {
-		file?.information?.title
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file?.information?.title ?: "" }
+		}
 	}
 
 	override getValue(MkFile file) {
-		val value = getText(file)
-		if(value != null) {
-			return value
-		}
-		return ""
+		file?.information?.title ?: ""
 	}
 
 	override setValue(MkFile file, Object newValue) {
@@ -37,10 +36,64 @@ class SegmentTitleColumn implements EditableColumnProvider {
 	}
 }
 
-class SegmentDurationColumn implements ColumnProvider {
-	override getText(MkFile file) {
-		if(file != null && file.information != null) {
-			return VilimaFormatter::getTime(file.information.duration)
+class SegmentDurationProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { VilimaFormatter::getTime(file?.information?.duration) }
+		}
+	}
+}
+
+class SegmentDateProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { VilimaFormatter::date(file?.information?.date) }
+		}
+	}
+}
+
+class SegmentUidProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file?.information?.uid }
+
+			override getFont(Object element) { JFaceResources::getTextFont }
+		}
+	}
+}
+
+class SegmentPreviousUidProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file?.information?.previousUid }
+
+			override getFont(Object element) { JFaceResources::getTextFont }
+		}
+	}
+}
+
+class SegmentNextUidProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file?.information?.nextUid }
+
+			override getFont(Object element) { JFaceResources::getTextFont }
+		}
+	}
+}
+
+class SegmentMuxingAppProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file?.information?.muxingApp }
+		}
+	}
+}
+
+class SegmentWritingAppProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file?.information?.writingApp }
 		}
 	}
 }

@@ -1,23 +1,25 @@
 package com.aljoschability.vilima.ui.columns
 
 import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.format.VilimaFormatter
 import com.google.common.io.Files
 import java.nio.file.Paths
 import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.swt.widgets.Composite
-import com.aljoschability.vilima.format.VilimaFormatter
 
-class FileNameColumn implements EditableColumnProvider {
+class FileNameProvider implements EditableColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file.name }
+		}
+	}
+
 	override getCellEditor(Composite parent, MkFile file) {
 		new TextCellEditor(parent)
 	}
 
-	override getText(MkFile file) {
-		file.name
-	}
-
 	override getValue(MkFile file) {
-		getText(file)
+		file.name
 	}
 
 	override setValue(MkFile file, Object value) {
@@ -36,10 +38,36 @@ class FileNameColumn implements EditableColumnProvider {
 	}
 }
 
-class FileSizeColumn implements ColumnProvider {
-	override getText(MkFile file) { VilimaFormatter::fileSize(file.size) }
+class FileFolderProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { file.path }
+		}
+	}
 }
 
-class FileDateModifiedColumn implements ColumnProvider {
-	override getText(MkFile file) { VilimaFormatter::date(file.dateModified) }
+class FileSizeProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { VilimaFormatter::fileSize(file.size) }
+		}
+	}
+}
+
+class FileCreationDateTimeProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) {
+				VilimaFormatter::date(file?.dateCreated)
+			}
+		}
+	}
+}
+
+class FileModificationDateTimeProvider implements ColumnProvider {
+	override getLabelProvider() {
+		new MkFileLabelProvider {
+			override getText(MkFile file) { VilimaFormatter::date(file?.dateModified) }
+		}
+	}
 }

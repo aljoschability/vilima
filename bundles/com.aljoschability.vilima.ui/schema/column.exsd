@@ -17,8 +17,9 @@
          </appinfo>
       </annotation>
       <complexType>
-         <sequence>
-            <element ref="column" minOccurs="1" maxOccurs="unbounded"/>
+         <sequence minOccurs="1" maxOccurs="unbounded">
+            <element ref="column" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="category" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -48,41 +49,117 @@
    </element>
 
    <element name="column">
+      <annotation>
+         <documentation>
+            All registered columns can be used in the file table of the application.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The (bundle-wide) unique identifier for the column.
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="class" type="string" use="required">
+         <attribute name="provider" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The class that implements the columns behavior. For read-only columns the class must implement &lt;code&gt;com.aljoschability.vilima.ui.columns.Column&lt;/code&gt;, for editing support the class must implement &lt;code&gt;com.aljoschability.vilima.ui.columns.EditableColumn&lt;/code&gt; as well.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":com.aljoschability.vilima.ui.columns.Column"/>
                </appinfo>
             </annotation>
          </attribute>
-         <attribute name="name" type="string" use="required">
+         <attribute name="title" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The title of the column.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="category" type="string">
+            <annotation>
+               <documentation>
+                  The (optional) category identifier for the column. When empty or invalid the column will be assigned to the special category &lt;code&gt;Other&lt;/code&gt;.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="com.aljoschability.vilima.ui.column/category/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
          <attribute name="description" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional description for the column.
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="width" type="string">
+            <annotation>
+               <documentation>
+                  The &lt;strong&gt;initial&lt;/strong&gt; width of the column, must be a positive Integer. When empty or invalid a default value of &lt;code&gt;100&lt;/code&gt; is used.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="alignment">
+            <annotation>
+               <documentation>
+                  The alignment of the column as defined in the &lt;code&gt;SWT&lt;/code&gt; constants. When empty or invalid the default &lt;code&gt;LEAD&lt;/code&gt; is used.
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="LEAD">
+                  </enumeration>
+                  <enumeration value="CENTER">
+                  </enumeration>
+                  <enumeration value="TRAIL">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="category">
+      <annotation>
+         <documentation>
+            Column categories are used to group similar columns together for a better user experience.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The (bundle-wide) unique identifier for the column category.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="title" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The title of the category that is shown in the user interface.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  An optional (but recommended) icon that is used to highlight the category.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
                </appinfo>
             </annotation>
          </attribute>
