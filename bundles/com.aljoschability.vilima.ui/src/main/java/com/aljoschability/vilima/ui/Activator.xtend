@@ -22,11 +22,23 @@ final class Activator extends AbstractActivator {
 	override protected initialize() {
 		Activator::INSTANCE = this
 
+		addImage(VilimaImages::TRIANGLE_DOWN)
+		addImage(VilimaImages::TRIANGLE_LEFT)
+		addImage(VilimaImages::TRIANGLE_RIGHT)
+		addImage(VilimaImages::TRIANGLE_UP)
+
 		addImage(VilimaImages::TRACK_TYPE_VIDEO)
 		addImage(VilimaImages::TRACK_TYPE_AUDIO)
 		addImage(VilimaImages::TRACK_TYPE_SUBTITLE)
 
+		// register column category icons
 		columnRegistry = new ColumnRegistry
+		for (category : columnRegistry.columnCategories) {
+			if(category.imagePath != null) {
+				val desc = AbstractUIPlugin::imageDescriptorFromPlugin(category.namespace, category.imagePath)
+				imageRegistry.put(category.namespace + "/" + category.imagePath, desc)
+			}
+		}
 
 		val reg = com.aljoschability.vilima.Activator::get.scraperRegistry
 

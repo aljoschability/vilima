@@ -19,11 +19,11 @@ final class Activator extends AbstractCoreActivator {
 		scraperRegistry = new ScraperRegistryImpl
 
 		for (ms : scraperRegistry.getMovieScraperExtensions) {
-			println(ms)
+//			println(ms)
 		}
 
 		for (ss : scraperRegistry.getShowScraperExtensions) {
-			println(ss)
+//			println(ss)
 		}
 	}
 
