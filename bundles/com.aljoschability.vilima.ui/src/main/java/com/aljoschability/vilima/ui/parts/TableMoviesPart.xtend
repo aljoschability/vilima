@@ -16,8 +16,10 @@ import com.aljoschability.vilima.ui.util.VilimaViewerEditorActivationStrategy
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import org.eclipse.e4.core.di.annotations.Optional
+import org.eclipse.e4.ui.di.PersistState
 import org.eclipse.e4.ui.di.UIEventTopic
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService
+import org.eclipse.jface.dialogs.IDialogSettings
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.viewers.ColumnLabelProvider
 import org.eclipse.jface.viewers.ColumnViewerEditor
@@ -33,15 +35,6 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Menu
 import org.eclipse.swt.widgets.MenuItem
 import org.eclipse.swt.widgets.TreeColumn
-
-import static com.aljoschability.vilima.ui.parts.TableMoviesPart.*
-import org.eclipse.core.runtime.Platform
-import java.io.File
-import java.nio.file.Paths
-import org.eclipse.e4.ui.model.application.MApplication
-import org.eclipse.jface.dialogs.IDialogSettings
-import javax.annotation.PreDestroy
-import org.eclipse.e4.ui.di.PersistState
 
 class TableMoviesPart {
 	static val SETTINGS_COLUMN_IDS = "COLUMN_IDS"
