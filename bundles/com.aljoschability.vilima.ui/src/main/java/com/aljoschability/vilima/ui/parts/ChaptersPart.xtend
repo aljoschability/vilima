@@ -50,7 +50,7 @@ class ChaptersPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkChapter) {
+				if(element instanceof MkChapter) {
 					val b = new StringBuilder()
 					for (display : element.texts) {
 						b.append(display.getText)
@@ -77,12 +77,12 @@ class ChaptersPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkEdition) {
+				if(element instanceof MkEdition) {
 					return "Edition " + element.getUid
 				}
 
-				if (element instanceof MkChapter) {
-					return VilimaFormatter::getTime(element.getStart / 1000000)
+				if(element instanceof MkChapter) {
+					return VilimaFormatter::getTime(element.start / 1000000d, true)
 				}
 
 				return ""
@@ -94,16 +94,16 @@ class ChaptersPart {
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
 		input = null
 
-		if (selection != null && selection.size == 1) {
+		if(selection != null && selection.size == 1) {
 			val selected = selection.firstElement
-			if (selected instanceof MkFile) {
-				if (selected.editions.size == 1) {
+			if(selected instanceof MkFile) {
+				if(selected.editions.size == 1) {
 					input = selected.editions.get(0)
 				}
 			}
 		}
 
-		if (viewer != null && !viewer.control.disposed) {
+		if(viewer != null && !viewer.control.disposed) {
 			viewer.input = input
 		}
 	}
@@ -111,7 +111,7 @@ class ChaptersPart {
 
 class VilimaChaptersViewerContentProvider extends ArrayContentProvider {
 	override getElements(Object element) {
-		if (element instanceof MkEdition) {
+		if(element instanceof MkEdition) {
 			return element.chapters
 		}
 
