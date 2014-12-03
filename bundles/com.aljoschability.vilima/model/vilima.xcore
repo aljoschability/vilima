@@ -17,6 +17,8 @@ class MkFile
 	String[1] name
 	/* The size of the file in bytes. */
 	Long[1] size
+	/* The date/time of the file creation. */
+	Long[1] dateCreated
 	/* The date/time of the last file modification. */
 	Long[1] dateModified
 	/* The segment information of the Matroska container. */
@@ -196,6 +198,23 @@ class MkTagNode
 	Boolean[1] languageDefault = "true"
 	/* This possibly contains further nested information. */
 	contains MkTagNode[] nodes
+}
+
+//
+// #############################################################################
+// #############################################################################
+//
+/*  */
+class VilimaColumnConfiguration
+{
+	String[1] sortColumnId
+	contains VilimaColumn[] columns
+}
+
+class VilimaColumn
+{
+	String[1] ^id
+	Integer[1] width
 }
 
 //
