@@ -100,7 +100,7 @@ class AttachmentsPart {
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if (element instanceof MkAttachment) {
-					return VilimaFormatter::fileSize(element.getSize)
+					return VilimaFormatter::fileSize(element.size)
 				}
 				return ""
 			}
