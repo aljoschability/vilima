@@ -189,14 +189,16 @@ public final class MatroskaFileSeeker {
 		if (EbmlElementType.FLOAT.equals(element.getType())) {
 			if (element.getSize() == 4) {
 				float value = 0;
-				ByteArrayInputStream bIS = new ByteArrayInputStream(element.getData());
+				ByteArrayInputStream bIS = new ByteArrayInputStream(
+						element.getData());
 				DataInputStream dIS = new DataInputStream(bIS);
 				value = dIS.readFloat();
 				return value;
 
 			} else if (element.getSize() == 8) {
 				double value = 0;
-				ByteArrayInputStream bIS = new ByteArrayInputStream(element.getData());
+				ByteArrayInputStream bIS = new ByteArrayInputStream(
+						element.getData());
 				DataInputStream dIS = new DataInputStream(bIS);
 				value = dIS.readDouble();
 				return value;

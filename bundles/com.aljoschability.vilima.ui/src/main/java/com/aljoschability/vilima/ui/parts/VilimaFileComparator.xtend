@@ -1,12 +1,12 @@
 package com.aljoschability.vilima.ui.parts
 
-import org.eclipse.jface.viewers.ViewerComparator
-import org.eclipse.jface.viewers.Viewer
-import org.eclipse.jface.viewers.TreeViewer
-import com.aljoschability.vilima.ui.columns.ColumnExtension
-import org.eclipse.swt.SWT
-import com.aljoschability.vilima.ui.columns.ColumnProvider
 import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.ui.columns.MkFileColumn
+import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
+import org.eclipse.jface.viewers.TreeViewer
+import org.eclipse.jface.viewers.Viewer
+import org.eclipse.jface.viewers.ViewerComparator
+import org.eclipse.swt.SWT
 
 class VilimaFileComparator extends ViewerComparator {
 	override compare(Viewer viewer, Object a, Object b) {
@@ -17,8 +17,8 @@ class VilimaFileComparator extends ViewerComparator {
 		}
 	}
 
-	def private static ColumnProvider getProvider(Viewer viewer) {
-		((viewer as TreeViewer).tree.sortColumn?.data as ColumnExtension).provider
+	def private static MkFileColumn getProvider(Viewer viewer) {
+		((viewer as TreeViewer).tree.sortColumn?.data as MkFileColumnExtension).provider
 	}
 
 	def private static int getDirection(Viewer viewer) { (viewer as TreeViewer).tree.sortDirection }

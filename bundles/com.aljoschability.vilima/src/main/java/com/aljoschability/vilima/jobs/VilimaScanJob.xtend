@@ -77,7 +77,7 @@ class VilimaScanJob extends Job {
 
 			//val text = '''«elapsed»ms needed for "«file.name»".'''
 			val text = file.name + "\t" + elapsed
-			println(text)
+//			println(text)
 			log.append(text + "\n")
 		}
 

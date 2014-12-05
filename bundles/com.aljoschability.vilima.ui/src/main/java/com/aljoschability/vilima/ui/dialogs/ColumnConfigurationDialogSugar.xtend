@@ -2,8 +2,8 @@ package com.aljoschability.vilima.ui.dialogs
 
 import com.aljoschability.vilima.VilimaColumn
 import com.aljoschability.vilima.VilimaColumnConfiguration
-import com.aljoschability.vilima.ui.columns.ColumnCategoryExtension
-import com.aljoschability.vilima.ui.columns.ColumnExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnCategoryExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnViewer
 import org.eclipse.jface.viewers.EditingSupport
@@ -49,14 +49,14 @@ class WidthColumnEditingSupport extends EditingSupport {
 class ColumnExtensionsContentProvider extends ArrayContentProvider implements ITreeContentProvider {
 	override getChildren(Object element) {
 		switch element {
-			ColumnCategoryExtension: element.columns
+			MkFileColumnCategoryExtension: element.columns
 			default: newArrayOfSize(0)
 		}
 	}
 
 	override getParent(Object element) {
 		switch element {
-			ColumnExtension: element.category
+			MkFileColumnExtension: element.category
 			default: null
 		}
 	}

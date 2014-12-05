@@ -6,9 +6,8 @@ import com.aljoschability.vilima.VilimaEventTopics
 import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.XVilimaLibrary
 import com.aljoschability.vilima.ui.Activator
-import com.aljoschability.vilima.ui.columns.ColumnExtension
-import com.aljoschability.vilima.ui.columns.EditableColumnProvider
-import com.aljoschability.vilima.ui.columns.VilimaEditingSupport
+import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import com.aljoschability.vilima.ui.dialogs.ColumnConfigurationDialog
 import com.aljoschability.vilima.ui.providers.VilimaContentProvider
 import com.aljoschability.vilima.ui.util.ProgramImageLabelProvider
@@ -44,6 +43,8 @@ class TableMoviesPart {
 
 	@Inject IContentManager manager
 	@Inject ESelectionService selectionService
+	@Inject MkFileColumnRegistry columnRegistry
+
 	IDialogSettings settings
 
 	TreeViewer viewer
@@ -110,7 +111,7 @@ class TableMoviesPart {
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
 					val configuration = readColumnConfiguration()
-					val dialog = new ColumnConfigurationDialog(viewer.tree.shell, configuration)
+					val dialog = new ColumnConfigurationDialog(viewer.tree.shell, columnRegistry, configuration)
 					if(dialog.open == Window::OK) {
 						handleColumnsChanged(configuration)
 						viewer.refresh
@@ -183,7 +184,7 @@ class TableMoviesPart {
 			// store only movable columns
 			if(treeColumn.moveable) {
 				val column = VilimaFactory::eINSTANCE.createVilimaColumn
-				column.id = (treeColumn.data as ColumnExtension).id
+				column.id = (treeColumn.data as MkFileColumnExtension).id
 				column.width = treeColumn.width
 
 				configuration.columns += column
@@ -204,21 +205,24 @@ class TableMoviesPart {
 
 		// add columns
 		for (col : configuration.columns) {
-			val ce = Activator::get.columnRegistry.columns.get(col.id)
+			val ce = columnRegistry.columns.get(col.id)
 
-			val column = new TreeViewerColumn(viewer, ce.alignment)
+			if(ce != null) {
+				val column = new TreeViewerColumn(viewer, ce.alignment)
 
-			column.column.moveable = true
-			column.column.resizable = true
-			column.column.width = col.width
-			column.column.text = ce.name
-			column.column.data = ce
-			column.column.addSelectionListener(getSelectionListener())
+				column.column.moveable = true
+				column.column.resizable = true
+				column.column.width = col.width
+				column.column.text = ce.name
+				column.column.data = ce
+				column.column.addSelectionListener(getSelectionListener())
 
-			column.labelProvider = ce.provider.labelProvider
+				column.labelProvider = ce.provider.labelProvider
 
-			if(ce.provider instanceof EditableColumnProvider) {
-				column.editingSupport = new VilimaEditingSupport(viewer, ce.provider as EditableColumnProvider)
+				val editingSupport = ce.provider.getEditingSupport(viewer)
+				if(editingSupport != null) {
+					column.editingSupport = editingSupport
+				}
 			}
 		}
 

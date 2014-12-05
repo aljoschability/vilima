@@ -33,6 +33,7 @@ class VilimaFormatter {
 			return null
 		}
 
+		SIZE_FORMAT.minimumFractionDigits = 2
 		SIZE_FORMAT.maximumFractionDigits = 2
 
 		var i = 1

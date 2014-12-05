@@ -1,36 +1,33 @@
 package com.aljoschability.vilima.ui.dialogs
 
+import com.aljoschability.vilima.VilimaColumn
 import com.aljoschability.vilima.VilimaColumnConfiguration
+import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.VilimaImages
-import com.aljoschability.vilima.ui.columns.ColumnCategoryExtension
-import com.aljoschability.vilima.ui.columns.ColumnExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnCategoryExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import com.aljoschability.vilima.ui.extensions.SwtExtension
-import java.util.Map
+import java.util.Collection
 import org.eclipse.jface.dialogs.IDialogSettings
 import org.eclipse.jface.dialogs.TitleAreaDialog
 import org.eclipse.jface.viewers.ColumnLabelProvider
+import org.eclipse.jface.viewers.ISelection
+import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.jface.viewers.LabelProvider
 import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.SashForm
+import org.eclipse.swt.events.SelectionAdapter
+import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Shell
 
-import static com.aljoschability.vilima.ui.dialogs.ColumnConfigurationDialog.*
-import com.aljoschability.vilima.VilimaColumn
-import org.eclipse.swt.events.SelectionAdapter
-import org.eclipse.swt.events.SelectionEvent
-import org.eclipse.jface.viewers.IStructuredSelection
-import com.aljoschability.vilima.VilimaFactory
-import org.eclipse.swt.dnd.DND
-import org.eclipse.swt.dnd.Transfer
-import java.util.ArrayList
-import java.util.Collection
-import org.eclipse.jface.viewers.ISelection
+import static extension com.aljoschability.vilima.ui.dialogs.ColumnConfigurationDialog.*
 
 class ColumnConfigurationDialog extends TitleAreaDialog {
 	val static COLUMN_WIDTH_ACTIVE_TITLE = "COLUMN_WIDTH_ACTIVE_TITLE"
@@ -39,8 +36,9 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 	extension SwtExtension = SwtExtension::INSTANCE
 
+	MkFileColumnRegistry registry
+
 	VilimaColumnConfiguration configuration
-	Map<String, ColumnExtension> availableColumns = newLinkedHashMap
 
 	IDialogSettings settings
 
@@ -48,12 +46,11 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 	TreeViewer activeViewer
 	TreeViewer inactiveViewer
 
-	new(Shell shell, VilimaColumnConfiguration configuration) {
+	new(Shell shell, MkFileColumnRegistry registry, VilimaColumnConfiguration configuration) {
 		super(shell)
 
+		this.registry = registry
 		this.configuration = configuration
-
-		availableColumns = Activator::get.columnRegistry.columns
 
 		initializeDialogSettings()
 	}
@@ -102,15 +99,15 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		inactiveViewer.labelProvider = new LabelProvider {
 			override getText(Object element) {
 				switch element {
-					ColumnCategoryExtension: element.name
-					ColumnExtension: element.name
+					MkFileColumnCategoryExtension: element.name
+					MkFileColumnExtension: element.name
 					default: super.getText(element)
 				}
 			}
 
 			override getImage(Object element) {
 				switch element {
-					ColumnCategoryExtension: {
+					MkFileColumnCategoryExtension: {
 						if(element.imagePath != null) {
 							return Activator::get.getImage('''«element.namespace»/«element.imagePath»''')
 						}
@@ -122,7 +119,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		}
 		inactiveViewer.addDoubleClickListener([e|handleAddColumns(e.selection.selectedColumnExtension)])
 
-		inactiveViewer.input = Activator::get.columnRegistry.columnCategories
+		inactiveViewer.input = registry.columnCategories
 	}
 
 	def private void createActiveViewer(Composite parent) {
@@ -146,7 +143,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		columnColumn.labelProvider = new ColumnLabelProvider {
 			override getText(Object element) {
 				if(element instanceof VilimaColumn) {
-					return availableColumns.get(element.id).name
+					return registry.columns.get(element.id).name
 				}
 				return super.getText(element)
 			}
@@ -232,7 +229,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 			})
 	}
 
-	def private void handleAddColumns(Collection<ColumnExtension> extensions) {
+	def private void handleAddColumns(Collection<MkFileColumnExtension> extensions) {
 		val before = configuration.columns.size
 
 		for (e : extensions) {
@@ -305,12 +302,12 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 	override protected isResizable() { true }
 
 	/* ************************************************************ */
-	def private static Collection<ColumnExtension> getSelectedColumnExtension(TreeViewer viewer) {
+	def private static Collection<MkFileColumnExtension> getSelectedColumnExtension(TreeViewer viewer) {
 		viewer.selection.selectedColumnExtension
 	}
 
-	def private static Collection<ColumnExtension> getSelectedColumnExtension(ISelection selection) {
-		(selection as IStructuredSelection).iterator.filter(ColumnExtension).toList
+	def private static Collection<MkFileColumnExtension> getSelectedColumnExtension(ISelection selection) {
+		(selection as IStructuredSelection).iterator.filter(MkFileColumnExtension).toList
 	}
 
 	def private static Collection<VilimaColumn> getSelectedVilimaColumns(TreeViewer viewer) {
