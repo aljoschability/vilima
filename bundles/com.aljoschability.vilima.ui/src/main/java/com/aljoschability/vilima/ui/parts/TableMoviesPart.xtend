@@ -196,6 +196,10 @@ class TableMoviesPart {
 	def private void handleColumnsChanged(VilimaColumnConfiguration configuration) {
 		viewer.tree.redraw = false
 
+		// reset sort column
+		viewer.tree.sortColumn = null
+		viewer.tree.sortDirection = SWT::NONE
+
 		// remove columns
 		for (col : viewer.tree.columns) {
 			if(col.moveable) {
