@@ -39,7 +39,7 @@ class MkInformation
 	/* Duration of the segment (based on TimecodeScale). */
 	Double duration = "-1"
 	/* Date of the origin of time-stamp (value 0), i.e. production date. */
-	Long date = "-1"
+	Long date
 	/* A randomly generated unique ID to identify the current segment between many others (128 bits). */
 	String uid
 	/* A unique ID to identify the previous chained segment (128 bits). */
