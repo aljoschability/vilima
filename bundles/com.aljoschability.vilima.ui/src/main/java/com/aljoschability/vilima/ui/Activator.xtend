@@ -2,6 +2,7 @@ package com.aljoschability.vilima.ui;
 
 import com.aljoschability.core.ui.runtime.AbstractActivator
 import com.aljoschability.vilima.scraper.ScraperExtension
+import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import org.eclipse.swt.graphics.Image
 import org.eclipse.ui.plugin.AbstractUIPlugin
 
@@ -23,16 +24,6 @@ final class Activator extends AbstractActivator {
 		addImage(VilimaImages::TRACK_TYPE_VIDEO)
 		addImage(VilimaImages::TRACK_TYPE_AUDIO)
 		addImage(VilimaImages::TRACK_TYPE_SUBTITLE)
-
-		// register column category icons
-		//		columnRegistry = new ColumnRegistry
-		//		for (category : columnRegistry.columnCategories) {
-		//			if(category.imagePath != null) {
-		//				val desc = AbstractUIPlugin::imageDescriptorFromPlugin(category.namespace, category.imagePath)
-		//				imageRegistry.put(category.namespace + "/" + category.imagePath, desc)
-		//			}
-		//		}
-		println('''normally, we would register the column images here...''')
 
 		val reg = com.aljoschability.vilima.Activator::get.scraperRegistry
 
@@ -61,5 +52,14 @@ final class Activator extends AbstractActivator {
 
 	def Image getScraperImage(ScraperExtension ext) {
 		getImage(ext.pluginId + "/" + ext.imagePath)
+	}
+
+	def void registerColumnExtensionImages(MkFileColumnRegistry registry) {
+		for (category : registry.columnCategories) {
+			if(category.imagePath != null) {
+				val desc = AbstractUIPlugin::imageDescriptorFromPlugin(category.namespace, category.imagePath)
+				imageRegistry.put(category.namespace + "/" + category.imagePath, desc)
+			}
+		}
 	}
 }
