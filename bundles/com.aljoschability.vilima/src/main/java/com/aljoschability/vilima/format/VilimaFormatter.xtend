@@ -1,13 +1,15 @@
 package com.aljoschability.vilima.format
 
+import com.aljoschability.vilima.MkTrack
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import com.aljoschability.vilima.MkTrack
 
 class VilimaFormatter {
 	static val DATE_FORMATTER = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
 
 	static val SIZE_FORMAT = NumberFormat::getNumberInstance
+
+	static val SIZE_BYTES_FORMAT = NumberFormat::getIntegerInstance
 
 	def static String getTrackInfo(MkTrack track) {
 		if(track.getCodecId.startsWith("A_")) {
@@ -53,6 +55,14 @@ class VilimaFormatter {
 		return SIZE_FORMAT.format(result) + " " + unit
 	}
 
+	def static String fileSizeBytes(Long size) {
+		if(size == null) {
+			return null
+		}
+
+		return SIZE_BYTES_FORMAT.format(size) + " Bytes"
+	}
+
 	def static String date(Long timestamp) {
 		if(timestamp == null) {
 			return null
@@ -62,6 +72,31 @@ class VilimaFormatter {
 
 	def static String getTime(Double duration) {
 		getTime(duration, false)
+	}
+
+	val static TIME_FORMAT_SEC = NumberFormat::getIntegerInstance
+	val static TIME_FORMAT_MIN = NumberFormat::getIntegerInstance
+
+	def static String getTimeSeconds(Double duration) {
+		if(duration == null) {
+			return ""
+		}
+
+		TIME_FORMAT_SEC.minimumFractionDigits = 0
+		TIME_FORMAT_SEC.maximumFractionDigits = 0
+
+		TIME_FORMAT_SEC.format(duration/1000d) + " s"
+	}
+
+	def static String getTimeMinutes(Double duration) {
+		if(duration == null) {
+			return ""
+		}
+
+		TIME_FORMAT_MIN.minimumFractionDigits = 0
+		TIME_FORMAT_MIN.maximumFractionDigits = 0
+
+		TIME_FORMAT_MIN.format(duration / 60000d) + " min"
 	}
 
 	def static String getTime(Double duration, boolean showMillis) {

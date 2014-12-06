@@ -7,25 +7,6 @@
 		<initializer class="com.aljoschability.vilima.ui.preferences.VilimaPreferenceInitializer"/>
 	</extension>
 
-	<extension point="com.aljoschability.vilima.ui.column">
-		<category
-			icon="icons/entypo/info.png"
-			id="com.aljoschability.vilima.ui.column.category.segment"
-			title="Segment"/>
-		<category
-			icon="icons/entypo/bookmarks.png"
-			id="com.aljoschability.vilima.ui.column.category.tags"
-			title="Tags"/>
-		<category
-			icon="icons/entypo/flow-tree.png"
-			id="com.aljoschability.vilima.ui.column.category.tracks"
-			title="Tracks"/>
-		<category
-			icon="icons/entypo/attachment.png"
-			id="com.aljoschability.vilima.ui.column.category.attachment"
-			title="Attachments"/>
-	</extension>
-
 	<!-- file columns -->
 	<extension point="com.aljoschability.vilima.ui.column">
 		<category
@@ -33,103 +14,162 @@
 			id="com.aljoschability.vilima.ui.column.category.file"
 			title="File"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FilePathColumn"
 			id="file.path"
 			title="Path"
-			width="100"
-			category="com.aljoschability.vilima.ui.column.category.file"
-			provider="com.aljoschability.vilima.ui.columns.FilePathColumn"/>
+			width="30"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileFullpathColumn"
+			id="file.fullpath"
+			title="Full Path"
+			width="30"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileDirectoryColumn"
+			id="file.directory"
+			title="Directory"
+			width="30"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileNameColumn"
 			id="file.name"
 			title="File Name"
-			width="240"
-			category="com.aljoschability.vilima.ui.column.category.file"
-			provider="com.aljoschability.vilima.ui.columns.FileNameColumn"/>
+			width="240"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileSizeColumn"
 			id="file.size"
 			title="File Size"
-			alignment="TRAIL"
 			width="80"
-			category="com.aljoschability.vilima.ui.column.category.file"
-			provider="com.aljoschability.vilima.ui.columns.FileSizeColumn"/>
+			alignment="TRAIL"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileSizeBytesColumn"
+			id="file.size/bytes"
+			title="File Size (Bytes)"
+			width="80"
+			alignment="TRAIL"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileDateCreatedColumn"
 			id="file.dateCreated"
 			title="Created"
-			width="108"
-			category="com.aljoschability.vilima.ui.column.category.file"
-			provider="com.aljoschability.vilima.ui.columns.FileDateCreatedColumn"/>
+			width="108"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.file"
+			provider="com.aljoschability.vilima.ui.columns.FileDateModifiedColumn"
 			id="file.dateModified"
 			title="Modified"
-			width="108"
-			category="com.aljoschability.vilima.ui.column.category.file"
-			provider="com.aljoschability.vilima.ui.columns.FileDateModifiedColumn"/>
+			width="108"/>
 	</extension>
 
 	<!-- segment columns -->
 	<extension point="com.aljoschability.vilima.ui.column">
+		<category
+			icon="icons/entypo/info.png"
+			id="com.aljoschability.vilima.ui.column.category.segment"
+			title="Segment"/>
 		<column
-			id="segment.duration"
-			title="Duration"
-			alignment="TRAIL"
-			width="61"
 			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentDurationColumn"/>
-		<column
-			id="segment.date"
-			title="Segment Date"
-			width="108"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentDateColumn"/>
-		<column
+			provider="com.aljoschability.vilima.ui.columns.SegmentTitleColumn"
 			id="segment.title"
 			title="Segment Title"
-			width="160"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentTitleColumn"/>
+			width="160"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentDateColumn"
+			id="segment.date"
+			title="Segment Date"
+			width="108"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentDurationColumn"
+			id="segment.duration"
+			title="Duration"
+			width="61"
+			alignment="TRAIL"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentDurationSecondsColumn"
+			id="segment.duration/seconds"
+			title="Duration (Seconds)"
+			width="61"
+			alignment="TRAIL"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentDurationMinutesColumn"
+			id="segment.duration/minutes"
+			title="Duration (Minutes)"
+			width="61"
+			alignment="TRAIL"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentUidColumn"
 			id="segment.uid"
 			title="Segment UID"
-			width="265"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentUidColumn"/>
+			width="265"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentPreviousUidColumn"
 			id="segment.previousUid"
 			title="Segment Previous UID"
-			width="265"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentPreviousUidColumn"/>
+			width="265"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentNextUidColumn"
 			id="segment.nextUid"
 			title="Segment Next UID"
-			width="265"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentNextUidColumn"/>
+			width="265"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentMuxingAppColumn"
 			id="segment.muxingApp"
 			title="Segment Muxing App"
-			width="30"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentMuxingAppColumn"/>
+			width="30"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentWritingAppColumn"
 			id="segment.writingApp"
 			title="Segment Writing App"
-			width="30"
-			category="com.aljoschability.vilima.ui.column.category.segment"
-			provider="com.aljoschability.vilima.ui.columns.SegmentWritingAppColumn"/>
+			width="30"/>
+	</extension>
+
+	<!-- tags columns -->
+	<extension point="com.aljoschability.vilima.ui.column">
+		<category
+			icon="icons/entypo/bookmarks.png"
+			id="com.aljoschability.vilima.ui.column.category.tags"
+			title="Tags"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.tags"
+			provider="com.aljoschability.vilima.ui.columns.TagsContentTypeColumn"
+			id="tags/content_type"
+			title="Content Type"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.tags"
+			provider="com.aljoschability.vilima.ui.columns.TagsMovieCollectionColumn"
+			id="tags/movie/collection"
+			title="Movie: Collection"/>
 	</extension>
 
 	<!-- track columns -->
 	<extension point="com.aljoschability.vilima.ui.column">
+		<category
+			icon="icons/entypo/flow-tree.png"
+			id="com.aljoschability.vilima.ui.column.category.tracks"
+			title="Tracks"/>
 		<column
+			category="com.aljoschability.vilima.ui.column.category.tracks"
+			provider="com.aljoschability.vilima.ui.columns.TrackCodecsColumn"
 			id="track.codecs"
-			title="Codecs"
-			category="com.aljoschability.vilima.ui.column.category.tracks"
-			provider="com.aljoschability.vilima.ui.columns.TrackCodecsColumn"/>
+			title="Codecs"/>
 		<column
-			id="track.videoCodecs"
-			title="Video Codecs"
 			category="com.aljoschability.vilima.ui.column.category.tracks"
-			provider="com.aljoschability.vilima.ui.columns.TrackVideoCodecsColumn"/>
+			provider="com.aljoschability.vilima.ui.columns.TrackVideoCodecsColumn"
+			id="track.videoCodecs"
+			title="Video Codecs"/>
 		<column
 			id="track.videoResolution"
 			title="Track: Horizontal Resolution"
@@ -137,17 +177,12 @@
 			provider="com.aljoschability.vilima.ui.columns.TrackVideoResolutionColumn"/>
 	</extension>
 
-	<!-- tags columns -->
-	<extension point="com.aljoschability.vilima.ui.column">
-		<column
-			id="tag/CONTENT_TYPE"
-			title="Content Type"
-			category="com.aljoschability.vilima.ui.column.category.tags"
-			provider="com.aljoschability.vilima.ui.columns.TagsContentTypeColumn"/>
-	</extension>
-
 	<!-- attachment columns -->
 	<extension point="com.aljoschability.vilima.ui.column">
+		<category
+			icon="icons/entypo/attachment.png"
+			id="com.aljoschability.vilima.ui.column.category.attachment"
+			title="Attachments"/>
 		<column
 			id="attachment.cover"
 			title="Cover Art"

@@ -189,24 +189,71 @@ abstract class AbstractStringColumn implements MkFileColumn {
 
 	EditingSupport editingSupport
 
-	override compare(MkFile file1, MkFile file2) {
-		val value1 = file1.string
-		val value2 = file2.string
-
-		if(value1 == value2) {
+	def static protected int compareStrings(String string1, String string2) {
+		if(string1 == string2) {
 			return 0
 		}
 
-		if(value1 != null && value2 != null) {
-			return value1.compareToIgnoreCase(value2)
+		if(string1 != null && string2 != null) {
+			return string1.compareToIgnoreCase(string2)
 		}
 
-		if(value2 != null) {
+		if(string2 != null) {
 			return -1
 		}
 
 		return 1
 	}
+
+	def static protected int compareLongs(Long long1, Long long2) {
+		if(long1 == long2) {
+			return 0
+		}
+
+		if(long1 != null && long2 != null) {
+			return long1.compareTo(long2)
+		}
+
+		if(long2 != null) {
+			return -1
+		}
+
+		return 1
+	}
+
+	def static protected int compareDoubles(Double double1, Double double2) {
+		if(double1 == double2) {
+			return 0
+		}
+
+		if(double1 != null && double2 != null) {
+			return double1.compareTo(double2)
+		}
+
+		if(double2 != null) {
+			return -1
+		}
+
+		return 1
+	}
+
+	def static protected int compareIntegers(Integer integer1, Integer integer2) {
+		if(integer1 == integer2) {
+			return 0
+		}
+
+		if(integer1 != null && integer2 != null) {
+			return integer1.compareTo(integer2)
+		}
+
+		if(integer2 != null) {
+			return -1
+		}
+
+		return 1
+	}
+
+	override compare(MkFile file1, MkFile file2) { compareStrings(file1.string, file2.string) }
 
 	override getLabelProvider() {
 		if(labelProvider == null) {
@@ -268,24 +315,7 @@ abstract class AbstractStringColumn implements MkFileColumn {
 }
 
 abstract class AbstractLongColumn extends AbstractStringColumn {
-	override compare(MkFile file1, MkFile file2) {
-		val value1 = file1.number
-		val value2 = file2.number
-
-		if(value1 == value2) {
-			return 0
-		}
-
-		if(value1 != null && value2 != null) {
-			return value1.compareTo(value2)
-		}
-
-		if(value2 != null) {
-			return -1
-		}
-
-		return 1
-	}
+	override compare(MkFile file1, MkFile file2) { compareLongs(file1.number, file2.number) }
 
 	def protected Long getNumber(MkFile file)
 
@@ -301,24 +331,7 @@ abstract class AbstractLongColumn extends AbstractStringColumn {
 }
 
 abstract class AbstractDoubleColumn extends AbstractStringColumn {
-	override compare(MkFile file1, MkFile file2) {
-		val value1 = file1.number
-		val value2 = file2.number
-
-		if(value1 == value2) {
-			return 0
-		}
-
-		if(value1 != null && value2 != null) {
-			return value1.compareTo(value2)
-		}
-
-		if(value2 != null) {
-			return -1
-		}
-
-		return 1
-	}
+	override compare(MkFile file1, MkFile file2) { compareDoubles(file1.number, file2.number) }
 
 	def protected Double getNumber(MkFile file)
 
