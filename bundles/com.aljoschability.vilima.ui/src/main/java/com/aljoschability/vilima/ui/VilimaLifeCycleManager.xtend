@@ -13,7 +13,10 @@ class VilimaLifeCycleManager {
 
 	@PostContextCreate
 	def postContextCreate(IEclipseContext context) {
-		context.set(MkFileColumnRegistry, new MkFileColumnRegistry)
+		val columnRegistry = new MkFileColumnRegistry
+		context.set(MkFileColumnRegistry, columnRegistry)
+
+		Activator::get.registerColumnExtensionImages(columnRegistry)
 
 		context.set(IContentManager, new VilimaContentManager(broker))
 	}
