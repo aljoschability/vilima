@@ -190,4 +190,59 @@
 			provider="com.aljoschability.vilima.ui.columns.AttachmentCoverColumn"/>
    </extension>
 
+	<!-- movie columns -->
+	<extension point="com.aljoschability.vilima.ui.column">
+		<category
+			icon="icons/entypo/video.png"
+			id="com.aljoschability.vilima.ui.column.category.movie"
+			title="Movies/General"/>
+		<column
+			id="movie.collection.title"
+			title="Collection"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieCollectionTitleColumn"/>
+		<column
+			id="movie.collection.summary"
+			title="Collection Description"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieCollectionSummaryColumn"/>
+		<column
+			id="movie.title"
+			title="Title"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieTitleColumn"/>
+		<column
+			id="movie.subtitle"
+			title="Tagline"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieSubtitleColumn"/>
+		<column
+			id="movie.dateReleased"
+			title="Release Date"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieDateReleaseColumn"/>
+		<column
+			id="movie.summary"
+			title="Summary"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieSummaryColumn"/>
+		<column
+			id="movie.comment"
+			title="Comment"
+			category="com.aljoschability.vilima.ui.column.category.movie"
+			provider="com.aljoschability.vilima.ui.columns.MovieCommentColumn"/>
+	</extension>
+
+	<!-- test columns -->
+	<extension point="com.aljoschability.vilima.ui.column">
+		<category
+			icon="icons/entypo/code.png"
+			id="com.aljoschability.vilima.ui.column.category.tests"
+			title="Tests"/>
+		<column
+			id="test.genres"
+			title="Genres"
+			category="com.aljoschability.vilima.ui.column.category.tests"
+			provider="com.aljoschability.vilima.ui.columns.TestColumn"/>
+   </extension>
 </plugin>

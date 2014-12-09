@@ -1,5 +1,6 @@
 package com.aljoschability.vilima.ui.columns
 
+import com.aljoschability.core.ui.CoreColors
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.ui.Activator
 import java.util.Collection
@@ -16,8 +17,12 @@ import org.eclipse.jface.viewers.ICellEditorValidator
 import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.swt.SWT
+import org.eclipse.swt.graphics.Color
 import org.eclipse.swt.graphics.Font
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.Data
+import org.eclipse.jface.resource.JFaceColors
+import org.eclipse.swt.widgets.Display
 
 @Accessors class MkFileColumnCategoryExtension {
 	val String namespace
@@ -184,82 +189,141 @@ interface MkFileColumn extends Comparator<MkFile> {
 	def EditingSupport getEditingSupport(TreeViewer viewer)
 }
 
+interface CompareExtensions {
+	val INSTANCE = new CompareExtensions {
+		override compareStrings(String value1, String value2) {
+			if(value1 == value2) {
+				return 0
+			}
+
+			if(value1 != null && value2 != null) {
+				return value1.compareToIgnoreCase(value2)
+			}
+
+			if(value2 != null) {
+				return -1
+			}
+
+			return 1
+		}
+
+		override compareLongs(Long value1, Long value2) {
+			if(value1 == value2) {
+				return 0
+			}
+
+			if(value1 != null && value2 != null) {
+				return value1.compareTo(value2)
+			}
+
+			if(value2 != null) {
+				return -1
+			}
+
+			return 1
+		}
+
+		override compareDoubles(Double value1, Double value2) {
+			if(value1 == value2) {
+				return 0
+			}
+
+			if(value1 != null && value2 != null) {
+				return value1.compareTo(value2)
+			}
+
+			if(value2 != null) {
+				return -1
+			}
+
+			return 1
+		}
+
+		override compareIntegers(Integer value1, Integer value2) {
+			if(value1 == value2) {
+				return 0
+			}
+
+			if(value1 != null && value2 != null) {
+				return value1.compareTo(value2)
+			}
+
+			if(value2 != null) {
+				return -1
+			}
+
+			return 1
+		}
+	}
+
+	def int compareIntegers(Integer value1, Integer value2)
+
+	def int compareLongs(Long value1, Long value2)
+
+	def int compareDoubles(Double value1, Double value2)
+
+	def int compareStrings(String value1, String value2)
+}
+
+enum MkFileDiagnoseStatus {
+	NONE,
+	WARNING,
+	ERROR
+}
+
+@Data class MkFileDiagnose {
+	MkFileDiagnoseStatus status
+	String message
+}
+
 abstract class AbstractStringColumn implements MkFileColumn {
+	protected extension CompareExtensions = CompareExtensions::INSTANCE
+	protected extension TagExtensions = TagExtensions::INSTANCE
+	protected extension DiagnoseExtensions = DiagnoseExtensions::INSTANCE
+
 	ColumnLabelProvider labelProvider
 
 	EditingSupport editingSupport
 
-	def static protected int compareStrings(String string1, String string2) {
-		if(string1 == string2) {
-			return 0
-		}
-
-		if(string1 != null && string2 != null) {
-			return string1.compareToIgnoreCase(string2)
-		}
-
-		if(string2 != null) {
-			return -1
-		}
-
-		return 1
-	}
-
-	def static protected int compareLongs(Long long1, Long long2) {
-		if(long1 == long2) {
-			return 0
-		}
-
-		if(long1 != null && long2 != null) {
-			return long1.compareTo(long2)
-		}
-
-		if(long2 != null) {
-			return -1
-		}
-
-		return 1
-	}
-
-	def static protected int compareDoubles(Double double1, Double double2) {
-		if(double1 == double2) {
-			return 0
-		}
-
-		if(double1 != null && double2 != null) {
-			return double1.compareTo(double2)
-		}
-
-		if(double2 != null) {
-			return -1
-		}
-
-		return 1
-	}
-
-	def static protected int compareIntegers(Integer integer1, Integer integer2) {
-		if(integer1 == integer2) {
-			return 0
-		}
-
-		if(integer1 != null && integer2 != null) {
-			return integer1.compareTo(integer2)
-		}
-
-		if(integer2 != null) {
-			return -1
-		}
-
-		return 1
-	}
-
 	override compare(MkFile file1, MkFile file2) { compareStrings(file1.string, file2.string) }
+
+	def private MkFileDiagnose getDiagnose(Object object) { getDiagnose(object as MkFile) }
+
+	def protected MkFileDiagnose getDiagnose(MkFile file) { null }
+
+	def private Color getColor(MkFileDiagnose diagnose) {
+		if(diagnose != null) {
+			switch diagnose.status {
+				case WARNING: return CoreColors::get(CoreColors::WARNING)
+				case ERROR: return CoreColors::get(CoreColors::ERROR)
+				default: return null
+			}
+		}
+	}
 
 	override getLabelProvider() {
 		if(labelProvider == null) {
 			labelProvider = new ColumnLabelProvider {
 				override getText(Object element) {
-					(element as MkFile).string ?: ""
+					element.string ?: ""
+				}
+
+				override useNativeToolTip(Object object) { true }
+
+				override getToolTipText(Object element) {
+					element?.diagnose?.message
+				}
+
+				override getForeground(Object element) {
+					val s = element?.string
+
+					if(s == "Basic Instinct 2") {
+						return Display::getCurrent.getSystemColor(SWT::COLOR_DARK_GRAY)
+					}
+				}
+
+				override getBackground(Object element) {
+					element?.diagnose?.color
 				}
 
 				override getFont(Object element) {
@@ -311,7 +375,25 @@ abstract class AbstractStringColumn implements MkFileColumn {
 
 	def protected boolean set(MkFile file, String string) { false }
 
+	def private String getString(Object object) { getString(object as MkFile) }
+
 	def protected String getString(MkFile file)
+}
+
+interface DiagnoseExtensions {
+	val INSTANCE = new DiagnoseExtensions {
+		override warning(String message) {
+			return new MkFileDiagnose(MkFileDiagnoseStatus::WARNING, message)
+		}
+
+		override error(String message) {
+			return new MkFileDiagnose(MkFileDiagnoseStatus::ERROR, message)
+		}
+	}
+
+	def MkFileDiagnose warning(String message)
+
+	def MkFileDiagnose error(String message)
 }
 
 abstract class AbstractLongColumn extends AbstractStringColumn {

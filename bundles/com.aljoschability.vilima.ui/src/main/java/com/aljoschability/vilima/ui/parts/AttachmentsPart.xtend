@@ -22,6 +22,9 @@ import org.eclipse.swt.widgets.Display
 import javax.annotation.PreDestroy
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkAttachment
+import java.nio.file.Paths
+import java.io.File
+import com.google.common.io.Files
 
 class AttachmentsPart {
 	@Inject Display display
@@ -44,6 +47,16 @@ class AttachmentsPart {
 
 		viewer = new TableViewer(table)
 		viewer.contentProvider = new VilimaAttachmentsViewerContentProvider
+		viewer.addDoubleClickListener(
+			[
+				val att = (selection as IStructuredSelection).firstElement as MkAttachment
+				val mkfile = att.eContainer as MkFile
+				val file = Paths::get(mkfile.path, mkfile.name).toFile
+				val aFile = File::createTempFile(att.name, "." + Files::getFileExtension(att.name))
+				val id = mkfile.attachments.indexOf(att)
+				val command = '''mkvextract attachments "«file»" «id + 1»:"«aFile»"'''
+				println(command)
+			])
 
 		createNameColumn()
 		createMimeColumn()
@@ -65,18 +78,18 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkAttachment) {
+				if(element instanceof MkAttachment) {
 					return String.valueOf(element.getName)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof MkAttachment) {
+				if(element instanceof MkAttachment) {
 					val name = element.getName
-					if (name != null) {
+					if(name != null) {
 						val index = name.indexOf(".")
-						if (index != -1) {
+						if(index != -1) {
 							val ext = name.substring(index).toLowerCase
 							return getFileImage(ext)
 						}
@@ -99,7 +112,7 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkAttachment) {
+				if(element instanceof MkAttachment) {
 					return VilimaFormatter::fileSize(element.size)
 				}
 				return ""
@@ -118,8 +131,8 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkAttachment) {
-					if (element.getMimeType != null) {
+				if(element instanceof MkAttachment) {
+					if(element.getMimeType != null) {
 						return element.getMimeType
 					}
 				}
@@ -139,8 +152,8 @@ class AttachmentsPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkAttachment) {
-					if (element.getDescription != null) {
+				if(element instanceof MkAttachment) {
+					if(element.getDescription != null) {
 						return element.getDescription
 					}
 				}
@@ -151,9 +164,9 @@ class AttachmentsPart {
 
 	def private Image getFileImage(String ext) {
 		var image = fileImages.get(ext)
-		if (image == null) {
+		if(image == null) {
 			val program = Program::findProgram(ext)
-			if (program != null) {
+			if(program != null) {
 				val data = program.imageData
 				image = new Image(display, data)
 				fileImages.put(ext, image)
@@ -166,14 +179,14 @@ class AttachmentsPart {
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
 		input = null
 
-		if (selection != null && selection.size() == 1) {
+		if(selection != null && selection.size() == 1) {
 			val selected = selection.firstElement
-			if (selected instanceof MkFile) {
+			if(selected instanceof MkFile) {
 				input = selected
 			}
 		}
 
-		if (viewer != null && !viewer.table.disposed) {
+		if(viewer != null && !viewer.table.disposed) {
 			viewer.input = input
 		}
 	}
@@ -190,7 +203,7 @@ class AttachmentsPart {
 
 class VilimaAttachmentsViewerContentProvider extends ArrayContentProvider {
 	override getElements(Object element) {
-		if (element instanceof MkFile) {
+		if(element instanceof MkFile) {
 			return element.attachments
 		}
 

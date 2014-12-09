@@ -31,7 +31,7 @@ interface TmdbService {
 	 * @param id The identifier of the movie.
 	 * @param language ISO 639-1 code.
 	 */
-	@GET("/movie/{id}")
+	@GET("/movie/{id}?append_to_response=credits")
 	def TmdbMovie getMovie(
 		@Path("id") Integer id,
 		@Query("language") String language

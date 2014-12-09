@@ -10,6 +10,8 @@ import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import com.aljoschability.vilima.ui.extensions.SwtExtension
 import java.util.Collection
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl
 import org.eclipse.jface.dialogs.IDialogSettings
 import org.eclipse.jface.dialogs.TitleAreaDialog
 import org.eclipse.jface.viewers.ColumnLabelProvider
@@ -24,6 +26,7 @@ import org.eclipse.swt.events.SelectionAdapter
 import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.widgets.FileDialog
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Shell
 
@@ -63,13 +66,13 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		// available part
 		val inactiveComposite = new Composite(sash, SWT::NONE)
-		inactiveComposite.layout = newSwtGridLayout
+		inactiveComposite.layout = newGridLayoutSwt
 
 		createInactiveViewer(inactiveComposite)
 
 		// active part
 		val activeComposite = new Composite(sash, SWT::NONE)
-		activeComposite.layout = newSwtGridLayout(2)
+		activeComposite.layout = newGridLayoutSwt(2)
 
 		createControls(activeComposite)
 
@@ -85,13 +88,90 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		return area
 	}
 
+	override protected createButtonsForButtonBar(Composite parent) {
+		val exportButton = createButton(parent, 50, "Export", false)
+		exportButton.addSelectionListener(
+			new SelectionAdapter {
+				FileDialog dialog
+
+				override widgetSelected(SelectionEvent e) {
+					if(dialog == null) {
+						dialog = new FileDialog(shell, SWT::SAVE)
+						dialog.fileName = "columns.vfcc"
+						dialog.filterExtensions = #["*.vfcc", "*.*"]
+						dialog.filterIndex = 0
+						dialog.filterNames = #["Vilima File Column Configuration", "All Files"]
+						dialog.text = "Export Column Configuration"
+						dialog.overwrite = true
+					}
+
+					val result = dialog.open
+					if(result != null) {
+						saveConfiguration(result)
+					}
+				}
+			})
+
+		val importButton = createButton(parent, 60, "Import", false)
+		importButton.addSelectionListener(
+			new SelectionAdapter {
+				FileDialog dialog
+
+				override widgetSelected(SelectionEvent e) {
+					if(dialog == null) {
+						dialog = new FileDialog(shell, SWT::OPEN)
+						dialog.filterExtensions = #["*.vfcc", "*.*"]
+						dialog.filterIndex = 0
+						dialog.filterNames = #["Vilima File Column Configuration", "All Files"]
+						dialog.text = "Import Column Configuration"
+					}
+
+					val result = dialog.open
+					if(result != null) {
+						loadConfiguration(result)
+					}
+				}
+			})
+
+		super.createButtonsForButtonBar(parent)
+	}
+
+	def private void saveConfiguration(String path) {
+		val realPath = if(path.endsWith(".vfcc")) {
+				path
+			} else {
+				path + ".vfcc"
+			}
+		val uri = URI::createFileURI(realPath)
+		val res = new XMIResourceImpl(uri)
+		res.contents += configuration
+		res.save(null)
+	}
+
+	def private void loadConfiguration(String path) {
+		val uri = URI::createFileURI(path)
+		val res = new XMIResourceImpl(uri)
+		res.load(null)
+
+		var VilimaColumnConfiguration loaded = null
+		for (content : res.contents) {
+			if(content instanceof VilimaColumnConfiguration) {
+				loaded = content
+			}
+		}
+
+		configuration = loaded
+		activeViewer.input = configuration
+		inactiveViewer.refresh
+	}
+
 	def private void createInactiveViewer(Composite parent) {
 		val group = new Group(parent, SWT::NONE)
-		group.layout = newSwtGridLayout
+		group.layout = newGridLayoutSwt
 		group.layoutData = newGridData(true, true)
 		group.text = "Available Columns"
 
-		inactiveViewer = new TreeViewer(group, SWT::BORDER.bitwiseOr(SWT::FULL_SELECTION).bitwiseOr(SWT::SINGLE))
+		inactiveViewer = new TreeViewer(group, SWT::BORDER.bitwiseOr(SWT::FULL_SELECTION).bitwiseOr(SWT::MULTI))
 		inactiveViewer.tree.layoutData = newGridData(true, true)
 
 		inactiveViewer.autoExpandLevel = TreeViewer::ALL_LEVELS
@@ -124,11 +204,11 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 	def private void createActiveViewer(Composite parent) {
 		val group = new Group(parent, SWT::NONE)
-		group.layout = newSwtGridLayout
+		group.layout = newGridLayoutSwt
 		group.layoutData = newGridData(true, true)
 		group.text = "Active Columns"
 
-		activeViewer = new TreeViewer(group, SWT::BORDER.bitwiseOr(SWT::FULL_SELECTION).bitwiseOr(SWT::SINGLE))
+		activeViewer = new TreeViewer(group, SWT::BORDER.bitwiseOr(SWT::FULL_SELECTION).bitwiseOr(SWT::MULTI))
 		activeViewer.tree.layoutData = newGridData(true, true)
 		activeViewer.tree.headerVisible = true
 		activeViewer.tree.linesVisible = true
@@ -177,7 +257,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		// add or remove columns
 		val moveComposite = new Composite(composite, SWT::NONE)
 		moveComposite.layoutData = newGridData
-		moveComposite.layout = newSwtGridLayout
+		moveComposite.layout = newGridLayoutSwt
 
 		val addButton = new Button(moveComposite, SWT::PUSH)
 		addButton.layoutData = newGridData
@@ -204,7 +284,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 		// change order of active columns
 		val orderComposite = new Composite(composite, SWT::NONE)
 		orderComposite.layoutData = newGridData
-		orderComposite.layout = newSwtGridLayout
+		orderComposite.layout = newGridLayoutSwt
 
 		val upButton = new Button(orderComposite, SWT::PUSH)
 		upButton.layoutData = newGridData

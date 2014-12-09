@@ -4,6 +4,9 @@ import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
 import org.eclipse.swt.layout.GridData
 import org.eclipse.swt.layout.GridLayout
+import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.SWT
+import org.eclipse.swt.widgets.Group
 
 interface SwtExtension {
 	val INSTANCE = new SwtExtensionImpl
@@ -16,9 +19,13 @@ interface SwtExtension {
 
 	def GridLayout newGridLayout(int columns)
 
-	def GridLayout newSwtGridLayout()
+	def GridLayout newGridLayoutSwt()
 
-	def GridLayout newSwtGridLayout(int columns)
+	def GridLayout newGridLayoutSwt(int columns)
+
+	def Composite newComposite(Composite parent)
+
+	def Group newGroup(Composite parent)
 }
 
 class SwtExtensionImpl implements SwtExtension {
@@ -38,11 +45,20 @@ class SwtExtensionImpl implements SwtExtension {
 		GridLayoutFactory::fillDefaults.numColumns(columns).create
 	}
 
-	override newSwtGridLayout() {
-		newSwtGridLayout(1)
+	override newGridLayoutSwt() {
+		newGridLayoutSwt(1)
 	}
 
-	override newSwtGridLayout(int columns) {
+	override newGridLayoutSwt(int columns) {
 		GridLayoutFactory::swtDefaults.numColumns(columns).create
 	}
+
+	override newComposite(Composite parent) {
+		new Composite(parent, SWT::NONE)
+	}
+
+	override newGroup(Composite parent) {
+		new Group(parent, SWT::NONE)
+	}
+
 }

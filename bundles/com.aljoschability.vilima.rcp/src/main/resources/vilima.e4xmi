@@ -16,6 +16,7 @@
               <children xsi:type="basic:Part" xmi:id="_JnAvcEPcEeShf-sMSroa6A" elementId="" containerData="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.InformationPart" label="Segment" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/information.png"/>
               <children xsi:type="basic:Part" xmi:id="_71mfELeMEeS78M6FscaNdQ" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.MetadataPart" label="Tags" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/catalog.png"/>
               <children xsi:type="basic:Part" xmi:id="_WiIhMLoAEeSI8-NRea-yaQ" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.DataProviderPart" label="Data" iconURI="platform:/plugin/com.aljoschability.vilima.ui/src/main/resources/icons/databases.png"/>
+              <children xsi:type="basic:Part" xmi:id="_KfQwAMWXEeShDaiXwCRKVw" elementId="com.aljoschability.vilima.rcp.part.covers" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.CoverPart" label="Covers" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/entypo/eye.png"/>
             </children>
           </children>
         </children>
