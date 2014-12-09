@@ -364,6 +364,9 @@ class MatroskaFileReader {
 			val element = parent.nextChild
 
 			switch element.id {
+				case MatroskaNode::FileUID.id: {
+					attachment.uid = element.readLong
+				}
 				case MatroskaNode::FileDescription.id: {
 					attachment.description = element.readString
 				}
