@@ -98,6 +98,8 @@ class TableMoviesPart {
 		viewer.contentProvider = new VilimaContentProvider(manager)
 		viewer.addSelectionChangedListener(
 			[ e |
+				
+				
 				selectionService.selection = viewer.selection
 			])
 
