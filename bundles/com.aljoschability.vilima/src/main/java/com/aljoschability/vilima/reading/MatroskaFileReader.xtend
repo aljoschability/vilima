@@ -32,6 +32,8 @@ class MatroskaFileReader {
 	Collection<Long> positionsParsed
 	long seekOffset
 
+	int attachmentsCount
+
 	def MkFile readFile(File file) {
 		init(file)
 
@@ -66,6 +68,8 @@ class MatroskaFileReader {
 
 	def private void init(File file) {
 		result = file.createMkFile
+
+		attachmentsCount = 0
 
 		seeks = new LinkedList
 
@@ -348,7 +352,10 @@ class MatroskaFileReader {
 
 			switch element.id {
 				case MatroskaNode::AttachedFile.id: {
+					attachmentsCount++
+
 					val attachment = VilimaFactory::eINSTANCE.createMkAttachment
+					attachment.id = attachmentsCount
 					element.fill(attachment)
 
 					result.attachments += attachment
@@ -577,10 +584,6 @@ class MatroskaFileReader {
 
 	def private String readString(EbmlElement element) {
 		seeker.readString(element as EbmlDataElement)
-	}
-
-	def private short readShort(EbmlElement element) {
-		seeker.readInteger(element as EbmlDataElement) as short
 	}
 
 	def private EbmlElement nextChild(EbmlElement element) {
