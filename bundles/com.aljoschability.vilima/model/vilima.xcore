@@ -26,7 +26,7 @@ class MkFile
 	/* The tracks contained in the Matroska container. */
 	contains MkTrack[] tracks
 	/* The attachment inside the Matroska container. */
-	contains MkAttachment[] attachments
+	contains MkAttachment[] attachments opposite file
 	/* The editions contained in the Matroska container. */
 	contains MkEdition[] editions
 	/* The tags contained in the Matroska container. */
@@ -125,6 +125,10 @@ enum MkTrackType
 /* This represents a file attachment */
 class MkAttachment
 {
+	/* The file the attachment is attached to. */
+	container MkFile file opposite attachments
+	/* The ID used in mkvextract, e.g. */
+	Integer[1] ^id
 	/* Unique ID representing the file, as random as possible. */
 	Long[1] uid
 	/* The size of the attached file. */
