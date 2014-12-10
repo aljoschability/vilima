@@ -2,14 +2,8 @@ package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkAttachment
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.ui.Activator
+import com.aljoschability.vilima.ui.extensions.MkvExtractExtensions
 import com.aljoschability.vilima.ui.extensions.SwtExtension
-import com.google.common.io.CharStreams
-import com.google.common.io.Files
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
-import java.nio.file.Paths
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
@@ -18,22 +12,26 @@ import org.eclipse.e4.ui.services.IServiceConstants
 import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.SashForm
+import org.eclipse.swt.events.ControlAdapter
+import org.eclipse.swt.events.ControlEvent
+import org.eclipse.swt.graphics.GC
 import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Label
-import org.eclipse.swt.widgets.Canvas
-import org.eclipse.swt.graphics.GC
 
 class CoverPart {
 	extension SwtExtension = SwtExtension::INSTANCE
+	extension MkvExtractExtensions = MkvExtractExtensions::INSTANCE
 
-	Canvas portraitCanvas
-	Label landscapeCanvas
+	Label portraitLabel
+	Label landscapeLabel
 
 	MkFile file
 
 	Image portraitImage
+
+	Image landscapeImage
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
@@ -52,30 +50,10 @@ class CoverPart {
 	}
 
 	def private Image extractImage(MkAttachment attachment) {
-		val inFile = Paths::get(file.path, file.name).toFile
-		val outFile = File::createTempFile(attachment.name, "." + Files::getFileExtension(attachment.name))
-		val id = file.attachments.indexOf(attachment)
-		val command = '''mkvextract attachments "«inFile»" «id + 1»:"«outFile»"'''
-
-		val process = Runtime::getRuntime.exec(command)
-		if(process.waitFor == 0) {
-			val stdInput = new BufferedReader(new InputStreamReader(process.inputStream))
-
-			//println(CharStreams::toString(stdInput))
-			Activator::get.info(CharStreams::toString(stdInput))
-
-			if(outFile.exists) {
-				return new Image(Display::getCurrent, outFile.toString)
-			}
-		} else {
-			val stdInput = new BufferedReader(new InputStreamReader(process.inputStream))
-			val stdError = new BufferedReader(new InputStreamReader(process.errorStream))
-
-			println('''error running command: «command»''')
-			println(CharStreams::toString(stdInput))
-			println(CharStreams::toString(stdError))
+		val file = attachment.extract
+		if(file != null && file.exists) {
+			return new Image(Display::getCurrent, file.toString)
 		}
-
 		return null
 	}
 
@@ -96,31 +74,14 @@ class CoverPart {
 		group.layoutData = newGridData(true, true)
 		group.text = "Portrait Cover"
 
-		portraitCanvas = new Canvas(group, SWT::BORDER)
-		portraitCanvas.layoutData = newGridData(true, true)
-		portraitCanvas.addPaintListener(
-			[ e |
-				if(portraitImage != null && !portraitImage.disposed) {
-					val width = portraitCanvas.clientArea.width
-					val height = portraitCanvas.clientArea.height
-					e.gc.drawImage(resize(portraitImage, width, height), 0, 0)
+		portraitLabel = new Label(group, SWT::CENTER)
+		portraitLabel.layoutData = newGridData(true, true)
+		portraitLabel.addControlListener(
+			new ControlAdapter {
+				override controlResized(ControlEvent e) {
+					paint(portraitLabel, portraitImage)
 				}
-			])
-	}
-
-	def private Image resize(Image image, int width, int height) {
-		println('''image       : w=«image.imageData.width»; h=«image.imageData.height»''')
-		println('''canvas[size]: w=«portraitCanvas.size.x»; h=«portraitCanvas.size.y»''')
-		println('''canvas[area]: w=«portraitCanvas.clientArea.x»; h=«portraitCanvas.clientArea.y»''')
-
-		val scaled = new Image(Display.getDefault(), width, height)
-		val gc = new GC(scaled)
-		gc.setAntialias(SWT::ON)
-		gc.setInterpolation(SWT::HIGH)
-		gc.drawImage(image, 0, 0, image.bounds.width, image.bounds.height, 0, 0, width, height)
-		gc.dispose()
-		image.dispose()
-		return scaled
+			})
 	}
 
 	def private void createLandscapeGroup(Composite parent) {
@@ -129,49 +90,101 @@ class CoverPart {
 		group.layoutData = newGridData(true, true)
 		group.text = "Landscape Cover"
 
-		landscapeCanvas = new Label(group, SWT::NONE)
-		landscapeCanvas.layoutData = newGridData(true, true)
+		landscapeLabel = new Label(group, SWT::CENTER)
+		landscapeLabel.layoutData = newGridData(true, true)
+		landscapeLabel.addControlListener(
+			new ControlAdapter {
+				override controlResized(ControlEvent e) {
+					paint(landscapeLabel, landscapeImage)
+				}
+			})
+	}
+
+	def private void paint(Label composite, Image image) {
+		if(image == null || composite == null || image.disposed || composite.disposed) {
+			println('''something is null or disposed''')
+			return
+		}
+
+		// dispose old image
+		val oldImage = composite.image
+		composite.image = null
+		oldImage?.dispose
+
+		// calculations
+		val ix = image.imageData.width  as double
+		val iy = image.imageData.height as double
+		val iRatio = ix / iy
+
+		val cx = composite.size.x as double
+		val cy = composite.size.y as double
+		val cRatio = cx / cy
+
+		val limitY = cRatio - iRatio > 0
+
+		var rx = cx
+		var ry = cx * (iy / ix)
+		if(limitY) {
+			rx = cy * (ix / iy)
+			ry = cy
+		}
+
+		// actually draw
+		composite.image = resize(image, rx as int, ry as int)
+	}
+
+	def private Image resize(Image image, int width, int height) {
+		val scaled = new Image(Display.getDefault(), width, height)
+		val gc = new GC(scaled)
+		gc.setAntialias(SWT::ON)
+		gc.setInterpolation(SWT::HIGH)
+		gc.drawImage(image, 0, 0, image.bounds.width, image.bounds.height, 0, 0, width, height)
+		gc.dispose()
+
+		//		image.dispose()
+		return scaled
 	}
 
 	def private show(MkFile file) {
 		this.file = file
 
 		if(file.hasCovers) {
-			if(portraitCanvas != null && !portraitCanvas.disposed) {
+			if(portraitLabel != null && !portraitLabel.disposed) {
 				val portraitAttachment = file.getAttachment("cover.jpg")
 
 				if(portraitAttachment != null) {
-					portraitCanvas.redraw = false
+					portraitLabel.redraw = false
 					portraitImage = extractImage(portraitAttachment)
-					portraitCanvas.redraw = true
+					portraitLabel.redraw = true
+					portraitLabel.paint(portraitImage)
 				}
 			}
 
-			if(landscapeCanvas != null && !landscapeCanvas.disposed) {
+			if(landscapeLabel != null && !landscapeLabel.disposed) {
 				val landscapeAttachment = file.getAttachment("cover_land.jpg")
 
 				if(landscapeAttachment != null) {
-					landscapeCanvas.image = extractImage(landscapeAttachment)
-					val data = landscapeCanvas.image.imageData
-
-					println('''cover_land.jpg («data.width» x «data.height»)''')
+					landscapeLabel.redraw = false
+					landscapeImage = extractImage(landscapeAttachment)
+					landscapeLabel.redraw = true
+					landscapeLabel.paint(landscapeImage)
 				}
 			}
 		} else {
 
 			// dispose existing images
-			if(portraitCanvas != null && !portraitCanvas.disposed) {
-				//				val image = portraitCanvas.image
-				//				portraitCanvas.image = null
-				//
-				//				if(image != null) {
-				//					image.dispose
-				//				}
+			if(portraitLabel != null && !portraitLabel.disposed) {
+				val image = portraitLabel.image
+				portraitLabel.image = null
+
+				if(image != null) {
+					image.dispose
+				}
 			}
 
-			if(landscapeCanvas != null && !landscapeCanvas.disposed) {
-				val image = landscapeCanvas.image
-				landscapeCanvas.image = null
+			if(landscapeLabel != null && !landscapeLabel.disposed) {
+				val image = landscapeLabel.image
+				landscapeLabel.image = null
 
 				if(image != null) {
 					image.dispose
