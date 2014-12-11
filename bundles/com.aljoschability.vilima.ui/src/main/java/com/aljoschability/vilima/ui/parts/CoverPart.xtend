@@ -2,7 +2,6 @@ package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkAttachment
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.ui.extensions.MkvExtractExtensions
 import com.aljoschability.vilima.ui.extensions.SwtExtension
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -19,10 +18,11 @@ import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Label
+import com.aljoschability.vilima.extensions.ExtractExtension
 
 class CoverPart {
 	extension SwtExtension = SwtExtension::INSTANCE
-	extension MkvExtractExtensions = MkvExtractExtensions::INSTANCE
+	extension ExtractExtension = ExtractExtension::INSTANCE
 
 	Label portraitLabel
 	Label landscapeLabel

@@ -22,7 +22,7 @@ class MkFile
 	/* The date/time of the last file modification. */
 	Long[1] dateModified
 	/* The segment information of the Matroska container. */
-	contains MkInformation[1] information
+	contains MkInformation[1] information opposite file
 	/* The tracks contained in the Matroska container. */
 	contains MkTrack[] tracks
 	/* The attachment inside the Matroska container. */
@@ -36,8 +36,10 @@ class MkFile
 /* This contains all the information about the segment of a Matroska container. */
 class MkInformation
 {
+	/* The file the segment information belongs to. */
+	container MkFile file opposite information
 	/* Duration of the segment (based on TimecodeScale). */
-	Double duration = "-1"
+	Double duration
 	/* Date of the origin of time-stamp (value 0), i.e. production date. */
 	Long date
 	/* A randomly generated unique ID to identify the current segment between many others (128 bits). */
@@ -46,6 +48,9 @@ class MkInformation
 	String previousUid
 	/* A unique ID to identify the next chained segment (128 bits). */
 	String nextUid
+	String filename
+	String previousFilename
+	String nextFilename
 	/* General name of the segment. */
 	String title
 	/* Muxing application or library ("libmatroska-0.4.3"). */

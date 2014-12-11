@@ -283,7 +283,7 @@ abstract class AbstractStringColumn implements MkFileColumn {
 
 	ColumnLabelProvider labelProvider
 
-	EditingSupport editingSupport
+	protected EditingSupport editingSupport
 
 	override compare(MkFile file1, MkFile file2) { compareStrings(file1.string, file2.string) }
 

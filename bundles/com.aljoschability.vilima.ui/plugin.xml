@@ -75,7 +75,9 @@
 			category="com.aljoschability.vilima.ui.column.category.segment"
 			provider="com.aljoschability.vilima.ui.columns.SegmentTitleColumn"
 			id="segment.title"
-			title="Segment Title"
+			title="Title"
+			description="The general title of the segment. This is often shown in players when a real title tag is not given or supported."
+			alignment="LEAD"
 			width="160"/>
 		<column
 			category="com.aljoschability.vilima.ui.column.category.segment"
@@ -122,6 +124,24 @@
 			id="segment.nextUid"
 			title="Segment Next UID"
 			width="265"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentFilenameColumn"
+			id="segment.filename"
+			title="Segment File Name"
+			width="200"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentPreviousFilenameColumn"
+			id="segment.previousFilename"
+			title="Segment Previous File Name"
+			width="200"/>
+		<column
+			category="com.aljoschability.vilima.ui.column.category.segment"
+			provider="com.aljoschability.vilima.ui.columns.SegmentNextFilenameColumn"
+			id="segment.nextFilename"
+			title="Segment Next File Name"
+			width="200"/>
 		<column
 			category="com.aljoschability.vilima.ui.column.category.segment"
 			provider="com.aljoschability.vilima.ui.columns.SegmentMuxingAppColumn"

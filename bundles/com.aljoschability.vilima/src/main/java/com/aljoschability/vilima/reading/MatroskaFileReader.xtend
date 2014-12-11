@@ -223,25 +223,34 @@ class MatroskaFileReader {
 				case MatroskaNode::SegmentUID.id: {
 					information.uid = element.readHex
 				}
+				case MatroskaNode::PrevUID.id: {
+					information.previousUid = element.readHex
+				}
+				case MatroskaNode::NextUID.id: {
+					information.nextUid = element.readHex
+				}
+				case MatroskaNode::SegmentFilename.id: {
+					information.filename = element.readString
+				}
+				case MatroskaNode::PrevFilename.id: {
+					information.previousFilename = element.readString
+				}
+				case MatroskaNode::NextFilename.id: {
+					information.nextFilename = element.readString
+				}
 				case MatroskaNode::DateUTC.id: {
 
 					// XXX: this should use the "international format"...
 					information.date = seeker.readTimestamp(element as EbmlDataElement)
+				}
+				case MatroskaNode::Duration.id: {
+					information.duration = element.readDouble
 				}
 				case MatroskaNode::MuxingApp.id: {
 					information.muxingApp = element.readString
 				}
 				case MatroskaNode::WritingApp.id: {
 					information.writingApp = element.readString
-				}
-				case MatroskaNode::Duration.id: {
-					information.duration = element.readDouble
-				}
-				case MatroskaNode::PrevUID.id: {
-					information.previousUid = element.readHex
-				}
-				case MatroskaNode::NextUID.id: {
-					information.nextUid = element.readHex
 				}
 			}
 

@@ -11,6 +11,12 @@ import java.util.List
 import java.nio.file.Path
 import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
+import com.aljoschability.vilima.extensions.ModifyExtension
+import org.eclipse.jface.viewers.TreeViewer
+import org.eclipse.jface.viewers.EditingSupport
+import org.eclipse.jface.viewers.TextCellEditor
+import org.eclipse.jface.viewers.ComboBoxCellEditor
+import org.eclipse.swt.SWT
 
 class FileNameColumn extends AbstractStringColumn {
 	override getString(MkFile file) { file.name }
@@ -66,12 +72,16 @@ class FileSizeColumn extends AbstractLongColumn {
 	override protected getNumber(MkFile file) { file.size }
 
 	override getString(MkFile file) { VilimaFormatter::fileSize(file.number) }
+
+	override protected useMonospaceFont() { true }
 }
 
 class FileSizeBytesColumn extends AbstractLongColumn {
 	override protected getNumber(MkFile file) { file.size }
 
 	override getString(MkFile file) { VilimaFormatter::fileSizeBytes(file.number) }
+
+	override protected useMonospaceFont() { true }
 }
 
 class FileDateCreatedColumn extends AbstractLongColumn {
@@ -84,73 +94,6 @@ class FileDateModifiedColumn extends AbstractLongColumn {
 	override protected getNumber(MkFile file) { file.dateModified }
 
 	override getString(MkFile file) { VilimaFormatter::date(file.number) }
-}
-
-class SegmentTitleColumn extends AbstractStringColumn {
-	override getString(MkFile file) { file?.information?.title }
-
-	override protected isEditable() { true }
-
-	override protected set(MkFile file, String value) {
-		if(file.string != value) {
-
-			//file.information.title = newValue as String
-			println('''Store segment title: "«file.string»" ==> "«value»".''')
-
-			return true
-		}
-		return false
-	}
-}
-
-class SegmentUidColumn extends AbstractStringColumn {
-	override protected useMonospaceFont() { true }
-
-	override getString(MkFile file) { file?.information?.uid }
-}
-
-class SegmentPreviousUidColumn extends AbstractStringColumn {
-	override protected useMonospaceFont() { true }
-
-	override getString(MkFile file) { file?.information?.previousUid }
-}
-
-class SegmentNextUidColumn extends AbstractStringColumn {
-	override protected useMonospaceFont() { true }
-
-	override getString(MkFile file) { file?.information?.nextUid }
-}
-
-class SegmentWritingAppColumn extends AbstractStringColumn {
-	override getString(MkFile file) { file?.information?.writingApp }
-}
-
-class SegmentMuxingAppColumn extends AbstractStringColumn {
-	override getString(MkFile file) { file?.information?.muxingApp }
-}
-
-class SegmentDateColumn extends AbstractLongColumn {
-	override protected getNumber(MkFile file) { file?.information?.date }
-
-	override getString(MkFile file) { VilimaFormatter::date(file.number) }
-}
-
-class SegmentDurationColumn extends AbstractDoubleColumn {
-	override protected getNumber(MkFile file) { file?.information?.duration }
-
-	override getString(MkFile file) { VilimaFormatter::getTime(file.number) }
-}
-
-class SegmentDurationSecondsColumn extends AbstractDoubleColumn {
-	override protected getNumber(MkFile file) { file?.information?.duration }
-
-	override getString(MkFile file) { VilimaFormatter::getTimeSeconds(file.number) }
-}
-
-class SegmentDurationMinutesColumn extends AbstractDoubleColumn {
-	override protected getNumber(MkFile file) { file?.information?.duration }
-
-	override getString(MkFile file) { VilimaFormatter::getTimeMinutes(file.number) }
 }
 
 class TagsMovieCollectionColumn extends AbstractStringColumn {
@@ -284,6 +227,8 @@ class TrackVideoCodecsColumn extends AbstractStringColumn {
 }
 
 class TagsContentTypeColumn extends AbstractStringColumn {
+	val static VALUES = #["", "Documentation", "Movie", "TV Show"]
+
 	override getString(MkFile file) {
 		var String text = null
 		for (tag : file.tags) {
@@ -296,6 +241,44 @@ class TagsContentTypeColumn extends AbstractStringColumn {
 		return text
 	}
 
+	override getEditingSupport(TreeViewer treeViewer) {
+		if(editable && editingSupport == null) {
+			editingSupport = new EditingSupport(treeViewer) {
+				override protected canEdit(Object element) {
+					element instanceof MkFile
+				}
+
+				override protected getCellEditor(Object element) {
+					val editor = new ComboBoxCellEditor(treeViewer.tree, VALUES, SWT::READ_ONLY)
+
+					return editor
+				}
+
+				override protected getValue(Object element) {
+					val value = (element as MkFile).string
+					var index = 0
+					for (candidate : VALUES) {
+						if(candidate == value) {
+							return index
+						}
+						index++
+					}
+					return 0
+				}
+
+				override protected setValue(Object element, Object value) {
+					val text = VALUES.get(value as Integer)
+					println('''set value from combo: "«text»"''')
+
+				//					if(set(element as MkFile, value as Integer)) {
+				//						viewer.update(element, null)
+				//					}
+				}
+			}
+		}
+		return editingSupport
+	}
+
 	override protected set(MkFile file, String string) {
 		if(file.string != string) {
 			println('''Store tag[CONTENT_TYPE]: "«file.string»" := "«string»".''')
@@ -304,4 +287,7 @@ class TagsContentTypeColumn extends AbstractStringColumn {
 		}
 		return false
 	}
+
+	override protected isEditable() { true }
+
 }
