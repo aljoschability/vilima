@@ -12,6 +12,7 @@
 <plugin>
    <extension-point id="scraper" name="Meta Data Scraper" schema="schema/scraper.exsd"/>
    <extension-point id="tagging" name="Vilima Tagging" schema="schema/tagging.exsd"/>
+   <extension-point id="field" name="File Field" schema="schema/field.exsd"/>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated vilima -->
       <package

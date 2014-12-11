@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="com.aljoschability.vilima" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="com.aljoschability.vilima" id="field" name="File Field"/>
+      </appinfo>
+      <documentation>
+         [Enter description of this extension point.]
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="category" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="entry" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="category">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="icon" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="resource"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="index" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="entry">
+      <complexType>
+         <sequence>
+            <element ref="parameter" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The &lt;b&gt;non-empty and unique&lt;/b&gt; name of the field that is used to identify it.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="category" type="string">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt;) category identifier for the column. When empty or invalid the column will be assigned to a special category &lt;code&gt;Other&lt;/code&gt;.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="com.aljoschability.vilima.field/@name"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="hint_title" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt; but recommended) title of the field. This is used as default title when a new field is created.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="hint_width" type="string">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt; but recommended) width of the field when used as column. This is used as default width when a new column representing this field is created.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="hint_alignment">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt; but recommended) alignment of the field when used as column. This is used as default alignment when a new column representing this field is created.
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="LEAD">
+                  </enumeration>
+                  <enumeration value="CENTER">
+                  </enumeration>
+                  <enumeration value="TRAIL">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="hint_monospaced" type="boolean" use="required">
+            <annotation>
+               <documentation>
+                  Whether or not this fields value should be presented in monospace font. It is optional and defaults to &lt;code&gt;false&lt;/code&gt; which means the default dialog font is used.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt; but recommended) description of the field. This is shown in the user interface and should describe what the field actually shows and possibly edits.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="parameter">
+      <annotation>
+         <documentation>
+            Parameters can be used to configure a field. When of type enumeration it can have multiple literals. It makes sense to provide at least two of them.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="literal" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name is used to identify the parameter. It must be &lt;b&gt;non-empty and unique&lt;/b&gt; for the containing field.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="title" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The short, not-empty and human-readable title for the parameter that is used in the user interface is &lt;b&gt;required&lt;/b&gt;.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="type" use="required">
+            <annotation>
+               <documentation>
+                  The type of the parameter that is &lt;b&gt;needed&lt;/b&gt; to decide how to handle the parameter value during saving/loading as well as in the user interface.
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="Boolean">
+                  </enumeration>
+                  <enumeration value="Enumeration">
+                  </enumeration>
+                  <enumeration value="Integer">
+                  </enumeration>
+                  <enumeration value="Decimal">
+                  </enumeration>
+                  <enumeration value="String">
+                  </enumeration>
+               </restriction>
+            </simpleType>
+         </attribute>
+         <attribute name="default_value" type="string">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt;) default value of the parameter as String. When not defined or invalid, the following values are used.
+&lt;ul&gt;
+&lt;li&gt;A Boolean parameter defaults to &lt;code&gt;false&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;An Enumeration parameter defaults to first given &lt;code&gt;literal&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;An Integer parameter defaults to &lt;code&gt;0&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;A Decimal parameter defaults to &lt;code&gt;0.0&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;A String parameter defaults to &lt;code&gt;null&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt;) description is used in the user interface to help the user understanding the impact of the parameter.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="validator" type="string">
+            <annotation>
+               <documentation>
+                  The (&lt;b&gt;optional&lt;/b&gt;) validator class is used to check the parameters value when given. When empty every value is assumed to be valid. This is especially &lt;b&gt;recommended for String&lt;/b&gt; type parameters.
+
+It &lt;b&gt;must implement&lt;/b&gt; &lt;code&gt;com.aljoschability.vilima.fields.FieldParameterValidator&lt;/code&gt; and &lt;b&gt;could extend&lt;/b&gt; the base implementation &lt;code&gt;com.aljoschability.vilima.fields.DefaultFieldParameterValidator&lt;/code&gt; which provides a good base for implementors.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":com.aljoschability.vilima.fields.FieldParameterValidator"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="literal">
+      <annotation>
+         <documentation>
+            A literal defines the possible values a enumeration type parameter can have.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The name is used to identify the literal so it must be &lt;b&gt;non-empty and unique&lt;/b&gt; for the containing parameter.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="title" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The &lt;b&gt;required&lt;/b&gt; short human-readable title for the literal that is used in the user interface like in a combo box or radio group.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="examples"/>
+      </appinfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="apiinfo"/>
+      </appinfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="implementation"/>
+      </appinfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+
+</schema>
