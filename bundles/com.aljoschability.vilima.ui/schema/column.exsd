@@ -50,6 +50,9 @@
 
    <element name="column">
       <annotation>
+         <appinfo>
+            <meta.element deprecated="true"/>
+         </appinfo>
          <documentation>
             All registered columns can be used in the file table of the application.
          </documentation>
@@ -58,18 +61,8 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  The (bundle-wide) unique identifier for the column.
+                  The identifier of the column. This must be a unique string for the bundle registering the extension. It should describe the purpose of the column, for example &lt;code&gt;file.extension&lt;/code&gt;.
                </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="provider" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The class that implements the columns behavior. For read-only columns the class must implement &lt;code&gt;com.aljoschability.vilima.ui.columns.Column&lt;/code&gt;, for editing support the class must implement &lt;code&gt;com.aljoschability.vilima.ui.columns.EditableColumn&lt;/code&gt; as well.
-               </documentation>
-               <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.aljoschability.vilima.ui.columns.Column"/>
-               </appinfo>
             </annotation>
          </attribute>
          <attribute name="title" type="string" use="required">
@@ -79,6 +72,16 @@
                </documentation>
                <appinfo>
                   <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="provider" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The class that implements the columns behavior. For read-only columns the class must implement &lt;code&gt;com.aljoschability.vilima.ui.columns.Column&lt;/code&gt;, for editing support the class must implement &lt;code&gt;com.aljoschability.vilima.ui.columns.EditableColumn&lt;/code&gt; as well.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":com.aljoschability.vilima.ui.columns.Column"/>
                </appinfo>
             </annotation>
          </attribute>
@@ -131,6 +134,9 @@
 
    <element name="category">
       <annotation>
+         <appinfo>
+            <meta.element deprecated="true"/>
+         </appinfo>
          <documentation>
             Column categories are used to group similar columns together for a better user experience.
          </documentation>
