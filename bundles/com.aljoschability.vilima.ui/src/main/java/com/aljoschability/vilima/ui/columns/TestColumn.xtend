@@ -70,7 +70,7 @@ class VideoCodecPrivateColumn extends AbstractStringColumn {
 				if(text.length > 0) {
 					text.append(", ")
 				}
-				text.append(AudioCodecPrivateColumn::format(track.codecId))
+				text.append(AudioCodecPrivateColumn::format(track.getCodec))
 			}
 		}
 		return text.toString
@@ -85,7 +85,7 @@ class AudioCodecPrivateColumn extends AbstractStringColumn {
 				if(text.length > 0) {
 					text.append(", ")
 				}
-				text.append(AudioCodecPrivateColumn::format(track.codecId))
+				text.append(AudioCodecPrivateColumn::format(track.getCodec))
 			}
 		}
 		return text.toString

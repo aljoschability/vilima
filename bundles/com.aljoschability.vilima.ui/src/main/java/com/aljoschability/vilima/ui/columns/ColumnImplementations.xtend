@@ -200,7 +200,7 @@ class TrackCodecsColumn extends AbstractStringColumn {
 		for (var i = 0; i < file.tracks.size; i++) {
 			val track = file.tracks.get(i)
 
-			text.append(track.codecId)
+			text.append(track.getCodec)
 
 			if(i < file.tracks.size - 1) {
 				text.append(", ")

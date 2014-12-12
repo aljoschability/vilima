@@ -12,16 +12,16 @@ class VilimaFormatter {
 	static val SIZE_BYTES_FORMAT = NumberFormat::getIntegerInstance
 
 	def static String getTrackInfo(MkTrack track) {
-		if(track.getCodecId.startsWith("A_")) {
-			return '''«track.getCodecId.substring(2)» («track.getAudioChannels» channels)'''
+		if(track.getCodec.startsWith("A_")) {
+			return '''«track.getCodec.substring(2)» («track.getAudioChannels» channels)'''
 		}
 
-		if(track.getCodecId.startsWith("S_")) {
-			return track.getCodecId.substring(2)
+		if(track.getCodec.startsWith("S_")) {
+			return track.getCodec.substring(2)
 		}
 
-		if(track.getCodecId.startsWith("V_")) {
-			return track.getCodecId.substring(2)
+		if(track.getCodec.startsWith("V_")) {
+			return track.getCodec.substring(2)
 		}
 
 		return track.toString()

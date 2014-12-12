@@ -268,7 +268,7 @@ public class MatroskaReader {
 			} else if (MatroskaNode.CodecID.matches(element)) {
 				String value = seeker.readString((EbmlDataElement) element);
 
-				track.setCodecId(value);
+				track.setCodec(value);
 			} else if (MatroskaNode.Video.matches(element)) {
 				readTrackVideoDetails((EbmlMasterElement) element, track);
 			} else if (MatroskaNode.Audio.matches(element)) {

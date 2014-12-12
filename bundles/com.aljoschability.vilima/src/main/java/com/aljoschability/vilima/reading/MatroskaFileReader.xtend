@@ -315,11 +315,11 @@ class MatroskaFileReader {
 
 		// XXX: rewrite
 		if(codecId == "V_MPEG4/ISO/AVC") {
-			track.codecId = '''«codecId»/«codecPrivate.get(1)»/«codecPrivate.get(3)»'''
+			track.codec = '''«codecId»/«codecPrivate.get(1)»/«codecPrivate.get(3)»'''
 		} else if(codecId == "V_MS/VFW/FOURCC") {
-			track.codecId = '''«codecId»/«new String(Arrays::copyOfRange(codecPrivate, 16, 20))»'''
+			track.codec = '''«codecId»/«new String(Arrays::copyOfRange(codecPrivate, 16, 20))»'''
 		} else {
-			track.codecId = codecId
+			track.codec = codecId
 		}
 	}
 

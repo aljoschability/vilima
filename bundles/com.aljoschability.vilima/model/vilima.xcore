@@ -81,7 +81,7 @@ class MkTrack
 	/* Specifies the language of the track in the Matroska languages form. */
 	String language = "eng"
 	/* An ID corresponding to the codec, see the codec page for more info. */
-	String[1] codecId
+	String[1] codec
 	/* Set if the video is interlaced. */
 	Boolean videoFlagInterlaced = "false"
 	/* Width of the encoded video frames in pixels. */
