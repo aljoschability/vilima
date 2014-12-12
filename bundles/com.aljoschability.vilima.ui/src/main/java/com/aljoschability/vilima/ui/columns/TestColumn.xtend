@@ -68,9 +68,9 @@ class VideoCodecPrivateColumn extends AbstractStringColumn {
 		for (track : file.tracks) {
 			if(track.type == MkTrackType::VIDEO) {
 				if(text.length > 0) {
-					text.append("; ")
+					text.append(", ")
 				}
-				text.append('''«track.codecName» [«track.codecId»] «track.codecPrivate»''')
+				text.append(AudioCodecPrivateColumn::format(track.codecId))
 			}
 		}
 		return text.toString
@@ -83,12 +83,52 @@ class AudioCodecPrivateColumn extends AbstractStringColumn {
 		for (track : file.tracks) {
 			if(track.type == MkTrackType::AUDIO) {
 				if(text.length > 0) {
-					text.append("; ")
+					text.append(", ")
 				}
-				text.append('''«track.codecName» [«track.codecId»] «track.codecPrivate»''')
+				text.append(AudioCodecPrivateColumn::format(track.codecId))
 			}
 		}
 		return text.toString
+	}
+
+	def static String format(String codec) {
+		if(codec != null) {
+			switch codec {
+				case "A_AAC":
+					return "AAC"
+				case "A_AC3":
+					return "AC3"
+				case "A_DTS":
+					return "DTS"
+				case "A_MPEG/L3":
+					return "MP3"
+				case "A_VORBIS":
+					return "Vorbis"
+				case codec.startsWith("V_MPEG4/ISO/AVC"): {
+					val split = codec.substring(16).split("/")
+					val profile = switch split.get(0) {
+						case "100": "High"
+						case "77": "Main"
+						default: '''? («split.get(0)»)'''
+					}
+					val level = switch split.get(1) {
+						case "30": "3.0"
+						case "31": "3.1"
+						case "40": "4.0"
+						case "41": "4.1"
+						case "42": "4.2"
+						default: '''? («split.get(1)»)'''
+					}
+
+					return '''AVC «profile»@«level»'''
+				}
+				case codec.startsWith("V_MS/VFW/FOURCC"): {
+					return '''VFW «codec.substring(16)»'''
+				}
+				case "S_TEXT/UTF8":
+					return "UTF-8 Plain Text"
+			}
+		}
 	}
 }
 

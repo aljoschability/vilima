@@ -1,22 +1,21 @@
 package com.aljoschability.vilima.ui.columns
 
 import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.format.VilimaFormatter
 import com.google.common.io.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.Collection
 import java.util.List
-import java.nio.file.Path
-import com.aljoschability.vilima.MkTag
-import com.aljoschability.vilima.MkTagNode
-import com.aljoschability.vilima.extensions.ModifyExtension
-import org.eclipse.jface.viewers.TreeViewer
-import org.eclipse.jface.viewers.EditingSupport
-import org.eclipse.jface.viewers.TextCellEditor
 import org.eclipse.jface.viewers.ComboBoxCellEditor
+import org.eclipse.jface.viewers.EditingSupport
+import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.swt.SWT
+
+import static com.aljoschability.vilima.ui.columns.TagsContentTypeColumn.*
 
 class FileNameColumn extends AbstractStringColumn {
 	override getString(MkFile file) { file.name }
