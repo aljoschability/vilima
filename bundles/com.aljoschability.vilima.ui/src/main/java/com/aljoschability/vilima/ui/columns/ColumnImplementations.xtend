@@ -4,7 +4,7 @@ import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.MkTrackType
-import com.aljoschability.vilima.format.VilimaFormatter
+import com.aljoschability.vilima.extensions.VilimaFormatter
 import com.google.common.io.Files
 import java.nio.file.Path
 import java.nio.file.Paths

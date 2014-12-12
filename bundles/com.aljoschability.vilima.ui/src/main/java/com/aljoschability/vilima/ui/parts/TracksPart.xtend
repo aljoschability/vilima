@@ -1,6 +1,8 @@
 package com.aljoschability.vilima.ui.parts;
 
-import com.aljoschability.vilima.format.VilimaFormatter
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkTrack
+import com.aljoschability.vilima.extensions.VilimaFormatter
 import com.aljoschability.vilima.ui.VilimaImages
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -18,10 +20,6 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
-
-import com.aljoschability.vilima.MkFile
-import static com.aljoschability.vilima.MkTrackType.*
-import com.aljoschability.vilima.MkTrack
 
 class TracksPart {
 	Object input

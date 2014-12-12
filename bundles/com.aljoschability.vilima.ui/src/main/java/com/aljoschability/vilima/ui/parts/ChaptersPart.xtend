@@ -1,6 +1,9 @@
 package com.aljoschability.vilima.ui.parts;
 
-import com.aljoschability.vilima.format.VilimaFormatter
+import com.aljoschability.vilima.MkChapter
+import com.aljoschability.vilima.MkEdition
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.extensions.VilimaFormatter
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
@@ -15,9 +18,6 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
-import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkChapter
-import com.aljoschability.vilima.MkEdition
 
 class ChaptersPart {
 	TableViewer viewer

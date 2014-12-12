@@ -2,7 +2,7 @@ package com.aljoschability.vilima.ui.columns
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.extensions.ModifyExtension
-import com.aljoschability.vilima.format.VilimaFormatter
+import com.aljoschability.vilima.extensions.VilimaFormatter
 
 class SegmentTitleColumn extends AbstractStringColumn {
 	extension ModifyExtension = ModifyExtension::INSTANCE

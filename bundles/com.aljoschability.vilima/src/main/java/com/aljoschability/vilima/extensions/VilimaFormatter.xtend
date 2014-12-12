@@ -1,4 +1,4 @@
-package com.aljoschability.vilima.format
+package com.aljoschability.vilima.extensions
 
 import com.aljoschability.vilima.MkTrack
 import java.text.NumberFormat

@@ -1,6 +1,7 @@
 package com.aljoschability.vilima.ui.parts
 
-import com.aljoschability.vilima.format.VilimaFormatter
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.extensions.VilimaFormatter
 import java.util.Map
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -14,7 +15,6 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
-import com.aljoschability.vilima.MkFile
 
 class InformationPart {
 	val Map<String, Label> labelsMap = newLinkedHashMap

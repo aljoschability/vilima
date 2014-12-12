@@ -16,7 +16,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.aljoschability.eclipse.core.runtime
 Export-Package: com.aljoschability.vilima,
  com.aljoschability.vilima.extensions,
- com.aljoschability.vilima.format,
  com.aljoschability.vilima.helpers,
  com.aljoschability.vilima.impl,
  com.aljoschability.vilima.jobs,

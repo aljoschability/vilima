@@ -1,7 +1,14 @@
 package com.aljoschability.vilima.ui.parts;
 
-import com.aljoschability.vilima.format.VilimaFormatter
+import com.aljoschability.vilima.MkAttachment
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.extensions.VilimaFormatter
+import com.google.common.io.Files
+import java.io.File
+import java.nio.file.Paths
+import java.util.Map
 import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
 import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Optional
@@ -12,19 +19,12 @@ import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.jface.viewers.TableViewer
 import org.eclipse.jface.viewers.TableViewerColumn
 import org.eclipse.swt.SWT
+import org.eclipse.swt.graphics.Image
+import org.eclipse.swt.program.Program
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
-import org.eclipse.swt.program.Program
-import org.eclipse.swt.graphics.Image
-import java.util.Map
-import org.eclipse.swt.widgets.Display
-import javax.annotation.PreDestroy
-import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkAttachment
-import java.nio.file.Paths
-import java.io.File
-import com.google.common.io.Files
 
 class AttachmentsPart {
 	@Inject Display display
