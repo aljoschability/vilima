@@ -275,6 +275,9 @@ class MatroskaFileReader {
 	}
 
 	def private void fill(EbmlElement parent, MkTrack track) {
+		var String codecId = null
+		var byte[] codecPrivate = null
+
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
@@ -295,10 +298,10 @@ class MatroskaFileReader {
 					track.language = element.readString
 				}
 				case MatroskaNode::CodecID.id: {
-					track.codecId = element.readString
+					codecId = element.readString
 				}
 				case MatroskaNode::CodecPrivate.id: {
-					track.codecPrivate = element.extBinaryToString
+					codecPrivate = seeker.readBytes(element as EbmlDataElement)
 				}
 				case MatroskaNode::Video.id: {
 					element.fillVideo(track)
@@ -312,10 +315,19 @@ class MatroskaFileReader {
 		}
 
 		// XXX: rewrite
-		MatroskaReader::rewriteCodecPrivate(track)
+		if(codecId == "V_MPEG4/ISO/AVC") {
+			track.codecId = '''«codecId»/«codecPrivate.get(1)»/«codecPrivate.get(3)»'''
+		} else if(codecId == "V_MS/VFW/FOURCC") {
+			track.codecId = '''«codecId»/«new String(Arrays::copyOfRange(codecPrivate, 16, 20))»'''
+		} else {
+			track.codecId = codecId
+		}
 	}
 
-	def private void fillVideo(EbmlElement parent, MkTrack track) {
+	def private void fillVideo(
+		EbmlElement parent,
+		MkTrack track
+	) {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 

@@ -35,11 +35,11 @@ class FieldDefinitionParameterImpl implements FieldDefinitionParameter {
 	val Map<Integer, FieldDefinitionParameterLiteral> literals
 
 	def FieldDefinitionParameter create(IConfigurationElement pce) {
-		val name = pce.registeredId
-		val title = pce.registeredName
+		val name = pce.readId
+		val title = pce.readName
 		val type = readType(pce)
 		val defaultValue = pce.getAttribute(ATTRIBUTE_DEFAULT_VALUE)
-		val description = pce.registeredDescription
+		val description = pce.readDescription
 		val validator = readValidator(pce)
 
 		// all basic required values given

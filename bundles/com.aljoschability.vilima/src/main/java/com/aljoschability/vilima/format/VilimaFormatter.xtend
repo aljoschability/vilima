@@ -21,9 +21,6 @@ class VilimaFormatter {
 		}
 
 		if(track.getCodecId.startsWith("V_")) {
-			if(track.getCodecId == "V_MS/VFW/FOURCC") {
-				return '''«track.getCodecId.substring(2)» («track.getCodecPrivate»)'''
-			}
 			return track.getCodecId.substring(2)
 		}
 
@@ -85,7 +82,7 @@ class VilimaFormatter {
 		TIME_FORMAT_SEC.minimumFractionDigits = 0
 		TIME_FORMAT_SEC.maximumFractionDigits = 0
 
-		TIME_FORMAT_SEC.format(duration/1000d) + " s"
+		TIME_FORMAT_SEC.format(duration / 1000d) + " s"
 	}
 
 	def static String getTimeMinutes(Double duration) {

@@ -219,6 +219,10 @@ public final class MatroskaFileSeeker {
 		}
 	}
 
+	public Boolean readBoolean(EbmlDataElement element) throws IOException {
+		return readInteger(element) == 1;
+	}
+
 	private long uintToLong(byte[] data) {
 		long l = 0;
 		long tmp = 0;

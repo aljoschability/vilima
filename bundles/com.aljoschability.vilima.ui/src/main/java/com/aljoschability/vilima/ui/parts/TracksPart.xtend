@@ -38,8 +38,8 @@ class TracksPart {
 		viewer.contentProvider = ArrayContentProvider::getInstance()
 		viewer.comparator = new ViewerComparator() {
 			override compare(Viewer viewer, Object a, Object b) {
-				if (a instanceof MkTrack) {
-					if (b instanceof MkTrack) {
+				if(a instanceof MkTrack) {
+					if(b instanceof MkTrack) {
 						return Integer.compare(a.getNumber, b.getNumber)
 					}
 				}
@@ -65,14 +65,14 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkTrack) {
+				if(element instanceof MkTrack) {
 					return VilimaFormatter::getTrackInfo(element)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if (element instanceof MkTrack) {
+				if(element instanceof MkTrack) {
 					switch (element.getType) {
 						case VIDEO: {
 							return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
@@ -104,7 +104,7 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkTrack) {
+				if(element instanceof MkTrack) {
 					return VilimaFormatter::getLanguage(element.getLanguage)
 				}
 				return ""
@@ -122,9 +122,9 @@ class TracksPart {
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
-				if (element instanceof MkTrack) {
+				if(element instanceof MkTrack) {
 					val name = element.getName
-					if (name != null) {
+					if(name != null) {
 						return name
 					}
 				}
@@ -137,14 +137,14 @@ class TracksPart {
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
 		input = null
 
-		if (selection != null && selection.size() == 1) {
+		if(selection != null && selection.size() == 1) {
 			val element = selection.firstElement
-			if (element instanceof MkFile) {
+			if(element instanceof MkFile) {
 				input = element.tracks
 			}
 		}
 
-		if (viewer != null && !viewer.table.disposed) {
+		if(viewer != null && !viewer.table.disposed) {
 			viewer.input = input
 		}
 	}

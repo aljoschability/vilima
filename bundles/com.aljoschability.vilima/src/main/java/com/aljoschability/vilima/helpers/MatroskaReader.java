@@ -276,10 +276,6 @@ public class MatroskaReader {
 				String value = seeker.readString((EbmlDataElement) element);
 
 				track.setCodecId(value);
-			} else if (MatroskaNode.CodecPrivate.matches(element)) {
-				byte[] value = seeker.readBytes((EbmlDataElement) element);
-
-				track.setCodecPrivate(convertBinaryToString(value));
 			} else if (MatroskaNode.Video.matches(element)) {
 				readTrackVideoDetails((EbmlMasterElement) element, track);
 			} else if (MatroskaNode.Audio.matches(element)) {
@@ -288,8 +284,6 @@ public class MatroskaReader {
 
 			seeker.skip(element);
 		}
-
-		rewriteCodecPrivate(track);
 
 		file.getTracks().add(track);
 	}
@@ -567,38 +561,6 @@ public class MatroskaReader {
 		library.getGenres().add(type);
 
 		return type;
-	}
-
-	public static void rewriteCodecPrivate(MkTrack track) {
-		if (track.getCodecPrivate() != null) {
-			// reconstruct byte array
-			String[] split = track.getCodecPrivate()
-					.substring(1, track.getCodecPrivate().length() - 2)
-					.split(", ");
-			byte[] bytes = new byte[split.length];
-			for (int i = 0; i < bytes.length; i++) {
-				bytes[i] = new Byte(split[i]);
-			}
-
-			if ("V_MPEG4/ISO/AVC".equals(track.getCodecId())) {
-				track.setCodecPrivate("Profile=" + bytes[1] + ", Level="
-						+ bytes[3]);
-			} else if ("V_MS/VFW/FOURCC".equals(track.getCodecId())) {
-				StringBuilder sb = new StringBuilder();
-
-				for (byte b : bytes) {
-					sb.append((char) b);
-				}
-				//System.out.println(sb);
-				System.out.println(bytes.length);
-
-				// System.out.println(Arrays.toString(new byte[] { 'X', 'V',
-				// 'I', 'D' }));
-				track.setCodecPrivate(new String(new byte[] { bytes[16],
-						bytes[17], bytes[18], bytes[19] }));
-
-			}
-		}
 	}
 
 	public static String convertBinaryToString(byte[] value) {
