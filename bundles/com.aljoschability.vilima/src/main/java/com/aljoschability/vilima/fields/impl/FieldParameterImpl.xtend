@@ -1,8 +1,8 @@
 package com.aljoschability.vilima.fields.impl
 
-import com.aljoschability.vilima.fields.FieldParameter
-import com.aljoschability.vilima.fields.FieldParameterLiteral
-import com.aljoschability.vilima.fields.FieldParameterType
+import com.aljoschability.vilima.fields.FieldDefinitionParameter
+import com.aljoschability.vilima.fields.FieldDefinitionParameterLiteral
+import com.aljoschability.vilima.fields.FieldDefinitionParameterType
 import com.aljoschability.vilima.fields.FieldParameterValidator
 import java.util.Map
 import org.eclipse.core.runtime.IConfigurationElement
@@ -11,14 +11,13 @@ import org.eclipse.xtend.lib.annotations.EqualsHashCode
 import org.eclipse.xtend.lib.annotations.ToString
 
 @Accessors @ToString @EqualsHashCode
-class FieldParameterImpl implements FieldParameter {
+class FieldDefinitionParameterImpl implements FieldDefinitionParameter {
+	extension FieldDefinitionTool = FieldDefinitionTool::INSTANCE
+
 	val static ELEMENT_LITERAL = "literal"
 
-	val static ATTRIBUTE_NAME = "name"
-	val static ATTRIBUTE_TITLE = "title"
 	val static ATTRIBUTE_TYPE = "type"
 	val static ATTRIBUTE_DEFAULT_VALUE = "default_value"
-	val static ATTRIBUTE_DESCRIPTION = "description"
 	val static ATTRIBUTE_VALIDATOR = "validator"
 
 	val static VALUE_TYPE_BOOLEAN = "Boolean"
@@ -29,26 +28,26 @@ class FieldParameterImpl implements FieldParameter {
 
 	val String name
 	val String title
-	val FieldParameterType type
+	val FieldDefinitionParameterType type
 	val String defaultValue
 	val String description
 	val FieldParameterValidator validator
-	val Map<Integer, FieldParameterLiteral> literals
+	val Map<Integer, FieldDefinitionParameterLiteral> literals
 
-	def static FieldParameter create(IConfigurationElement pce) {
-		val name = pce.getAttribute(ATTRIBUTE_NAME)
-		val title = pce.getAttribute(ATTRIBUTE_TITLE)
+	def FieldDefinitionParameter create(IConfigurationElement pce) {
+		val name = pce.registeredId
+		val title = pce.registeredName
 		val type = readType(pce)
 		val defaultValue = pce.getAttribute(ATTRIBUTE_DEFAULT_VALUE)
-		val description = pce.getAttribute(ATTRIBUTE_DESCRIPTION)
+		val description = pce.registeredDescription
 		val validator = readValidator(pce)
 
 		// all basic required values given
 		if(name != null && title != null && type != null) {
 
 			// read literals
-			var Map<Integer, FieldParameterLiteral> literalsMap = null
-			if(FieldParameterType::ENUMERATION == type) {
+			var Map<Integer, FieldDefinitionParameterLiteral> literalsMap = null
+			if(FieldDefinitionParameterType::ENUMERATION == type) {
 				literalsMap = newLinkedHashMap
 
 				var literalIndex = 0
@@ -62,7 +61,7 @@ class FieldParameterImpl implements FieldParameter {
 				literalsMap = literalsMap.immutableCopy
 			}
 
-			return new FieldParameterImpl(name, title, type, defaultValue, description, validator, literalsMap)
+			return new FieldDefinitionParameterImpl(name, title, type, defaultValue, description, validator, literalsMap)
 		}
 	}
 
@@ -74,15 +73,15 @@ class FieldParameterImpl implements FieldParameter {
 		return null
 	}
 
-	def private static FieldParameterType readType(IConfigurationElement ce) {
+	def private static FieldDefinitionParameterType readType(IConfigurationElement ce) {
 		val value = ce.getAttribute(ATTRIBUTE_TYPE)
 		if(value != null) {
 			switch value {
-				case VALUE_TYPE_BOOLEAN: return FieldParameterType::BOOLEAN
-				case VALUE_TYPE_ENUMERATION: return FieldParameterType::ENUMERATION
-				case VALUE_TYPE_INTEGER: return FieldParameterType::INTEGER
-				case VALUE_TYPE_DECIMAL: return FieldParameterType::DECIMAL
-				case VALUE_TYPE_STRING: return FieldParameterType::STRING
+				case VALUE_TYPE_BOOLEAN: return FieldDefinitionParameterType::BOOLEAN
+				case VALUE_TYPE_ENUMERATION: return FieldDefinitionParameterType::ENUMERATION
+				case VALUE_TYPE_INTEGER: return FieldDefinitionParameterType::INTEGER
+				case VALUE_TYPE_DECIMAL: return FieldDefinitionParameterType::DECIMAL
+				case VALUE_TYPE_STRING: return FieldDefinitionParameterType::STRING
 			}
 		}
 	}
