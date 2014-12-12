@@ -11,7 +11,6 @@ import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.VilimaFactory
-import com.aljoschability.vilima.helpers.MatroskaReader
 import com.aljoschability.vilima.helpers.MkReaderByter
 import java.io.File
 import java.nio.file.Files
@@ -609,12 +608,6 @@ class MatroskaFileReader {
 
 	def private EbmlElement nextChild(EbmlElement element) {
 		return seeker.nextChild(element as EbmlMasterElement)
-	}
-
-	def private String extBinaryToString(EbmlElement element) {
-		val byte[] value = seeker.readBytes(element as EbmlDataElement);
-
-		return MatroskaReader::convertBinaryToString(value)
 	}
 
 	def private int readInt(EbmlElement element) {

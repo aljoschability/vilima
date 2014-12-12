@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 import com.aljoschability.vilima.MkAttachment;
@@ -17,9 +16,7 @@ import com.aljoschability.vilima.MkInformation;
 import com.aljoschability.vilima.MkTag;
 import com.aljoschability.vilima.MkTagNode;
 import com.aljoschability.vilima.MkTrack;
-import com.aljoschability.vilima.XVilimaContentType;
 import com.aljoschability.vilima.VilimaFactory;
-import com.aljoschability.vilima.XVilimaGenre;
 import com.aljoschability.vilima.XVilimaLibrary;
 import com.aljoschability.vilima.reading.EbmlDataElement;
 import com.aljoschability.vilima.reading.EbmlElement;
@@ -28,9 +25,6 @@ import com.aljoschability.vilima.reading.MatroskaFileSeeker;
 import com.aljoschability.vilima.reading.MatroskaNode;
 
 public class MatroskaReader {
-
-	private final XVilimaLibrary library;
-
 	private MkFile file;
 	private MatroskaFileSeeker seeker;
 
@@ -40,7 +34,6 @@ public class MatroskaReader {
 
 	@Deprecated
 	public MatroskaReader(XVilimaLibrary library) {
-		this.library = library;
 	}
 
 	public MkFile readFile(Path path) throws IOException {
@@ -532,38 +525,5 @@ public class MatroskaReader {
 		}
 
 		return tag;
-	}
-
-	private XVilimaContentType getOrCreateContentType(String value) {
-		for (XVilimaContentType existing : library.getContentTypes()) {
-			if (existing.getName().equals(value)) {
-				return existing;
-			}
-		}
-
-		XVilimaContentType type = VilimaFactory.eINSTANCE
-				.createXVilimaContentType();
-		type.setName(value);
-		library.getContentTypes().add(type);
-
-		return type;
-	}
-
-	private XVilimaGenre getOrCreateGenre(String value) {
-		for (XVilimaGenre existing : library.getGenres()) {
-			if (existing.getName().equals(value)) {
-				return existing;
-			}
-		}
-
-		XVilimaGenre type = VilimaFactory.eINSTANCE.createXVilimaGenre();
-		type.setName(value);
-		library.getGenres().add(type);
-
-		return type;
-	}
-
-	public static String convertBinaryToString(byte[] value) {
-		return Arrays.toString(value);
 	}
 }
