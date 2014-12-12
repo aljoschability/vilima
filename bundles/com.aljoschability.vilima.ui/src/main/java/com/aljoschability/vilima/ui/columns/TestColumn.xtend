@@ -13,6 +13,7 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Control
 import org.eclipse.swt.widgets.Shell
+import com.aljoschability.vilima.MkTrackType
 
 class GenresSelectionDialog extends Dialog {
 	extension SwtExtension = SwtExtension::INSTANCE
@@ -59,6 +60,36 @@ class LanguageAwareStringColumn {
 }
 
 class LanguageAwareStringListColumn {
+}
+
+class VideoCodecPrivateColumn extends AbstractStringColumn {
+	override protected getString(MkFile file) {
+		val text = new StringBuilder
+		for (track : file.tracks) {
+			if(track.type == MkTrackType::VIDEO) {
+				if(text.length > 0) {
+					text.append("; ")
+				}
+				text.append('''«track.codecName» [«track.codecId»] «track.codecPrivate»''')
+			}
+		}
+		return text.toString
+	}
+}
+
+class AudioCodecPrivateColumn extends AbstractStringColumn {
+	override protected getString(MkFile file) {
+		val text = new StringBuilder
+		for (track : file.tracks) {
+			if(track.type == MkTrackType::AUDIO) {
+				if(text.length > 0) {
+					text.append("; ")
+				}
+				text.append('''«track.codecName» [«track.codecId»] «track.codecPrivate»''')
+			}
+		}
+		return text.toString
+	}
 }
 
 class TestColumn extends AbstractStringColumn {

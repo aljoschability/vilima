@@ -584,13 +584,18 @@ public class MatroskaReader {
 				track.setCodecPrivate("Profile=" + bytes[1] + ", Level="
 						+ bytes[3]);
 			} else if ("V_MS/VFW/FOURCC".equals(track.getCodecId())) {
+				StringBuilder sb = new StringBuilder();
+
+				for (byte b : bytes) {
+					sb.append((char) b);
+				}
+				//System.out.println(sb);
+				System.out.println(bytes.length);
+
 				// System.out.println(Arrays.toString(new byte[] { 'X', 'V',
 				// 'I', 'D' }));
 				track.setCodecPrivate(new String(new byte[] { bytes[16],
 						bytes[17], bytes[18], bytes[19] }));
-				// [40, 0, 0, 0, -48, 2, 0, 0, 96, 1, 0, 0, 1, 0, 12, 0, 88, 86,
-				// 73, 68, 0, 52, 23,
-				// 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 			}
 		}

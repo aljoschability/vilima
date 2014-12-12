@@ -264,5 +264,15 @@
 			title="Genres"
 			category="com.aljoschability.vilima.ui.column.category.tests"
 			provider="com.aljoschability.vilima.ui.columns.TestColumn"/>
+		<column
+			id="test.codecs.video"
+			title="Video Codec Details"
+			category="com.aljoschability.vilima.ui.column.category.tests"
+			provider="com.aljoschability.vilima.ui.columns.VideoCodecPrivateColumn"/>
+		<column
+			id="test.codecs.audio"
+			title="Audio Codec Details"
+			category="com.aljoschability.vilima.ui.column.category.tests"
+			provider="com.aljoschability.vilima.ui.columns.AudioCodecPrivateColumn"/>
    </extension>
 </plugin>
