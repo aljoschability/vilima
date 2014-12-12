@@ -82,10 +82,6 @@ class MkTrack
 	String language = "eng"
 	/* An ID corresponding to the codec, see the codec page for more info. */
 	String[1] codecId
-	/* Private data only known to the codec. */
-	String codecPrivate
-	/* A human-readable string specifying the codec. */
-	String codecName
 	/* Set if the video is interlaced. */
 	Boolean videoFlagInterlaced = "false"
 	/* Width of the encoded video frames in pixels. */
