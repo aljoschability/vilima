@@ -78,47 +78,51 @@ class MatroskaFileReader {
 	}
 
 	def private void readFile() {
-		var element = seeker.nextElement();
-		if(!MatroskaNode::EBML.matches(element)) {
+		seeker.nextElement.parseEbml
+
+		seeker.nextElement.parseSegment
+	}
+
+	def private void parseEbml(EbmlElement parent) {
+		if(!MatroskaNode::EBML.matches(parent)) {
 			throw new RuntimeException("EBML root element could not be read.")
 		}
 
-		readDocType(element as EbmlMasterElement)
-
-		element = seeker.nextElement()
-		if(!MatroskaNode::Segment.matches(element)) {
-			throw new RuntimeException("Segment not the second element in the file.")
-		}
-
-		readSegment(element as EbmlMasterElement)
-	}
-
-	def private void readDocType(EbmlMasterElement parent) {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::DocType.id: {
+			switch element.node {
+				case DocType: {
 					val value = element.readString
 
 					if(value != "matroska" && value != "webm") {
 						throw new RuntimeException("EBML document type cannot be read.")
 					}
 				}
+				default: {
+				}
 			}
 
 			element.skip
 		}
 	}
 
-	def private void readSegment(EbmlMasterElement parent) {
+	def private void parseSegment(EbmlElement parent) {
+		if(!MatroskaNode::Segment.matches(parent)) {
+			throw new RuntimeException("Segment not the second element in the file.")
+		}
+
 		seekOffset = seeker.position
 
-		var EbmlElement element = null
-		while((element = seeker.nextChild(parent)) != null) {
-			if(element instanceof EbmlMasterElement) {
-				if(!readSegmentNode(element as EbmlMasterElement)) {
-					return;
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case Cluster: {
+					return
+				}
+				default: {
+					readSegmentNode(element)
 				}
 			}
 
@@ -126,36 +130,33 @@ class MatroskaFileReader {
 		}
 	}
 
-	def private boolean readSegmentNode(EbmlMasterElement element) {
+	def private boolean readSegmentNode(EbmlElement element) {
 		positionsParsed += element.offset
 
-		switch element.id {
-			case MatroskaNode::SeekHead.id: {
+		switch element.node {
+			case SeekHead: {
 				element.parseSeekHead
 			}
-			case MatroskaNode::Info.id: {
-				if(result.information != null) {
-					throw new RuntimeException("Info already exists.")
-				}
-
-				result.information = VilimaFactory.eINSTANCE.createMkInformation
-
-				element.fill(result.information)
+			case Info: {
+				element.parseInfo
 			}
-			case MatroskaNode::Cluster.id: {
+			case Cluster: {
+				println('''trying to read cluster. should not happen!''')
 				return false
 			}
-			case MatroskaNode::Tracks.id: {
+			case Tracks: {
 				element.parseTracks
 			}
-			case MatroskaNode::Attachments.id: {
+			case Attachments: {
 				element.parseAttachments
 			}
-			case MatroskaNode::Chapters.id: {
+			case Chapters: {
 				element.parseChapters
 			}
-			case MatroskaNode::Tags.id: {
+			case Tags: {
 				element.parseTags
+			}
+			default: {
 			}
 		}
 
@@ -166,9 +167,11 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::Seek.id: {
+			switch element.node {
+				case Seek: {
 					element.parseSeek
+				}
+				default: {
 				}
 			}
 
@@ -183,12 +186,14 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::SeekID.id: {
+			switch element.node {
+				case SeekID: {
 					id = element.readBytes
 				}
-				case MatroskaNode::SeekPosition.id: {
+				case SeekPosition: {
 					position = element.readLong
+				}
+				default: {
 				}
 			}
 
@@ -201,61 +206,75 @@ class MatroskaFileReader {
 		}
 	}
 
-	def private void fill(EbmlElement parent, MkInformation information) {
+	def private void parseInfo(EbmlElement parent) {
+		val information = parent.createInfo
+		if(information != null) {
+			result.information = information
+		}
+	}
+
+	def private MkInformation createInfo(EbmlElement parent) {
+		val information = VilimaFactory::eINSTANCE.createMkInformation
+
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::Title.id: {
+			switch element.node {
+				case Title: {
 					information.title = element.readString
 				}
-				case MatroskaNode::SegmentUID.id: {
+				case SegmentUID: {
 					information.uid = element.readHex
 				}
-				case MatroskaNode::PrevUID.id: {
+				case PrevUID: {
 					information.previousUid = element.readHex
 				}
-				case MatroskaNode::NextUID.id: {
+				case NextUID: {
 					information.nextUid = element.readHex
 				}
-				case MatroskaNode::SegmentFilename.id: {
+				case SegmentFilename: {
 					information.filename = element.readString
 				}
-				case MatroskaNode::PrevFilename.id: {
+				case PrevFilename: {
 					information.previousFilename = element.readString
 				}
-				case MatroskaNode::NextFilename.id: {
+				case NextFilename: {
 					information.nextFilename = element.readString
 				}
-				case MatroskaNode::DateUTC.id: {
-
-					// XXX: this should use the "international format"...
-					information.date = seeker.readTimestamp(element as EbmlDataElement)
+				case DateUTC: {
+					information.date = element.readTimestamp
 				}
-				case MatroskaNode::Duration.id: {
+				case Duration: {
 					information.duration = element.readDouble
 				}
-				case MatroskaNode::MuxingApp.id: {
+				case MuxingApp: {
 					information.muxingApp = element.readString
 				}
-				case MatroskaNode::WritingApp.id: {
+				case WritingApp: {
 					information.writingApp = element.readString
+				}
+				default: {
 				}
 			}
 
 			element.skip
 		}
+
+		return information
 	}
 
 	def private void parseTracks(EbmlElement parent) {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::TrackEntry.id: {
+			switch element.node {
+				case TrackEntry: {
 					val track = VilimaFactory.eINSTANCE.createMkTrack
 					element.fill(track)
 					result.tracks += track
+				}
+				default: {
+					println("@parseTracks" + element.node)
 				}
 			}
 
@@ -270,33 +289,35 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::TrackNumber.id: {
+			switch element.node {
+				case TrackNumber: {
 					track.number = element.readInt
 				}
-				case MatroskaNode::TrackUID.id: {
+				case TrackUID: {
 					track.uid = element.readLong
 				}
-				case MatroskaNode::TrackType.id: {
+				case TrackType: {
 					track.type = element.readMkTrackType
 				}
-				case MatroskaNode::Name.id: {
+				case Name: {
 					track.name = element.readString
 				}
-				case MatroskaNode::Language.id: {
+				case Language: {
 					track.language = element.readString
 				}
-				case MatroskaNode::CodecID.id: {
+				case CodecID: {
 					codecId = element.readString
 				}
-				case MatroskaNode::CodecPrivate.id: {
-					codecPrivate = seeker.readBytes(element as EbmlDataElement)
+				case CodecPrivate: {
+					codecPrivate = element.readBytes
 				}
-				case MatroskaNode::Video.id: {
+				case Video: {
 					element.fillVideo(track)
 				}
-				case MatroskaNode::Audio.id: {
+				case Audio: {
 					element.fillAudio(track)
+				}
+				default: {
 				}
 			}
 
@@ -317,18 +338,20 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::PixelWidth.id: {
+			switch element.node {
+				case PixelWidth: {
 					track.videoPixelWidth = element.readInt
 				}
-				case MatroskaNode::PixelHeight.id: {
+				case PixelHeight: {
 					track.videoPixelHeight = element.readInt
 				}
-				case MatroskaNode::DisplayWidth.id: {
+				case DisplayWidth: {
 					track.videoDisplayWidth = element.readInt
 				}
-				case MatroskaNode::DisplayHeight.id: {
+				case DisplayHeight: {
 					track.videoDisplayHeight = element.readInt
+				}
+				default: {
 				}
 			}
 
@@ -340,11 +363,11 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::SamplingFrequency.id: {
+			switch element.node {
+				case SamplingFrequency: {
 					track.audioSamplingFrequency = element.readDouble
 				}
-				case MatroskaNode::Channels.id: {
+				case Channels: {
 					track.audioChannels = element.readInt
 				}
 			}
@@ -357,8 +380,8 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::AttachedFile.id: {
+			switch element.node {
+				case AttachedFile: {
 					attachmentsCount++
 
 					val attachment = VilimaFactory::eINSTANCE.createMkAttachment
@@ -377,20 +400,20 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::FileUID.id: {
+			switch element.node {
+				case FileUID: {
 					attachment.uid = element.readLong
 				}
-				case MatroskaNode::FileDescription.id: {
+				case FileDescription: {
 					attachment.description = element.readString
 				}
-				case MatroskaNode::FileName.id: {
+				case FileName: {
 					attachment.name = element.readString
 				}
-				case MatroskaNode::FileMimeType.id: {
+				case FileMimeType: {
 					attachment.mimeType = element.readString
 				}
-				case MatroskaNode::FileDescription.id: {
+				case FileData: {
 					attachment.size = element.size
 				}
 			}
@@ -399,12 +422,12 @@ class MatroskaFileReader {
 		}
 	}
 
-	def private void parseChapters(EbmlMasterElement parent) {
+	def private void parseChapters(EbmlElement parent) {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::EditionEntry.id: {
+			switch element.node {
+				case EditionEntry: {
 					val edition = VilimaFactory::eINSTANCE.createMkEdition()
 					element.fill(edition)
 
@@ -420,11 +443,11 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::EditionUID.id: {
+			switch element.node {
+				case EditionUID: {
 					edition.uid = element.readLong
 				}
-				case MatroskaNode::ChapterAtom.id: {
+				case ChapterAtom: {
 					val chapter = VilimaFactory::eINSTANCE.createMkChapter
 
 					element.fill(chapter)
@@ -441,11 +464,11 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::ChapterTimeStart.id: {
+			switch element.node {
+				case ChapterTimeStart: {
 					chapter.start = element.readLong
 				}
-				case MatroskaNode::ChapterDisplay.id: {
+				case ChapterDisplay: {
 					val text = VilimaFactory.eINSTANCE.createMkChapterText()
 
 					element.fill(text)
@@ -462,14 +485,14 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::ChapString.id: {
+			switch element.node {
+				case ChapString: {
 					text.text = element.readString
 				}
-				case MatroskaNode::ChapLanguage.id: {
+				case ChapLanguage: {
 					text.languages += element.readString
 				}
-				case MatroskaNode::ChapCountry.id: {
+				case ChapCountry: {
 					// TODO: ChapCountry not used
 				}
 			}
@@ -482,8 +505,8 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::Tag.id: {
+			switch element.node {
+				case Tag: {
 					val tag = VilimaFactory::eINSTANCE.createMkTag
 
 					element.fill(tag)
@@ -500,11 +523,11 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element.id {
-				case MatroskaNode::Targets.id: {
+			switch element.node {
+				case Targets: {
 					element.parseTagTargets(tag)
 				}
-				case MatroskaNode::SimpleTag.id: {
+				case SimpleTag: {
 					val node = VilimaFactory::eINSTANCE.createMkTagNode
 
 					element.fill(node)
@@ -521,24 +544,24 @@ class MatroskaFileReader {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
-			switch element. id {
-				case MatroskaNode::TargetTypeValue.id: {
+			switch element. node {
+				case TargetTypeValue: {
 					tag.target = element.readInt
 				}
-				case MatroskaNode::TargetType.id: {
+				case TargetType: {
 					tag.targetText = element.readString
 				}
-				case MatroskaNode::TagTrackUID.id: {
-					println(this + "added non-global tag")
+				case TagTrackUID: {
+					//XXX: println(this + "added non-global tag")
 				}
-				case MatroskaNode::TagEditionUID.id: {
-					println(this + "added non-global tag")
+				case TagEditionUID: {
+					//XXX: println(this + "added non-global tag")
 				}
-				case MatroskaNode::TagChapterUID.id: {
-					println(this + "added non-global tag")
+				case TagChapterUID: {
+					//XXX: println(this + "added non-global tag")
 				}
-				case MatroskaNode::TagAttachmentUID.id: {
-					println(this + "added non-global tag")
+				case TagAttachmentUID: {
+					//XXX: println(this + "added non-global tag")
 				}
 			}
 
@@ -549,14 +572,14 @@ class MatroskaFileReader {
 	def private void fill(EbmlElement parent, MkTagNode node) {
 		while(parent.hasNext) {
 			val element = parent.nextChild
-			switch element.id {
-				case MatroskaNode::TagName.id: {
+			switch element.node {
+				case TagName: {
 					node.name = element.readString
 				}
-				case MatroskaNode::TagString.id: {
+				case TagString: {
 					node.value = element.readString
 				}
-				case MatroskaNode::SimpleTag.id: {
+				case SimpleTag: {
 					val child = VilimaFactory::eINSTANCE.createMkTagNode
 
 					element.fill(child)
@@ -569,7 +592,7 @@ class MatroskaFileReader {
 		}
 	}
 
-	def private long offset(EbmlMasterElement element) {
+	def private long offset(EbmlElement element) {
 		return seeker.position - element.headerSize
 	}
 
@@ -587,6 +610,10 @@ class MatroskaFileReader {
 
 	def private double readDouble(EbmlElement element) {
 		seeker.readDouble(element as EbmlDataElement)
+	}
+
+	def private long readTimestamp(EbmlElement element) {
+		seeker.readTimestamp(element as EbmlDataElement)
 	}
 
 	def private String readString(EbmlElement element) {
@@ -622,6 +649,8 @@ interface MkFileReaderExtension {
 	val MkFileReaderExtension INSTANCE = new MkFileReaderExtensionImpl
 
 	def MkFile newMkFile(File file)
+
+	def MatroskaNode getNode(EbmlElement element)
 }
 
 class MkFileReaderExtensionImpl implements MkFileReaderExtension {
@@ -637,5 +666,9 @@ class MkFileReaderExtensionImpl implements MkFileReaderExtension {
 		result.size = attributes.size
 
 		return result
+	}
+
+	override getNode(EbmlElement element) {
+		MatroskaNode::get(element.id)
 	}
 }
