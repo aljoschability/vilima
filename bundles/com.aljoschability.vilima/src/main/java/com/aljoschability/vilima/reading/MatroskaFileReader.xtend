@@ -20,16 +20,44 @@ import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
 
+class MkFileParserHelper {
+	public long offset
+	public Queue<Long> seeks
+	public Collection<Long> positionsParsed
+
+	new() {
+		seeks = new LinkedList
+		positionsParsed = newArrayList
+		offset = -1
+	}
+
+	def void dispose() {
+		seeks = null
+		positionsParsed = null
+		offset = -1
+	}
+
+	def offer(long position) {
+		seeks.offer(position + offset)
+	}
+
+	def setOffset(long offset) {
+		this.offset = offset
+	}
+
+	def addPositionsParsed(long position) {
+		positionsParsed += position
+		seeks.remove(position)
+	}
+}
+
 class MatroskaFileReader {
 	extension MkFileReaderExtension = MkFileReaderExtension::INSTANCE
 
 	MkFile result
 	MatroskaFileSeeker seeker
 
-	Queue<Long> seeks
-
-	Collection<Long> positionsParsed
-	long seekOffset
+	MkFileParserHelper helper
 
 	int attachmentsCount
 
@@ -46,11 +74,13 @@ class MatroskaFileReader {
 	}
 
 	def private void readSeeks() {
-		while(!seeks.empty) {
-			val position = seeks.poll
-			if(!positionsParsed.contains(position)) {
+		while(!helper.seeks.empty) {
+			val position = helper.seeks.poll
+			if(!helper.positionsParsed.contains(position)) {
 				val element = seeker.nextElement(position)
-				readSegmentNode(element as EbmlMasterElement)
+				readSegmentNode(element)
+			} else {
+				println('''the position has already been parsed!''')
 			}
 		}
 	}
@@ -58,12 +88,11 @@ class MatroskaFileReader {
 	def private void init(File file) {
 		result = file.newMkFile
 
+		println('''### «file.name»''')
+
 		attachmentsCount = 0
 
-		seeks = new LinkedList
-
-		positionsParsed = newArrayList
-		seekOffset = -1
+		helper = new MkFileParserHelper
 
 		seeker = new MatroskaFileSeeker(file.toPath)
 	}
@@ -71,10 +100,7 @@ class MatroskaFileReader {
 	def private void dispose() {
 		seeker.dispose()
 
-		seeks = null
-
-		positionsParsed = null
-		seekOffset = -1
+		helper.dispose()
 	}
 
 	def private void readFile() {
@@ -112,7 +138,7 @@ class MatroskaFileReader {
 			throw new RuntimeException("Segment not the second element in the file.")
 		}
 
-		seekOffset = seeker.position
+		helper.setOffset(seeker.position)
 
 		while(parent.hasNext) {
 			val element = parent.nextChild
@@ -122,6 +148,7 @@ class MatroskaFileReader {
 					return
 				}
 				default: {
+					helper.addPositionsParsed(element.offset)
 					readSegmentNode(element)
 				}
 			}
@@ -131,8 +158,6 @@ class MatroskaFileReader {
 	}
 
 	def private boolean readSegmentNode(EbmlElement element) {
-		positionsParsed += element.offset
-
 		switch element.node {
 			case SeekHead: {
 				element.parseSeekHead
@@ -202,7 +227,7 @@ class MatroskaFileReader {
 
 		// ignore cluster
 		if(!Arrays::equals(MatroskaNode::Cluster.id, id)) {
-			seeks.offer(position + seekOffset)
+			helper.offer(position)
 		}
 	}
 
@@ -272,9 +297,6 @@ class MatroskaFileReader {
 					val track = VilimaFactory.eINSTANCE.createMkTrack
 					element.fill(track)
 					result.tracks += track
-				}
-				default: {
-					println("@parseTracks" + element.node)
 				}
 			}
 
