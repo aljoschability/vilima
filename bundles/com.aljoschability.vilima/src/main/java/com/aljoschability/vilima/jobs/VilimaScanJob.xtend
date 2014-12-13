@@ -69,7 +69,7 @@ class VilimaScanJob extends Job {
 		for (file : walker.files) {
 			val started = System.nanoTime();
 
-			manager.add(reader.readFile(file))
+			manager.add(reader.readFile(file.toPath))
 
 			//manager.add(reader.readFile(file.toPath))
 			// TODO: debug

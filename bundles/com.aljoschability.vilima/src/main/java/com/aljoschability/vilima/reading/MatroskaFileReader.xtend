@@ -12,26 +12,32 @@ import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.helpers.MkReaderByter
-import java.io.File
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
 import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
 
-class MkFileParserHelper {
+class MkFileParserSeeker {
+	val MatroskaFileSeeker seeker
+
 	public long offset
 	public Queue<Long> seeks
 	public Collection<Long> positionsParsed
 
-	new() {
+	new(Path path) {
+		seeker = new MatroskaFileSeeker(path)
+
 		seeks = new LinkedList
 		positionsParsed = newArrayList
 		offset = -1
 	}
 
 	def void dispose() {
+		seeker.dispose()
+
 		seeks = null
 		positionsParsed = null
 		offset = -1
@@ -49,20 +55,102 @@ class MkFileParserHelper {
 		positionsParsed += position
 		seeks.remove(position)
 	}
+
+	def nextElement(Long position) {
+		seeker.nextElement(position)
+	}
+
+	def nextElement() {
+		seeker.nextElement()
+	}
+
+	def getPosition() {
+		seeker.position
+	}
+
+	def void skip(EbmlElement element) {
+		seeker.skip(element)
+	}
+
+	def byte[] readBytes(EbmlElement element) {
+		seeker.readBytes(element as EbmlDataElement)
+	}
+
+	def long readLong(EbmlElement element) {
+		seeker.readInteger(element as EbmlDataElement)
+	}
+
+	def double readDouble(EbmlElement element) {
+		seeker.readDouble(element as EbmlDataElement)
+	}
+
+	def long readTimestamp(EbmlElement element) {
+		seeker.readTimestamp(element as EbmlDataElement)
+	}
+
+	def String readString(EbmlElement element) {
+		seeker.readString(element as EbmlDataElement)
+	}
+
+	def EbmlElement nextChild(EbmlElement element) {
+		return seeker.nextChild(element as EbmlMasterElement)
+	}
+
+	def int readInt(EbmlElement element) {
+		seeker.readInteger(element as EbmlDataElement) as int
+	}
+
+	def MkFile newMkFile(Path path) {
+		val file = path.toFile
+		println('''### «file.name»''')
+
+		val result = VilimaFactory::eINSTANCE.createMkFile()
+
+		result.name = file.name
+		result.path = file.parent
+
+		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
+		result.dateModified = attributes.lastModifiedTime.toMillis
+		result.dateCreated = attributes.creationTime.toMillis
+		result.size = attributes.size
+
+		return result
+	}
+
+	def MatroskaNode getNode(EbmlElement element) {
+		MatroskaNode::get(element.id)
+	}
+
+	def long offset(EbmlElement element) {
+		return seeker.position - element.headerSize
+	}
+
+	def String readHex(EbmlElement element) {
+		MkReaderByter::bytesToHex(element.readBytes)
+	}
+
+	def MkTrackType readMkTrackType(EbmlElement element) {
+		MkReaderByter::convertTrackType(element.readLong as byte)
+	}
+
+	def boolean hasNext(EbmlElement element) {
+		if(element instanceof EbmlMasterElement) {
+			return element.hasNext
+		}
+
+		return false
+	}
 }
 
 class MatroskaFileReader {
-	extension MkFileReaderExtension = MkFileReaderExtension::INSTANCE
+	extension MkFileParserSeeker seeker
 
-	MkFile result
-	MatroskaFileSeeker seeker
-
-	MkFileParserHelper helper
+	MkFile file
 
 	int attachmentsCount
 
-	def MkFile readFile(File file) {
-		init(file)
+	def MkFile readFile(Path path) {
+		init(path)
 
 		readFile()
 
@@ -70,13 +158,13 @@ class MatroskaFileReader {
 
 		dispose()
 
-		return result
+		return file
 	}
 
 	def private void readSeeks() {
-		while(!helper.seeks.empty) {
-			val position = helper.seeks.poll
-			if(!helper.positionsParsed.contains(position)) {
+		while(!seeker.seeks.empty) {
+			val position = seeker.seeks.poll
+			if(!seeker.positionsParsed.contains(position)) {
 				val element = seeker.nextElement(position)
 				readSegmentNode(element)
 			} else {
@@ -85,22 +173,16 @@ class MatroskaFileReader {
 		}
 	}
 
-	def private void init(File file) {
-		result = file.newMkFile
+	def private void init(Path path) {
+		seeker = new MkFileParserSeeker(path)
 
-		println('''### «file.name»''')
+		file = path.newMkFile
 
 		attachmentsCount = 0
-
-		helper = new MkFileParserHelper
-
-		seeker = new MatroskaFileSeeker(file.toPath)
 	}
 
 	def private void dispose() {
 		seeker.dispose()
-
-		helper.dispose()
 	}
 
 	def private void readFile() {
@@ -138,7 +220,7 @@ class MatroskaFileReader {
 			throw new RuntimeException("Segment not the second element in the file.")
 		}
 
-		helper.setOffset(seeker.position)
+		seeker.setOffset(seeker.position)
 
 		while(parent.hasNext) {
 			val element = parent.nextChild
@@ -148,7 +230,7 @@ class MatroskaFileReader {
 					return
 				}
 				default: {
-					helper.addPositionsParsed(element.offset)
+					seeker.addPositionsParsed(element.offset)
 					readSegmentNode(element)
 				}
 			}
@@ -227,14 +309,14 @@ class MatroskaFileReader {
 
 		// ignore cluster
 		if(!Arrays::equals(MatroskaNode::Cluster.id, id)) {
-			helper.offer(position)
+			seeker.offer(position)
 		}
 	}
 
 	def private void parseInfo(EbmlElement parent) {
 		val information = parent.createInfo
 		if(information != null) {
-			result.information = information
+			file.information = information
 		}
 	}
 
@@ -296,7 +378,7 @@ class MatroskaFileReader {
 				case TrackEntry: {
 					val track = VilimaFactory.eINSTANCE.createMkTrack
 					element.fill(track)
-					result.tracks += track
+					file.tracks += track
 				}
 			}
 
@@ -410,7 +492,7 @@ class MatroskaFileReader {
 					attachment.id = attachmentsCount
 					element.fill(attachment)
 
-					result.attachments += attachment
+					file.attachments += attachment
 				}
 			}
 
@@ -453,7 +535,7 @@ class MatroskaFileReader {
 					val edition = VilimaFactory::eINSTANCE.createMkEdition()
 					element.fill(edition)
 
-					result.editions += edition
+					file.editions += edition
 				}
 			}
 
@@ -533,7 +615,7 @@ class MatroskaFileReader {
 
 					element.fill(tag)
 
-					result.tags += tag
+					file.tags += tag
 				}
 			}
 
@@ -612,85 +694,5 @@ class MatroskaFileReader {
 
 			element.skip
 		}
-	}
-
-	def private long offset(EbmlElement element) {
-		return seeker.position - element.headerSize
-	}
-
-	def private void skip(EbmlElement element) {
-		seeker.skip(element)
-	}
-
-	def private byte[] readBytes(EbmlElement element) {
-		seeker.readBytes(element as EbmlDataElement)
-	}
-
-	def private long readLong(EbmlElement element) {
-		seeker.readInteger(element as EbmlDataElement)
-	}
-
-	def private double readDouble(EbmlElement element) {
-		seeker.readDouble(element as EbmlDataElement)
-	}
-
-	def private long readTimestamp(EbmlElement element) {
-		seeker.readTimestamp(element as EbmlDataElement)
-	}
-
-	def private String readString(EbmlElement element) {
-		seeker.readString(element as EbmlDataElement)
-	}
-
-	def private EbmlElement nextChild(EbmlElement element) {
-		return seeker.nextChild(element as EbmlMasterElement)
-	}
-
-	def private int readInt(EbmlElement element) {
-		seeker.readInteger(element as EbmlDataElement) as int
-	}
-
-	def private String readHex(EbmlElement element) {
-		MkReaderByter::bytesToHex(element.readBytes)
-	}
-
-	def private MkTrackType readMkTrackType(EbmlElement element) {
-		MkReaderByter::convertTrackType(element.readLong as byte)
-	}
-
-	def private boolean hasNext(EbmlElement element) {
-		if(element instanceof EbmlMasterElement) {
-			return element.hasNext
-		}
-
-		return false
-	}
-}
-
-interface MkFileReaderExtension {
-	val MkFileReaderExtension INSTANCE = new MkFileReaderExtensionImpl
-
-	def MkFile newMkFile(File file)
-
-	def MatroskaNode getNode(EbmlElement element)
-}
-
-class MkFileReaderExtensionImpl implements MkFileReaderExtension {
-	override newMkFile(File file) {
-		val result = VilimaFactory::eINSTANCE.createMkFile()
-
-		result.name = file.name
-		result.path = file.parent
-
-		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
-		result.dateModified = attributes.lastModifiedTime.toMillis
-		result.dateCreated = attributes.creationTime.toMillis
-		result.size = attributes.size
-
-		return result
-	}
-
-	override getNode(EbmlElement element) {
-		MatroskaNode::get(element.id)
 	}
 }

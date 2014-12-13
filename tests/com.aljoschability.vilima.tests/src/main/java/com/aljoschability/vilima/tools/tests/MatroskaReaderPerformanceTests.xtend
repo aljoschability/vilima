@@ -9,13 +9,14 @@ import java.util.concurrent.TimeUnit
 import org.junit.Test
 import com.google.common.io.CharStreams
 import org.junit.BeforeClass
+import java.nio.file.Paths
 
 class MatroskaReaderPerformanceTests {
 	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\attachments\multiattachmenttest (1).mkv'''
 
 	@BeforeClass
 	def static void preload() {
-		new MatroskaFileReader().readFile(new File(PATH))
+		new MatroskaFileReader().readFile(Paths::get(PATH))
 	}
 
 	@Test
@@ -41,12 +42,10 @@ class MatroskaReaderPerformanceTests {
 
 	@Test
 	def void testMatroskaFileReader() {
-		val file = new File(PATH)
-
 		val reader = new MatroskaFileReader
 
 		val watch = Stopwatch::createStarted
-		reader.readFile(file)
+		reader.readFile(Paths::get(PATH))
 		println('''needed «watch.stop.elapsed(TimeUnit::MILLISECONDS)»ms for MatroskaFileReader''')
 	}
 }
