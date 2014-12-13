@@ -9,156 +9,40 @@ import com.aljoschability.vilima.MkInformation
 import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
-import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.VilimaFactory
-import com.aljoschability.vilima.helpers.MkReaderByter
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
-import java.util.Collection
-import java.util.LinkedList
-import java.util.Queue
 
-class MkFileParserSeeker {
-	val MatroskaFileSeeker seeker
-
-	public long offset
-	public Queue<Long> seeks
-	public Collection<Long> positionsParsed
-
-	new(Path path) {
-		seeker = new MatroskaFileSeeker(path)
-
-		seeks = new LinkedList
-		positionsParsed = newArrayList
-		offset = -1
-	}
-
-	def void dispose() {
-		seeker.dispose()
-
-		seeks = null
-		positionsParsed = null
-		offset = -1
-	}
-
-	def offer(long position) {
-		seeks.offer(position + offset)
-	}
-
-	def setOffset(long offset) {
-		this.offset = offset
-	}
-
-	def addPositionsParsed(long position) {
-		positionsParsed += position
-		seeks.remove(position)
-	}
-
-	def nextElement(Long position) {
-		seeker.nextElement(position)
-	}
-
-	def nextElement() {
-		seeker.nextElement()
-	}
-
-	def getPosition() {
-		seeker.position
-	}
-
-	def void skip(EbmlElement element) {
-		seeker.skip(element)
-	}
-
-	def byte[] readBytes(EbmlElement element) {
-		seeker.readBytes(element as EbmlDataElement)
-	}
-
-	def long readLong(EbmlElement element) {
-		seeker.readInteger(element as EbmlDataElement)
-	}
-
-	def double readDouble(EbmlElement element) {
-		seeker.readDouble(element as EbmlDataElement)
-	}
-
-	def long readTimestamp(EbmlElement element) {
-		seeker.readTimestamp(element as EbmlDataElement)
-	}
-
-	def String readString(EbmlElement element) {
-		seeker.readString(element as EbmlDataElement)
-	}
-
-	def EbmlElement nextChild(EbmlElement element) {
-		return seeker.nextChild(element as EbmlMasterElement)
-	}
-
-	def int readInt(EbmlElement element) {
-		seeker.readInteger(element as EbmlDataElement) as int
-	}
-
-	def MkFile newMkFile(Path path) {
-		val file = path.toFile
-		println('''### «file.name»''')
-
-		val result = VilimaFactory::eINSTANCE.createMkFile()
-
-		result.name = file.name
-		result.path = file.parent
-
-		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
-		result.dateModified = attributes.lastModifiedTime.toMillis
-		result.dateCreated = attributes.creationTime.toMillis
-		result.size = attributes.size
-
-		return result
-	}
-
-	def MatroskaNode getNode(EbmlElement element) {
-		MatroskaNode::get(element.id)
-	}
-
-	def long offset(EbmlElement element) {
-		return seeker.position - element.headerSize
-	}
-
-	def String readHex(EbmlElement element) {
-		MkReaderByter::bytesToHex(element.readBytes)
-	}
-
-	def MkTrackType readMkTrackType(EbmlElement element) {
-		MkReaderByter::convertTrackType(element.readLong as byte)
-	}
-
-	def boolean hasNext(EbmlElement element) {
-		if(element instanceof EbmlMasterElement) {
-			return element.hasNext
-		}
-
-		return false
-	}
+class OldMkFileReaderSeeker {
 }
 
-class MatroskaFileReader {
-	extension MkFileParserSeeker seeker
+class MkFileReader {
+	extension MatroskaFileSeeker seeker
 
 	MkFile file
 
 	int attachmentsCount
 
 	def MkFile readFile(Path path) {
-		init(path)
+		seeker = new MatroskaFileSeeker(path)
+
+		file = path.newMkFile
+
+		attachmentsCount = 0
 
 		readFile()
 
 		readSeeks()
 
-		dispose()
+		seeker.dispose()
 
 		return file
+	}
+
+	def private void readFile() {
+		seeker.nextElement.parseEbml
+
+		seeker.nextElement.parseSegment
 	}
 
 	def private void readSeeks() {
@@ -171,24 +55,6 @@ class MatroskaFileReader {
 				println('''the position has already been parsed!''')
 			}
 		}
-	}
-
-	def private void init(Path path) {
-		seeker = new MkFileParserSeeker(path)
-
-		file = path.newMkFile
-
-		attachmentsCount = 0
-	}
-
-	def private void dispose() {
-		seeker.dispose()
-	}
-
-	def private void readFile() {
-		seeker.nextElement.parseEbml
-
-		seeker.nextElement.parseSegment
 	}
 
 	def private void parseEbml(EbmlElement parent) {

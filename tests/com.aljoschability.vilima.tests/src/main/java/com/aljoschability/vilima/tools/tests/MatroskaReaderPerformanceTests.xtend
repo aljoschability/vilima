@@ -1,6 +1,5 @@
 package com.aljoschability.vilima.tools.tests
 
-import com.aljoschability.vilima.reading.MatroskaFileReader
 import com.google.common.base.Stopwatch
 import java.io.BufferedReader
 import java.io.File
@@ -10,13 +9,14 @@ import org.junit.Test
 import com.google.common.io.CharStreams
 import org.junit.BeforeClass
 import java.nio.file.Paths
+import com.aljoschability.vilima.reading.MkFileReader
 
 class MatroskaReaderPerformanceTests {
 	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\attachments\multiattachmenttest (1).mkv'''
 
 	@BeforeClass
 	def static void preload() {
-		new MatroskaFileReader().readFile(Paths::get(PATH))
+		new MkFileReader().readFile(Paths::get(PATH))
 	}
 
 	@Test
@@ -42,7 +42,7 @@ class MatroskaReaderPerformanceTests {
 
 	@Test
 	def void testMatroskaFileReader() {
-		val reader = new MatroskaFileReader
+		val reader = new MkFileReader
 
 		val watch = Stopwatch::createStarted
 		reader.readFile(Paths::get(PATH))

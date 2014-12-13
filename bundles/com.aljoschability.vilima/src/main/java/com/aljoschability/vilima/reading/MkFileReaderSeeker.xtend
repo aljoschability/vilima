@@ -1,0 +1,320 @@
+package com.aljoschability.vilima.reading;
+
+import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkTrackType
+import com.aljoschability.vilima.VilimaFactory
+import com.aljoschability.vilima.helpers.MkReaderByter
+import com.google.common.base.Charsets
+import java.io.ByteArrayInputStream
+import java.io.DataInputStream
+import java.io.IOException
+import java.nio.ByteBuffer
+import java.nio.channels.SeekableByteChannel
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
+import java.nio.file.attribute.BasicFileAttributeView
+import java.util.Collection
+import java.util.LinkedList
+import java.util.Queue
+
+class MatroskaFileSeeker {
+
+	val SeekableByteChannel channel
+
+	val ByteBuffer idBuffer
+
+	val ByteBuffer sizeBuffer
+
+	public long offset
+	public Queue<Long> seeks
+	public Collection<Long> positionsParsed
+
+	def offer(long position) {
+		seeks.offer(position + offset)
+	}
+
+	def setOffset(long offset) {
+		this.offset = offset
+	}
+
+	def addPositionsParsed(long position) {
+		positionsParsed += position
+		seeks.remove(position)
+	}
+
+	def byte[] readBytes(EbmlElement element) {
+		readBytes(element as EbmlDataElement)
+	}
+
+	def long readLong(EbmlElement element) {
+		readInteger(element as EbmlDataElement)
+	}
+
+	def double readDouble(EbmlElement element) {
+		readDouble(element as EbmlDataElement)
+	}
+
+	def long readTimestamp(EbmlElement element) {
+		val data = readBytes(element as EbmlDataElement)
+		MkFileReaderSeekerExtension::readTimestamp(data)
+	}
+
+	def String readString(EbmlElement element) {
+		readString(element as EbmlDataElement)
+	}
+
+	def EbmlElement nextChild(EbmlElement element) {
+		return nextChild(element as EbmlMasterElement)
+	}
+
+	def int readInt(EbmlElement element) {
+		readInteger(element as EbmlDataElement) as int
+	}
+
+	def MkFile newMkFile(Path path) {
+		val file = path.toFile
+		println('''### «file.name»''')
+
+		val result = VilimaFactory::eINSTANCE.createMkFile()
+
+		result.name = file.name
+		result.path = file.parent
+
+		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
+		result.dateModified = attributes.lastModifiedTime.toMillis
+		result.dateCreated = attributes.creationTime.toMillis
+		result.size = attributes.size
+
+		return result
+	}
+
+	def MatroskaNode getNode(EbmlElement element) {
+		MatroskaNode::get(element.id)
+	}
+
+	def long offset(EbmlElement element) {
+		return position - element.headerSize
+	}
+
+	def String readHex(EbmlElement element) {
+		MkReaderByter::bytesToHex(element.readBytes)
+	}
+
+	def MkTrackType readMkTrackType(EbmlElement element) {
+		MkReaderByter::convertTrackType(element.readLong as byte)
+	}
+
+	def boolean hasNext(EbmlElement element) {
+		if(element instanceof EbmlMasterElement) {
+			return element.hasNext
+		}
+
+		return false
+	}
+
+	new(Path path) {
+
+		seeks = new LinkedList
+		positionsParsed = newArrayList
+		offset = -1
+
+		channel = Files::newByteChannel(path, StandardOpenOption::READ)
+
+		idBuffer = ByteBuffer::allocateDirect(8)
+		sizeBuffer = ByteBuffer::allocateDirect(8)
+	}
+
+	def private static byte[] toArray(ByteBuffer buffer) {
+		val result = newByteArrayOfSize(buffer.limit)
+		buffer.get(result)
+		return result
+	}
+
+	def EbmlElement nextElement() {
+
+		// read element id
+		val id = toArray(readElementId())
+
+		// read element data size
+		val dataSize = toArray(readDataSize())
+
+		return MkFileReaderSeekerExtension::createElement(id, dataSize)
+	}
+
+	def private ByteBuffer readElementId() {
+		idBuffer.clear()
+
+		// read leading bit
+		idBuffer.limit(1)
+		if(channel.read(idBuffer) != 1) {
+			throw new RuntimeException()
+		}
+
+		// convert length
+		val length = MkFileReaderSeekerExtension::getLength(idBuffer.get(0))
+
+		// read rest of id
+		idBuffer.limit(length)
+		if(channel.read(idBuffer) != length - 1) {
+			throw new RuntimeException()
+		}
+
+		idBuffer.flip()
+
+		return idBuffer
+	}
+
+	def private ByteBuffer readDataSize() {
+		sizeBuffer.clear()
+
+		// read leading bit
+		sizeBuffer.limit(1)
+		if(channel.read(sizeBuffer) != 1) {
+			throw new RuntimeException()
+		}
+
+		// convert length
+		val length = MkFileReaderSeekerExtension::getLength(sizeBuffer.get(0))
+
+		// read rest of id
+		sizeBuffer.limit(length)
+		if(channel.read(sizeBuffer) != length - 1) {
+			throw new RuntimeException()
+		}
+
+		// clear the first byte
+		MkFileReaderSeekerExtension::clearFirstByte(sizeBuffer, length)
+
+		sizeBuffer.flip()
+
+		return sizeBuffer
+	}
+
+	def EbmlElement nextChild(EbmlMasterElement parent) {
+		if(!parent.hasNext()) {
+			return null
+		}
+
+		val element = nextElement()
+		if(element == null) {
+			return null
+		}
+
+		parent.add(element)
+
+		return element
+	}
+
+	def long getPosition() {
+		return channel.position()
+	}
+
+	def void dispose() {
+		channel.close()
+
+		seeks = null
+		positionsParsed = null
+		offset = -1
+	}
+
+	def private long skip(long offset) {
+		if(offset <= 0 || offset > Integer.MAX_VALUE) {
+			return 0
+		}
+
+		val pos = channel.position();
+		val len = channel.size();
+		var newpos = pos + offset;
+		if(newpos > len) {
+			newpos = len
+		}
+		channel.position(newpos)
+
+		return newpos - pos
+	}
+
+	def void skip(EbmlElement element) {
+		skip(element.getSkipSize())
+	}
+
+	def byte[] readBytes(EbmlDataElement element) {
+		if(!element.read()) {
+			readData(element)
+		}
+
+		return element.getData()
+	}
+
+	def double readDouble(EbmlDataElement element) {
+		readBytes(element)
+
+		if(EbmlElementType.FLOAT.equals(element.getType())) {
+			if(element.getSize() == 4) {
+				var float value = 0;
+				val bIS = new ByteArrayInputStream(element.getData());
+				val dIS = new DataInputStream(bIS);
+				value = dIS.readFloat();
+				return value;
+
+			} else if(element.getSize() == 8) {
+				var double value = 0;
+				val bIS = new ByteArrayInputStream(element.getData());
+				val dIS = new DataInputStream(bIS);
+				value = dIS.readDouble();
+				return value;
+			}
+		}
+
+		throw new RuntimeException();
+	}
+
+	def long readInteger(EbmlDataElement element) {
+		readBytes(element)
+
+		switch (element.getType()) {
+			case UINTEGER: {
+				return MkFileReaderSeekerExtension::uintToLong(element.getData());
+			}
+			default: {
+				throw new RuntimeException();
+			}
+		}
+	}
+
+	def Boolean readBoolean(EbmlDataElement element) {
+		return readInteger(element) == 1;
+	}
+
+	def String readString(EbmlDataElement element) {
+		readBytes(element);
+
+		if(EbmlElementType.ASCII.equals(element.getType())) {
+			return new String(element.getData(), Charsets.US_ASCII);
+		} else if(EbmlElementType.STRING.equals(element.getType())) {
+			return new String(element.getData(), Charsets.UTF_8);
+		}
+
+		throw new RuntimeException();
+	}
+
+	def private void readData(EbmlDataElement element) throws IOException {
+		val buffer = ByteBuffer.allocateDirect(element.getSize() as int);
+
+		channel.read(buffer);
+
+		buffer.flip();
+
+		element.setData(toArray(buffer));
+
+		if(element.getSize() > Integer.MAX_VALUE) {
+			throw new RuntimeException();
+		}
+	}
+
+	def EbmlElement nextElement(long position) throws IOException {
+		channel.position(position);
+		return nextElement();
+	}
+
+}
