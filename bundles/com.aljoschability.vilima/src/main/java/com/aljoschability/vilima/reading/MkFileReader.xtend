@@ -10,11 +10,10 @@ import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.VilimaFactory
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
-
-class OldMkFileReaderSeeker {
-}
 
 class MkFileReader {
 	extension MatroskaFileSeeker seeker
@@ -23,17 +22,34 @@ class MkFileReader {
 
 	int attachmentsCount
 
+	def private MkFile newMkFile(Path path) {
+		val file = path.toFile
+		println('''### «file.name»''')
+
+		val result = VilimaFactory::eINSTANCE.createMkFile()
+
+		result.name = file.name
+		result.path = file.parent
+
+		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
+		result.dateModified = attributes.lastModifiedTime.toMillis
+		result.dateCreated = attributes.creationTime.toMillis
+		result.size = attributes.size
+
+		return result
+	}
+
 	def MkFile readFile(Path path) {
+
+		// reset everything
 		seeker = new MatroskaFileSeeker(path)
-
 		file = path.newMkFile
-
 		attachmentsCount = 0
 
 		readFile()
-
 		readSeeks()
 
+		// dispose
 		seeker.dispose()
 
 		return file

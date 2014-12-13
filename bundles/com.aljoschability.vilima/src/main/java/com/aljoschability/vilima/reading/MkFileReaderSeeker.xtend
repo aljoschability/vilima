@@ -1,8 +1,6 @@
 package com.aljoschability.vilima.reading;
 
-import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrackType
-import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.helpers.MkReaderByter
 import com.google.common.base.Charsets
 import java.io.ByteArrayInputStream
@@ -13,7 +11,6 @@ import java.nio.channels.SeekableByteChannel
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
@@ -29,6 +26,17 @@ class MatroskaFileSeeker {
 	public long offset
 	public Queue<Long> seeks
 	public Collection<Long> positionsParsed
+
+	new(Path path) {
+		seeks = new LinkedList
+		positionsParsed = newArrayList
+		offset = -1
+
+		channel = Files::newByteChannel(path, StandardOpenOption::READ)
+
+		idBuffer = ByteBuffer::allocateDirect(8)
+		sizeBuffer = ByteBuffer::allocateDirect(8)
+	}
 
 	def offer(long position) {
 		seeks.offer(position + offset)
@@ -72,23 +80,6 @@ class MatroskaFileSeeker {
 		readInteger(element as EbmlDataElement) as int
 	}
 
-	def MkFile newMkFile(Path path) {
-		val file = path.toFile
-		println('''### «file.name»''')
-
-		val result = VilimaFactory::eINSTANCE.createMkFile()
-
-		result.name = file.name
-		result.path = file.parent
-
-		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
-		result.dateModified = attributes.lastModifiedTime.toMillis
-		result.dateCreated = attributes.creationTime.toMillis
-		result.size = attributes.size
-
-		return result
-	}
-
 	def MatroskaNode getNode(EbmlElement element) {
 		MatroskaNode::get(element.id)
 	}
@@ -111,18 +102,6 @@ class MatroskaFileSeeker {
 		}
 
 		return false
-	}
-
-	new(Path path) {
-
-		seeks = new LinkedList
-		positionsParsed = newArrayList
-		offset = -1
-
-		channel = Files::newByteChannel(path, StandardOpenOption::READ)
-
-		idBuffer = ByteBuffer::allocateDirect(8)
-		sizeBuffer = ByteBuffer::allocateDirect(8)
 	}
 
 	def private static byte[] toArray(ByteBuffer buffer) {
