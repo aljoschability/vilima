@@ -21,7 +21,7 @@ import java.util.LinkedList
 import java.util.Queue
 
 class MatroskaFileReader {
-	extension ReaderHelper helper = new ReaderHelper
+	extension MkFileReaderExtension = MkFileReaderExtension::INSTANCE
 
 	MkFile result
 	MatroskaFileSeeker seeker
@@ -53,20 +53,10 @@ class MatroskaFileReader {
 				readSegmentNode(element as EbmlMasterElement)
 			}
 		}
-
-	// remove already read elements
-	//		for (Long position : positionsParsed) {
-	//			positionsNeeded.remove(position)
-	//		}
-	// read the referenced elements
-	//		for (Long position : positionsNeeded) {
-	//			val element = seeker.nextElement(position)
-	//			readSegmentNode(element as EbmlMasterElement)
-	//		}
 	}
 
 	def private void init(File file) {
-		result = file.createMkFile
+		result = file.newMkFile
 
 		attachmentsCount = 0
 
@@ -313,7 +303,7 @@ class MatroskaFileReader {
 			element.skip
 		}
 
-		// XXX: rewrite
+		// fill codec
 		if(codecId == "V_MPEG4/ISO/AVC") {
 			track.codec = '''«codecId»/«codecPrivate.get(1)»/«codecPrivate.get(3)»'''
 		} else if(codecId == "V_MS/VFW/FOURCC") {
@@ -323,10 +313,7 @@ class MatroskaFileReader {
 		}
 	}
 
-	def private void fillVideo(
-		EbmlElement parent,
-		MkTrack track
-	) {
+	def private void fillVideo(EbmlElement parent, MkTrack track) {
 		while(parent.hasNext) {
 			val element = parent.nextChild
 
@@ -631,8 +618,14 @@ class MatroskaFileReader {
 	}
 }
 
-class ReaderHelper {
-	def MkFile createMkFile(File file) {
+interface MkFileReaderExtension {
+	val MkFileReaderExtension INSTANCE = new MkFileReaderExtensionImpl
+
+	def MkFile newMkFile(File file)
+}
+
+class MkFileReaderExtensionImpl implements MkFileReaderExtension {
+	override newMkFile(File file) {
 		val result = VilimaFactory::eINSTANCE.createMkFile()
 
 		result.name = file.name

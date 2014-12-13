@@ -105,11 +105,9 @@ class MkTrack
 	/* Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed). */
 	Integer videoAspectRatioType = "0"
 	/* Sampling frequency in Hz. */
-	Double audioSamplingFrequency = "8000.0"
-	/* Real output sampling frequency in Hz (used for SBR techniques). */
-	Double audioOutputSamplingFrequency
+	Double audioSamplingFrequency
 	/* Numbers of channels in the track. */
-	Integer audioChannels = "1"
+	Integer audioChannels
 }
 
 enum MkTrackType
