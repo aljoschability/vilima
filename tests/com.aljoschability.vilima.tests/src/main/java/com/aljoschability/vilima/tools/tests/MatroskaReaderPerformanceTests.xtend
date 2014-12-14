@@ -1,51 +1,46 @@
 package com.aljoschability.vilima.tools.tests
 
-import com.google.common.base.Stopwatch
-import java.io.BufferedReader
-import java.io.File
-import java.io.InputStreamReader
-import java.util.concurrent.TimeUnit
-import org.junit.Test
-import com.google.common.io.CharStreams
-import org.junit.BeforeClass
-import java.nio.file.Paths
 import com.aljoschability.vilima.reading.MkFileReader
+import com.google.common.base.Stopwatch
+import java.io.File
+import java.nio.file.Paths
+import java.util.concurrent.TimeUnit
+import org.junit.BeforeClass
+import org.junit.Test
 
 class MatroskaReaderPerformanceTests {
-	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\attachments\multiattachmenttest (1).mkv'''
+	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\'''
 
 	@BeforeClass
 	def static void preload() {
-		new MkFileReader().readFile(Paths::get(PATH))
+		new MkFileReader().createMkFile(Paths::get(PATH, "cover_art.mkv"))
 	}
 
 	@Test
 	def void testMkvInfo() {
-		val file = new File(PATH)
-
-		val command = '''mkvinfo "«file»"'''
-
-		println('''running the following command line:''')
-		println(command)
-		println('''result:''')
+		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
 
 		val watch = Stopwatch::createStarted
-		val process = Runtime::getRuntime.exec(command)
-		if(process.waitFor == 0) {
-			val is = new BufferedReader(new InputStreamReader(process.inputStream))
-
-			println(CharStreams::toString(is))
-
-			println('''needed «watch.stop.elapsed(TimeUnit::MILLISECONDS)»ms for mkvinfo''')
+		for (file : files) {
+			Runtime::getRuntime.exec('''mkvinfo "«file»"''').waitFor
 		}
+		watch.stop
+
+		println(''' mkvinfo («files.size»): «watch.elapsed(TimeUnit::MILLISECONDS)»ms''')
 	}
 
 	@Test
 	def void testMatroskaFileReader() {
+		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
+
 		val reader = new MkFileReader
 
 		val watch = Stopwatch::createStarted
-		reader.readFile(Paths::get(PATH))
-		println('''needed «watch.stop.elapsed(TimeUnit::MILLISECONDS)»ms for MatroskaFileReader''')
+		for (file : files) {
+			reader.createMkFile(file.toPath)
+		}
+		watch.stop
+
+		println('''internal («files.size»): «watch.elapsed(TimeUnit::MILLISECONDS)»ms''')
 	}
 }
