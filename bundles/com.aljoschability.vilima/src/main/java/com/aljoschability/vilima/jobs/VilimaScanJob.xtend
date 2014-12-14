@@ -69,7 +69,10 @@ class VilimaScanJob extends Job {
 		for (file : walker.files) {
 			val started = System.nanoTime();
 
-			manager.add(reader.readFile(file.toPath))
+			val mkFile = reader.createMkFile(file.toPath)
+			if(mkFile != null) {
+				manager.add(mkFile)
+			}
 
 			//manager.add(reader.readFile(file.toPath))
 			// TODO: debug
@@ -77,13 +80,14 @@ class VilimaScanJob extends Job {
 
 			//val text = '''«elapsed»ms needed for "«file.name»".'''
 			val text = file.name + "\t" + elapsed
-//			println(text)
+
+			//			println(text)
 			log.append(text + "\n")
 		}
 
 		manager.refresh();
-		//com.google.common.io.Files::write(log, new File(LOG_PATH), Charsets::UTF_8)
 
+		//com.google.common.io.Files::write(log, new File(LOG_PATH), Charsets::UTF_8)
 		//		manager.refresh();
 		return Status::OK_STATUS
 	}
@@ -98,7 +102,7 @@ class VilimaFileWalker extends SimpleFileVisitor<Path> {
 
 	override visitFile(Path path, BasicFileAttributes attrs) throws IOException {
 		val file = path.toFile
-		if (file.name.toLowerCase.endsWith(".mkv")) {
+		if(file.name.toLowerCase.endsWith(".mkv")) {
 			files += file
 		}
 
