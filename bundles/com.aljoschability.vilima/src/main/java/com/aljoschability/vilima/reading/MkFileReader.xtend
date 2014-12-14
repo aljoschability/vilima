@@ -14,87 +14,41 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
 
 class MkFileReader {
-	extension MatroskaFileSeeker seeker
+	extension MatroskaFileSeeker seeker = new MatroskaFileSeeker()
 
 	MkFile file
 
-	int attachmentsCount
-
-	def private MkFile newMkFile(Path path) {
-		val file = path.toFile
-		println('''### «file.name»''')
-
-		val result = VilimaFactory::eINSTANCE.createMkFile()
-
-		result.name = file.name
-		result.path = file.parent
-
-		val attributes = Files::getFileAttributeView(file.toPath, BasicFileAttributeView).readAttributes
-		result.dateModified = attributes.lastModifiedTime.toMillis
-		result.dateCreated = attributes.creationTime.toMillis
-		result.size = attributes.size
-
-		return result
-	}
-
-	def MkFile readFile(Path path) {
-
-		// reset everything
-		seeker = new MatroskaFileSeeker(path)
-		file = path.newMkFile
-		attachmentsCount = 0
-
-		readFile()
-		readSeeks()
-
-		// dispose
-		seeker.dispose()
-
+	@Deprecated
+	def private static MkFile newMkFile(Procedure1<MkFile> procedure) {
+		val file = VilimaFactory::eINSTANCE.createMkFile
+		procedure.apply(file)
 		return file
 	}
 
-	def private void readFile() {
-		seeker.nextElement.parseEbml
+	def MkFile createMkFile(Path path) {
+		val attributes = Files::getFileAttributeView(path, BasicFileAttributeView).readAttributes
+		file = newMkFile[
+			name = path.toFile.name
+			path = path.toFile.parent
+			dateModified = attributes.lastModifiedTime.toMillis
+			dateCreated = attributes.creationTime.toMillis
+			size = attributes.size
+		]
+
+		seeker.initialize(path)
+
+		seeker.skipEbmlHeader
 
 		seeker.nextElement.parseSegment
-	}
 
-	def private void readSeeks() {
-		while(!seeker.seeks.empty) {
-			val position = seeker.seeks.poll
-			if(!seeker.positionsParsed.contains(position)) {
-				val element = seeker.nextElement(position)
-				readSegmentNode(element)
-			} else {
-				println('''the position has already been parsed!''')
-			}
-		}
-	}
+		readSeeks()
 
-	def private void parseEbml(EbmlElement parent) {
-		if(!MatroskaNode::EBML.matches(parent)) {
-			throw new RuntimeException("EBML root element could not be read.")
-		}
+		seeker.dispose()
 
-		while(parent.hasNext) {
-			val element = parent.nextChild
-
-			switch element.node {
-				case DocType: {
-					val value = element.readString
-
-					if(value != "matroska" && value != "webm") {
-						throw new RuntimeException("EBML document type cannot be read.")
-					}
-				}
-				default: {
-				}
-			}
-
-			element.skip
-		}
+		return file
 	}
 
 	def private void parseSegment(EbmlElement parent) {
@@ -118,6 +72,13 @@ class MkFileReader {
 			}
 
 			element.skip
+		}
+	}
+
+	def private void readSeeks() {
+		while(hasSeeks) {
+			val element = nextElement(nextSeekPosition)
+			readSegmentNode(element)
 		}
 	}
 
@@ -368,13 +329,13 @@ class MkFileReader {
 
 			switch element.node {
 				case AttachedFile: {
-					attachmentsCount++
-
 					val attachment = VilimaFactory::eINSTANCE.createMkAttachment
-					attachment.id = attachmentsCount
+					attachment.id = file.attachments.size
 					element.fill(attachment)
 
 					file.attachments += attachment
+				}
+				default: {
 				}
 			}
 
@@ -401,6 +362,8 @@ class MkFileReader {
 				}
 				case FileData: {
 					attachment.size = element.size
+				}
+				default: {
 				}
 			}
 

@@ -16,26 +16,50 @@ import java.util.LinkedList
 import java.util.Queue
 
 class MatroskaFileSeeker {
+	val ByteBuffer bufferHead
+	val ByteBuffer bufferSize
 
-	val SeekableByteChannel channel
+	SeekableByteChannel channel
 
-	val ByteBuffer idBuffer
-
-	val ByteBuffer sizeBuffer
-
-	public long offset
-	public Queue<Long> seeks
+	long offset
+	Queue<Long> seeks
 	public Collection<Long> positionsParsed
 
-	new(Path path) {
+	new() {
+		bufferHead = ByteBuffer::allocateDirect(8)
+		bufferSize = ByteBuffer::allocateDirect(8)
+	}
+
+	def void initialize(Path path) {
 		seeks = new LinkedList
 		positionsParsed = newArrayList
 		offset = -1
 
-		channel = Files::newByteChannel(path, StandardOpenOption::READ)
+		if(channel != null) {
+			println('''the channel has not been closed!''')
+			channel.close
+		}
 
-		idBuffer = ByteBuffer::allocateDirect(8)
-		sizeBuffer = ByteBuffer::allocateDirect(8)
+		channel = Files::newByteChannel(path, StandardOpenOption::READ)
+	}
+
+	def void dispose() {
+		channel.close()
+		channel = null
+
+		seeks = null
+		positionsParsed = null
+		offset = -1
+	}
+
+	def boolean hasSeeks() {
+		seeks -= positionsParsed
+
+		return !seeks.empty
+	}
+
+	def long nextSeekPosition() {
+		seeks.poll
 	}
 
 	def offer(long position) {
@@ -122,52 +146,52 @@ class MatroskaFileSeeker {
 	}
 
 	def private ByteBuffer readElementId() {
-		idBuffer.clear()
+		bufferHead.clear()
 
 		// read leading bit
-		idBuffer.limit(1)
-		if(channel.read(idBuffer) != 1) {
+		bufferHead.limit(1)
+		if(channel.read(bufferHead) != 1) {
 			throw new RuntimeException()
 		}
 
 		// convert length
-		val length = MkFileReaderSeekerExtension::getLength(idBuffer.get(0))
+		val length = MkFileReaderSeekerExtension::getLength(bufferHead.get(0))
 
 		// read rest of id
-		idBuffer.limit(length)
-		if(channel.read(idBuffer) != length - 1) {
+		bufferHead.limit(length)
+		if(channel.read(bufferHead) != length - 1) {
 			throw new RuntimeException()
 		}
 
-		idBuffer.flip()
+		bufferHead.flip()
 
-		return idBuffer
+		return bufferHead
 	}
 
 	def private ByteBuffer readDataSize() {
-		sizeBuffer.clear()
+		bufferSize.clear()
 
 		// read leading bit
-		sizeBuffer.limit(1)
-		if(channel.read(sizeBuffer) != 1) {
+		bufferSize.limit(1)
+		if(channel.read(bufferSize) != 1) {
 			throw new RuntimeException()
 		}
 
 		// convert length
-		val length = MkFileReaderSeekerExtension::getLength(sizeBuffer.get(0))
+		val length = MkFileReaderSeekerExtension::getLength(bufferSize.get(0))
 
 		// read rest of id
-		sizeBuffer.limit(length)
-		if(channel.read(sizeBuffer) != length - 1) {
+		bufferSize.limit(length)
+		if(channel.read(bufferSize) != length - 1) {
 			throw new RuntimeException()
 		}
 
 		// clear the first byte
-		MkFileReaderSeekerExtension::clearFirstByte(sizeBuffer, length)
+		MkFileReaderSeekerExtension::clearFirstByte(bufferSize, length)
 
-		sizeBuffer.flip()
+		bufferSize.flip()
 
-		return sizeBuffer
+		return bufferSize
 	}
 
 	def EbmlElement nextChild(EbmlMasterElement parent) {
@@ -187,14 +211,6 @@ class MatroskaFileSeeker {
 
 	def long getPosition() {
 		return channel.position()
-	}
-
-	def void dispose() {
-		channel.close()
-
-		seeks = null
-		positionsParsed = null
-		offset = -1
 	}
 
 	def private long skip(long offset) {
@@ -296,4 +312,29 @@ class MatroskaFileSeeker {
 		return nextElement();
 	}
 
+	def void skipEbmlHeader() {
+		val parent = nextElement
+
+		if(!MatroskaNode::EBML.matches(parent)) {
+			throw new RuntimeException("EBML root element could not be read.")
+		}
+
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case DocType: {
+					val value = element.readString
+
+					if(value != "matroska" && value != "webm") {
+						throw new RuntimeException("EBML document type cannot be read.")
+					}
+				}
+				default: {
+				}
+			}
+
+			element.skip
+		}
+	}
 }
