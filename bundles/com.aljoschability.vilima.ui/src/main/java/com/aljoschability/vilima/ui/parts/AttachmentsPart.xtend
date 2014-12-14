@@ -2,7 +2,6 @@ package com.aljoschability.vilima.ui.parts;
 
 import com.aljoschability.vilima.MkAttachment
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.extensions.VilimaFormatter
 import com.google.common.io.Files
 import java.io.File
 import java.nio.file.Paths
@@ -25,6 +24,10 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
+import org.eclipse.jface.resource.JFaceResources
+import org.eclipse.swt.events.ControlAdapter
+import org.eclipse.swt.events.ControlEvent
+import com.aljoschability.vilima.extensions.VilimaFormatter
 
 class AttachmentsPart {
 	@Inject Display display
@@ -33,11 +36,7 @@ class AttachmentsPart {
 
 	MkFile input
 
-	val Map<String, Image> fileImages
-
-	new() {
-		fileImages = newLinkedHashMap
-	}
+	val Map<String, Image> fileImages = newLinkedHashMap
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
@@ -46,11 +45,20 @@ class AttachmentsPart {
 		table.linesVisible = true
 
 		viewer = new TableViewer(table)
-		viewer.contentProvider = new VilimaAttachmentsViewerContentProvider
+		viewer.contentProvider = new ArrayContentProvider {
+			override getElements(Object element) {
+				if(element instanceof MkFile) {
+					return element.attachments
+				}
+
+				return super.getElements(element)
+			}
+		}
+
 		viewer.addDoubleClickListener(
 			[
 				val att = (selection as IStructuredSelection).firstElement as MkAttachment
-				val mkfile = att.eContainer as MkFile
+				val mkfile = att.file
 				val file = Paths::get(mkfile.path, mkfile.name).toFile
 				val aFile = File::createTempFile(att.name, "." + Files::getFileExtension(att.name))
 				val id = mkfile.attachments.indexOf(att)
@@ -58,121 +66,97 @@ class AttachmentsPart {
 				println(command)
 			])
 
-		createNameColumn()
-		createMimeColumn()
-		createSizeColumn()
-		createDescriptionColumn()
+		// columns
+		createAttachmentColumn("Name", 160, SWT::LEAD, false, true,
+			[ MkAttachment a |
+				String.valueOf(a.name)
+			])
+		createAttachmentColumn("ID", 27, SWT::CENTER, true, false,
+			[ MkAttachment a |
+				String.valueOf(a.id)
+			])
+		createAttachmentColumn("UID", 180, SWT::LEAD, true, false,
+			[ MkAttachment a |
+				String.valueOf(a.uid)
+			])
+		createAttachmentColumn("Size", 100, SWT::TRAIL, false, false,
+			[ MkAttachment a |
+				VilimaFormatter::fileSize(a.size)
+			])
+		createAttachmentColumn("Type", 160, SWT::LEAD, false, false,
+			[ MkAttachment a |
+				String.valueOf(a.mimeType)
+			])
+		createAttachmentColumn("Description", 72, SWT::LEAD, false, false,
+			[ MkAttachment a |
+				String.valueOf(a.description)
+			])
 
 		viewer.input = input
 		input = null
 	}
 
-	def private void createNameColumn() {
-		val column = new TableColumn(viewer.table, SWT::LEAD)
+	def private createAttachmentColumn(String title, int width, int style, boolean monospaced, boolean showIcon,
+		(MkAttachment)=>String function) {
+		val column = new TableColumn(viewer.table, style)
 
 		column.moveable = true
 		column.resizable = true
-		column.width = 160
-		column.text = "Name"
+		column.width = width
+		column.text = title
+
+		column.addControlListener(
+			new ControlAdapter {
+				override controlResized(ControlEvent e) {
+					println((e.widget as TableColumn).width)
+				}
+			})
 
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if(element instanceof MkAttachment) {
-					return String.valueOf(element.getName)
+					return function.apply(element)
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if(element instanceof MkAttachment) {
-					val name = element.getName
-					if(name != null) {
-						val index = name.indexOf(".")
-						if(index != -1) {
-							val ext = name.substring(index).toLowerCase
-							return getFileImage(ext)
-						}
+				if(showIcon) {
+					if(element instanceof MkAttachment) {
+						return getFileImage(element)
 					}
 				}
 
 				return null
 			}
-		}
-	}
 
-	def private void createSizeColumn() {
-		val column = new TableColumn(viewer.table, SWT::TRAIL)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 80
-		column.text = "Size"
-
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
-				if(element instanceof MkAttachment) {
-					return VilimaFormatter::fileSize(element.size)
+			override getFont(Object element) {
+				if(monospaced) {
+					return JFaceResources::getTextFont
 				}
-				return ""
 			}
 		}
 	}
 
-	def private void createMimeColumn() {
-		val column = new TableColumn(viewer.table, SWT::LEAD)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 120
-		column.text = "MIME-Type"
-
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
-				if(element instanceof MkAttachment) {
-					if(element.getMimeType != null) {
-						return element.getMimeType
+	def private Image getFileImage(MkAttachment element) {
+		val name = element.getName
+		if(name != null) {
+			val index = name.indexOf(".")
+			if(index != -1) {
+				val ext = name.substring(index).toLowerCase
+				var image = fileImages.get(ext)
+				if(image == null) {
+					val program = Program::findProgram(ext)
+					if(program != null) {
+						val data = program.imageData
+						image = new Image(display, data)
+						fileImages.put(ext, image)
 					}
 				}
-				return ""
+				return image
 			}
 		}
-	}
-
-	def private void createDescriptionColumn() {
-		val column = new TableColumn(viewer.table, SWT::LEAD)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 160
-		column.text = "Description"
-
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
-				if(element instanceof MkAttachment) {
-					if(element.getDescription != null) {
-						return element.getDescription
-					}
-				}
-				return ""
-			}
-		}
-	}
-
-	def private Image getFileImage(String ext) {
-		var image = fileImages.get(ext)
-		if(image == null) {
-			val program = Program::findProgram(ext)
-			if(program != null) {
-				val data = program.imageData
-				image = new Image(display, data)
-				fileImages.put(ext, image)
-			}
-		}
-		return image
 	}
 
 	@Inject
