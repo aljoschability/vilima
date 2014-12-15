@@ -2,6 +2,7 @@ package com.aljoschability.vilima.ui.parts;
 
 import com.aljoschability.vilima.MkAttachment
 import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.extensions.VilimaFormatter
 import com.google.common.io.Files
 import java.io.File
 import java.nio.file.Paths
@@ -12,48 +13,51 @@ import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.services.IServiceConstants
+import org.eclipse.jface.resource.JFaceResources
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
 import org.eclipse.jface.viewers.IStructuredSelection
-import org.eclipse.jface.viewers.TableViewer
-import org.eclipse.jface.viewers.TableViewerColumn
+import org.eclipse.jface.viewers.ITreeContentProvider
+import org.eclipse.jface.viewers.TreeViewer
+import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.swt.SWT
 import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.program.Program
 import org.eclipse.swt.widgets.Composite
-import org.eclipse.swt.widgets.Display
-import org.eclipse.swt.widgets.Table
-import org.eclipse.swt.widgets.TableColumn
-import org.eclipse.jface.resource.JFaceResources
-import org.eclipse.swt.events.ControlAdapter
-import org.eclipse.swt.events.ControlEvent
-import com.aljoschability.vilima.extensions.VilimaFormatter
+import org.eclipse.swt.widgets.Tree
+import org.eclipse.swt.widgets.TreeColumn
+
+class AttachmentsTreeContentProvider extends ArrayContentProvider implements ITreeContentProvider {
+	override getElements(Object element) {
+		if(element instanceof MkFile) {
+			return element.attachments
+		}
+
+		return super.getElements(element)
+	}
+
+	override getChildren(Object element) { newArrayOfSize(0) }
+
+	override getParent(Object element) {}
+
+	override hasChildren(Object element) { false }
+}
 
 class AttachmentsPart {
-	@Inject Display display
+	val Map<String, Image> fileImages = newLinkedHashMap
 
-	TableViewer viewer
+	TreeViewer viewer
 
 	MkFile input
 
-	val Map<String, Image> fileImages = newLinkedHashMap
-
 	@PostConstruct
 	def postConstruct(Composite parent) {
-		val table = new Table(parent, SWT::MULTI.bitwiseOr(SWT::FULL_SELECTION))
-		table.headerVisible = true
-		table.linesVisible = true
+		val tree = new Tree(parent, SWT::MULTI.bitwiseOr(SWT::FULL_SELECTION))
+		tree.headerVisible = true
+		tree.linesVisible = true
 
-		viewer = new TableViewer(table)
-		viewer.contentProvider = new ArrayContentProvider {
-			override getElements(Object element) {
-				if(element instanceof MkFile) {
-					return element.attachments
-				}
-
-				return super.getElements(element)
-			}
-		}
+		viewer = new TreeViewer(tree)
+		viewer.contentProvider = new AttachmentsTreeContentProvider
 
 		viewer.addDoubleClickListener(
 			[
@@ -98,21 +102,14 @@ class AttachmentsPart {
 
 	def private createAttachmentColumn(String title, int width, int style, boolean monospaced, boolean showIcon,
 		(MkAttachment)=>String function) {
-		val column = new TableColumn(viewer.table, style)
+		val column = new TreeColumn(viewer.tree, style)
 
 		column.moveable = true
 		column.resizable = true
 		column.width = width
 		column.text = title
 
-		column.addControlListener(
-			new ControlAdapter {
-				override controlResized(ControlEvent e) {
-					println((e.widget as TableColumn).width)
-				}
-			})
-
-		val viewerColumn = new TableViewerColumn(viewer, column)
+		val viewerColumn = new TreeViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if(element instanceof MkAttachment) {
@@ -150,7 +147,7 @@ class AttachmentsPart {
 					val program = Program::findProgram(ext)
 					if(program != null) {
 						val data = program.imageData
-						image = new Image(display, data)
+						image = new Image(viewer.control.display, data)
 						fileImages.put(ext, image)
 					}
 				}
@@ -170,7 +167,7 @@ class AttachmentsPart {
 			}
 		}
 
-		if(viewer != null && !viewer.table.disposed) {
+		if(viewer != null && !viewer.control.disposed) {
 			viewer.input = input
 		}
 	}
@@ -182,15 +179,5 @@ class AttachmentsPart {
 		for (key : fileImages.keySet) {
 			fileImages.get(key).dispose()
 		}
-	}
-}
-
-class VilimaAttachmentsViewerContentProvider extends ArrayContentProvider {
-	override getElements(Object element) {
-		if(element instanceof MkFile) {
-			return element.attachments
-		}
-
-		return super.getElements(element)
 	}
 }
