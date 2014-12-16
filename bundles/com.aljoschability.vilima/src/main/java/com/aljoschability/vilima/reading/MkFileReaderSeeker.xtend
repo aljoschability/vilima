@@ -264,12 +264,12 @@ class MatroskaFileSeeker {
 		throw new RuntimeException();
 	}
 
-	def long readInteger(EbmlDataElement element) {
+	def long readInteger(EbmlElement element) {
 		readBytes(element)
 
 		switch (element.getType()) {
 			case UINTEGER: {
-				return MkFileReaderSeekerExtension::uintToLong(element.getData());
+				return MkFileReaderSeekerExtension::uintToLong(element.data);
 			}
 			default: {
 				throw new RuntimeException();
@@ -277,7 +277,13 @@ class MatroskaFileSeeker {
 		}
 	}
 
-	def Boolean readBoolean(EbmlDataElement element) {
+	def byte[] getData(EbmlElement element) {
+		if(element instanceof EbmlDataElement) {
+			return element.data
+		}
+	}
+
+	def Boolean readBoolean(EbmlElement element) {
 		return readInteger(element) == 1;
 	}
 
