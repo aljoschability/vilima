@@ -9,47 +9,62 @@ import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.services.IServiceConstants
+import org.eclipse.jface.resource.JFaceResources
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
 import org.eclipse.jface.viewers.IStructuredSelection
-import org.eclipse.jface.viewers.TableViewer
-import org.eclipse.jface.viewers.TableViewerColumn
+import org.eclipse.jface.viewers.ITreeContentProvider
+import org.eclipse.jface.viewers.TreeViewer
+import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
-import org.eclipse.swt.widgets.Table
-import org.eclipse.swt.widgets.TableColumn
+import org.eclipse.swt.widgets.Tree
+import org.eclipse.swt.widgets.TreeColumn
+import com.aljoschability.vilima.MkChapterText
+
+class ChaptersTreeContentProvider extends ArrayContentProvider implements ITreeContentProvider {
+	override getElements(Object element) {
+		if(element instanceof MkFile) {
+			return element.editions
+		}
+
+		if(element instanceof MkEdition) {
+			return element.chapters
+		}
+
+		if(element instanceof MkChapter) {
+			return element.texts
+		}
+
+		return super.getElements(element)
+	}
+
+	override getChildren(Object element) { getElements(element) }
+
+	override getParent(Object element) {}
+
+	override hasChildren(Object element) { !element.children.empty }
+}
 
 class ChaptersPart {
-	TableViewer viewer
+	TreeViewer viewer
 
-	Object input
+	MkFile input
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
-		val table = new Table(parent, SWT::MULTI.bitwiseOr(SWT::FULL_SELECTION))
-		table.headerVisible = true
-		table.linesVisible = true
+		val tree = new Tree(parent, SWT::MULTI.bitwiseOr(SWT::FULL_SELECTION))
+		tree.headerVisible = true
+		tree.linesVisible = true
 
-		viewer = new TableViewer(table)
-		viewer.contentProvider = new VilimaChaptersViewerContentProvider
+		viewer = new TreeViewer(tree)
+		viewer.contentProvider = new ChaptersTreeContentProvider
 
-		createTitleColumn()
-		createStartColumn()
-
-		viewer.input = input
-	}
-
-	def private void createTitleColumn() {
-		val column = new TableColumn(viewer.table, SWT::LEAD)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 160
-		column.text = "Title"
-
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
+		createChapterColumn("Title", 160, SWT::LEAD, false,
+			[ element |
+				if(element instanceof MkEdition) {
+					return '''«element.uid»|«element.flagDefault»|«element.flagHidden»'''
+				}
 				if(element instanceof MkChapter) {
 					val b = new StringBuilder()
 					for (display : element.texts) {
@@ -60,32 +75,43 @@ class ChaptersPart {
 					}
 					return b.toString().substring(0, b.length - 2)
 				}
+				if(element instanceof MkChapterText) {
+				}
+				return String.valueOf(element)
+			])
 
-				return ""
-			}
-		}
-	}
-
-	def private void createStartColumn() {
-		val column = new TableColumn(viewer.table, SWT::TRAIL)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 90
-		column.text = "Start"
-
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
+		createChapterColumn("Start", 90, SWT::LEAD, true,
+			[ element |
 				if(element instanceof MkEdition) {
 					return "Edition " + element.getUid
 				}
-
 				if(element instanceof MkChapter) {
-					return VilimaFormatter::getTime(element.start / 1000000d, true)
+					return VilimaFormatter::getTime(element.timeStart / 1000000d, true)
 				}
+				return String.valueOf(element)
+			])
 
-				return ""
+		viewer.input = input
+	}
+
+	def private createChapterColumn(String title, int width, int style, boolean monospaced, (Object)=>String function) {
+		val column = new TreeColumn(viewer.tree, style)
+
+		column.moveable = true
+		column.resizable = true
+		column.width = width
+		column.text = title
+
+		val viewerColumn = new TreeViewerColumn(viewer, column)
+		viewerColumn.labelProvider = new ColumnLabelProvider() {
+			override getText(Object element) {
+				return function.apply(element)
+			}
+
+			override getFont(Object element) {
+				if(monospaced) {
+					return JFaceResources::getTextFont
+				}
 			}
 		}
 	}
@@ -94,27 +120,15 @@ class ChaptersPart {
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
 		input = null
 
-		if(selection != null && selection.size == 1) {
+		if(selection != null && selection.size() == 1) {
 			val selected = selection.firstElement
 			if(selected instanceof MkFile) {
-				if(selected.editions.size == 1) {
-					input = selected.editions.get(0)
-				}
+				input = selected
 			}
 		}
 
 		if(viewer != null && !viewer.control.disposed) {
 			viewer.input = input
 		}
-	}
-}
-
-class VilimaChaptersViewerContentProvider extends ArrayContentProvider {
-	override getElements(Object element) {
-		if(element instanceof MkEdition) {
-			return element.chapters
-		}
-
-		return newArrayOfSize(0)
 	}
 }
