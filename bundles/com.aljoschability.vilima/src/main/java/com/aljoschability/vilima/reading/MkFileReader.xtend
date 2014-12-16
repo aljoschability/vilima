@@ -414,8 +414,20 @@ class MkFileReader {
 			val element = parent.nextChild
 
 			switch element.node {
+				case ChapterUID: {
+					chapter.uid = element.readLong
+				}
 				case ChapterTimeStart: {
-					chapter.start = element.readLong
+					chapter.timeStart = element.readLong
+				}
+				case ChapterTimeEnd: {
+					chapter.timeEnd = element.readLong
+				}
+				case ChapterFlagHidden: {
+					chapter.flagHidden = element.readBoolean
+				}
+				case ChapterFlagEnabled: {
+					chapter.flagEnabled = element.readBoolean
 				}
 				case ChapterDisplay: {
 					val text = VilimaFactory.eINSTANCE.createMkChapterText()
@@ -423,6 +435,9 @@ class MkFileReader {
 					element.fill(text)
 
 					chapter.texts += text
+				}
+				default: {
+					println(element.node)
 				}
 			}
 
