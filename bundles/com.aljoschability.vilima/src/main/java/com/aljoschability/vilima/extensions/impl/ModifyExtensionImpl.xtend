@@ -10,7 +10,8 @@ import java.io.InputStreamReader
 
 class ModifyExtensionImpl implements ModifyExtension {
 	override writeAll(MkInformation information) {
-		val command = create(information.file).edit(information)
+		val command = create(information.file)
+		command.append(''' --edit info''')
 
 		// title
 		command.set("title", information.title)
@@ -36,8 +37,9 @@ class ModifyExtensionImpl implements ModifyExtension {
 		execute(command.toString)
 	}
 
-	override write(MkInformation information, String name, String value) {
-		val command = create(information.file).edit(information)
+	override writeInfo(MkFile file, String name, String value) {
+		val command = create(file)
+		command.append(''' --edit info''')
 
 		command.set(name, value)
 
@@ -46,10 +48,6 @@ class ModifyExtensionImpl implements ModifyExtension {
 
 	def private static create(MkFile file) {
 		new StringBuilder('''mkvpropedit "«MkFileExtension::INSTANCE.toFile(file)»"''')
-	}
-
-	def private static edit(StringBuilder builder, MkInformation information) {
-		builder.append(''' --edit info''')
 	}
 
 	def private static set(StringBuilder builder, String name, String rawValue) {

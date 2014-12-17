@@ -13,7 +13,7 @@ class SegmentTitleColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("title", value)) {
+			if(file.writeInfo("title", value)) {
 				file.information.title = value
 
 				return true
@@ -30,7 +30,7 @@ class SegmentUidColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("segment-uid", value)) {
+			if(file.writeInfo("segment-uid", value)) {
 				file.information.uid = value
 
 				return true
@@ -51,7 +51,7 @@ class SegmentPreviousUidColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("prev-uid", value)) {
+			if(file.writeInfo("prev-uid", value)) {
 				file.information.previousUid = value
 
 				return true
@@ -72,7 +72,7 @@ class SegmentNextUidColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("next-uid", value)) {
+			if(file.writeInfo("next-uid", value)) {
 				file.information.nextUid = value
 
 				return true
@@ -93,7 +93,7 @@ class SegmentFilenameColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("segment-filename", value)) {
+			if(file.writeInfo("segment-filename", value)) {
 				file.information.filename = value
 
 				return true
@@ -112,7 +112,7 @@ class SegmentPreviousFilenameColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("prev-filename", value)) {
+			if(file.writeInfo("prev-filename", value)) {
 				file.information.previousFilename = value
 
 				return true
@@ -131,7 +131,7 @@ class SegmentNextFilenameColumn extends AbstractStringColumn {
 
 	override protected set(MkFile file, String value) {
 		if(file.string != value) {
-			if(file.information.write("next-filename", value)) {
+			if(file.writeInfo("next-filename", value)) {
 				file.information.nextFilename = value
 
 				return true
