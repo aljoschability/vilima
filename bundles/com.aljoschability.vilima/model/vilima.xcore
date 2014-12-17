@@ -146,11 +146,11 @@ class MkEdition
 	/* A unique ID to identify the edition. It's useful for tagging an edition. */
 	Long uid
 	/* If an edition is hidden (1), it should not be available to the user interface (but still to Control Tracks; see flag notes). */
-	Boolean flagHidden
+	boolean flagHidden = "false"
 	/* If a flag is set (1) the edition should be used as the default one. */
-	Boolean flagDefault
+	boolean flagDefault = "false"
 	/* Specify if the chapters can be defined multiple times and the order to play them is enforced. */
-	Boolean flagOrdered
+	boolean flagOrdered = "false"
 	/* Contains the chapters of the edition. */
 	contains MkChapter[] chapters
 }
@@ -167,9 +167,9 @@ class MkChapter
 	/* Timestamp of the end of Chapter (timestamp excluded, not scaled). */
 	Long timeEnd
 	/* If a chapter is hidden (1), it should not be available to the user interface (but still to Control Tracks; see flag notes). */
-	Boolean flagHidden
+	boolean flagHidden = "false"
 	/* Specify wether the chapter is enabled. It can be enabled/disabled by a Control Track. When disabled, the movie should skip all the content between the TimeStart and TimeEnd of this chapter (see flag notes). */
-	Boolean flagEnabled
+	boolean flagEnabled = "true"
 	/* Contains all possible strings to use for the chapter display. */
 	contains MkChapterText[] texts
 }

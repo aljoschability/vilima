@@ -382,6 +382,8 @@ class MkFileReader {
 
 					file.editions += edition
 				}
+				default: {
+				}
 			}
 
 			element.skip
@@ -396,12 +398,23 @@ class MkFileReader {
 				case EditionUID: {
 					edition.uid = element.readLong
 				}
+				case EditionFlagDefault: {
+					edition.flagDefault = element.readBoolean
+				}
+				case EditionFlagHidden: {
+					edition.flagHidden = element.readBoolean
+				}
+				case EditionFlagOrdered: {
+					edition.flagOrdered = element.readBoolean
+				}
 				case ChapterAtom: {
 					val chapter = VilimaFactory::eINSTANCE.createMkChapter
 
 					element.fill(chapter)
 
 					edition.chapters += chapter
+				}
+				default: {
 				}
 			}
 
@@ -437,7 +450,6 @@ class MkFileReader {
 					chapter.texts += text
 				}
 				default: {
-					println(element.node)
 				}
 			}
 
@@ -456,8 +468,8 @@ class MkFileReader {
 				case ChapLanguage: {
 					text.languages += element.readString
 				}
-				case ChapCountry: {
-					// TODO: ChapCountry not used
+				default: {
+					println(element.node)
 				}
 			}
 
