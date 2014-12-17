@@ -1,7 +1,6 @@
 package com.aljoschability.vilima.reading;
 
 import com.aljoschability.vilima.MkTrackType
-import com.aljoschability.vilima.helpers.MkReaderByter
 import com.google.common.base.Charsets
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
@@ -113,11 +112,11 @@ class MatroskaFileSeeker {
 	}
 
 	def String readHex(EbmlElement element) {
-		MkReaderByter::bytesToHex(element.readBytes)
+		MkFileReaderSeekerExtension::bytesToHex(element.readBytes)
 	}
 
 	def MkTrackType readMkTrackType(EbmlElement element) {
-		MkReaderByter::convertTrackType(element.readLong as byte)
+		MkFileReaderSeekerExtension::convertTrackType(element.readLong as byte)
 	}
 
 	def boolean hasNext(EbmlElement element) {
