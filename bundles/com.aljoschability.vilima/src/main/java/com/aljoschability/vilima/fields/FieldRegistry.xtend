@@ -1,15 +1,13 @@
 package com.aljoschability.vilima.fields
 
-import java.util.List
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.core.runtime.Platform
-import org.eclipse.core.runtime.IConfigurationElement
-import java.util.Map
-import com.aljoschability.vilima.fields.impl.FieldDefinitionTool
 import com.aljoschability.vilima.Activator
-import com.aljoschability.vilima.fields.impl.FieldDefinitionImpl
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
 import com.aljoschability.vilima.fields.impl.FieldDefinitionCategoryImpl
+import com.aljoschability.vilima.fields.impl.FieldDefinitionImpl
+import com.aljoschability.vilima.fields.impl.FieldDefinitionTool
+import java.util.List
+import java.util.Map
+import org.eclipse.core.runtime.Platform
+import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
 
 interface FieldRegistry {
 	def List<FieldDefinitionCategory> getAllCategories()

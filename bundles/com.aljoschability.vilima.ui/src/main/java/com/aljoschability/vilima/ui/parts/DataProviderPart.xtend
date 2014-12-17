@@ -1,15 +1,21 @@
 package com.aljoschability.vilima.ui.parts
 
 //import com.aljoschability.vilima.dapro.tmdb.TmdbProvider
+
 import com.aljoschability.vilima.ScrapeMovie
 import com.aljoschability.vilima.scraper.ScraperRegistry
 import com.aljoschability.vilima.ui.Activator
+import java.net.URL
 import java.text.NumberFormat
 import javax.annotation.PostConstruct
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
+import org.eclipse.jface.resource.ImageDescriptor
+import org.eclipse.jface.resource.JFaceColors
+import org.eclipse.jface.resource.JFaceResources
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
+import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.jface.viewers.ITreeContentProvider
 import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.jface.viewers.TreeViewerColumn
@@ -18,19 +24,11 @@ import org.eclipse.swt.events.SelectionAdapter
 import org.eclipse.swt.events.SelectionEvent
 import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.widgets.Group
+import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
 
 import static com.aljoschability.vilima.ui.parts.DataProviderPart.*
-import org.eclipse.swt.widgets.Label
-import org.eclipse.jface.viewers.IStructuredSelection
-import com.aljoschability.vilima.scraper.MovieCandidate
-import org.eclipse.jface.resource.ImageDescriptor
-import java.net.URL
-import org.eclipse.swt.graphics.Image
-import org.eclipse.swt.widgets.Group
-import org.eclipse.jface.resource.JFaceResources
-import org.eclipse.jface.resource.JFaceColors
-import org.eclipse.swt.graphics.Point
 
 class DataProviderPart {
 

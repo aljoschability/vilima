@@ -1,7 +1,8 @@
 package com.aljoschability.vilima.ui.parts
 
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.VilimaLibrary
+import com.aljoschability.vilima.MkTag
+import com.aljoschability.vilima.MkTagNode
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
@@ -9,17 +10,13 @@ import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.services.IServiceConstants
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
+import org.eclipse.jface.viewers.ColumnLabelProvider
 import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.jface.viewers.TreeViewer
+import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Tree
-import org.eclipse.swt.widgets.TreeColumn
-import org.eclipse.jface.viewers.TreeViewerColumn
-import org.eclipse.jface.viewers.CellLabelProvider
-import org.eclipse.jface.viewers.ColumnLabelProvider
-import com.aljoschability.vilima.MkTagNode
-import com.aljoschability.vilima.MkTag
 
 class MetadataPart {
 	MkFile input

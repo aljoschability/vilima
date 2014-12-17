@@ -1,6 +1,7 @@
 package com.aljoschability.vilima.jobs
 
 import com.aljoschability.vilima.IContentManager
+import com.aljoschability.vilima.reading.MkFileReader
 import java.io.File
 import java.io.IOException
 import java.nio.file.FileVisitResult
@@ -13,8 +14,6 @@ import java.util.Collection
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Status
 import org.eclipse.core.runtime.jobs.Job
-import com.google.common.base.Charsets
-import com.aljoschability.vilima.reading.MkFileReader
 
 class VilimaScanJob extends Job {
 	static val LOG_PATH = '''D:\downloads\vilima__log__test.log'''

@@ -19,10 +19,9 @@ import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.swt.SWT
 import org.eclipse.swt.graphics.Color
 import org.eclipse.swt.graphics.Font
+import org.eclipse.swt.widgets.Display
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.Data
-import org.eclipse.jface.resource.JFaceColors
-import org.eclipse.swt.widgets.Display
 
 @Accessors class MkFileColumnCategoryExtension {
 	val String namespace
