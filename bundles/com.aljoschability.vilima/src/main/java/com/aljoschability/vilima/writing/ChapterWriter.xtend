@@ -1,5 +1,6 @@
 package com.aljoschability.vilima.writing
 
+import com.aljoschability.vilima.Activator
 import com.aljoschability.vilima.MkChapter
 import com.aljoschability.vilima.MkChapterText
 import com.aljoschability.vilima.MkEdition
@@ -12,8 +13,6 @@ import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 
 class ChapterWriter {
-	val static DEBUG = true
-
 	def boolean write(MkFile file) {
 		val mkFile = Paths::get(file.path, file.name)
 		val content = file.chapterFileContent
@@ -31,24 +30,13 @@ class ChapterWriter {
 	}
 
 	def static private boolean execute(String command) {
-		if(DEBUG) {
-			println(command)
-		}
-
 		val process = Runtime::getRuntime.exec(command)
 		if(process.waitFor != 0) {
 			val message = CharStreams::toString(new InputStreamReader(process.inputStream))
 
-			//Activator::get.error(message)
-			if(DEBUG) {
-				println(message)
-			}
+			Activator::get.error(message)
 
 			return false
-		}
-
-		if(DEBUG) {
-			println(CharStreams::toString(new InputStreamReader(process.inputStream)))
 		}
 
 		return true
