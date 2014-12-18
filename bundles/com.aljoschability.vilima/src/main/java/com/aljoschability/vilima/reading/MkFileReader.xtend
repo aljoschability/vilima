@@ -469,11 +469,15 @@ class MkFileReader {
 					text.languages += element.readString
 				}
 				default: {
-					println(element.node)
 				}
 			}
 
 			element.skip
+		}
+
+		// add default language when nothing was set
+		if(text.languages.empty) {
+			text.languages += "eng"
 		}
 	}
 
