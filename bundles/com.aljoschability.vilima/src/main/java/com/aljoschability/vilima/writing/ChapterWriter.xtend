@@ -113,7 +113,12 @@ class ChapterWriter {
 		return 0
 	}
 
-	def private static String toTime(Long time) {
+	@Deprecated
+	def static String toTime(Long time) {
+		if(time == null) {
+			return ""
+		}
+
 		val text = new StringBuilder
 
 		// hours
