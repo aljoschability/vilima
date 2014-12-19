@@ -152,12 +152,14 @@ class MkEdition
 	/* Specify if the chapters can be defined multiple times and the order to play them is enforced. */
 	boolean flagOrdered = "false"
 	/* Contains the chapters of the edition. */
-	contains MkChapter[] chapters
+	contains MkChapter[] chapters opposite edition
 }
 
 /* Represents a chapter of an edition. */
 class MkChapter
 {
+	/* The edition the chapter belongs to. */
+	container MkEdition edition opposite chapters
 	/* A unique ID to identify the Chapter. */
 	Long uid
 	/* A unique string ID to identify the Chapter. Use for WebVTT cue identifier storage. */
