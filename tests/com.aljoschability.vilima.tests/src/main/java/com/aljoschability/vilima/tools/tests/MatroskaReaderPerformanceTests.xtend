@@ -17,6 +17,7 @@ class MatroskaReaderPerformanceTests {
 	@BeforeClass
 	def static void preload() {
 		new MkFileReader().createMkFile(Paths::get(PATH, "cover_art.mkv"))
+		new ResourceSetImpl().getResource(URI::createFileURI(Paths::get(PATH, "cover_art.mkv").toString), true)
 	}
 
 	@Test
@@ -24,14 +25,6 @@ class MatroskaReaderPerformanceTests {
 		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
 
 		val resourceSet = new ResourceSetImpl
-
-		val factory = new MkResourceFactory
-
-		val extToFactMap = resourceSet.resourceFactoryRegistry.extensionToFactoryMap
-		extToFactMap.put("mkv", factory)
-		extToFactMap.put("mk3d", factory)
-		extToFactMap.put("mka", factory)
-		extToFactMap.put("mks", factory)
 
 		val watch = Stopwatch::createStarted
 		for (file : files) {
