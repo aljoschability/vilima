@@ -10,14 +10,29 @@
 		Aljoscha Hark <mail@aljoschability.com> - initial API and implementation
 -->
 <plugin>
-   <extension-point id="scraper" name="Meta Data Scraper" schema="schema/scraper.exsd"/>
-   <extension-point id="fields" name="File Field" schema="schema/fields.exsd"/>
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated vilima -->
-      <package
-            uri="http://www.aljoschability.com/vilima/2014"
-            class="com.aljoschability.vilima.VilimaPackage"
-            genModel="model/vilima.xcore"/>
-   </extension>
+	<extension-point id="scraper" name="Meta Data Scraper" schema="schema/scraper.exsd"/>
+	<extension-point id="fields" name="File Field" schema="schema/fields.exsd"/>
+
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package
+			uri="http://www.aljoschability.com/vilima/2014"
+			class="com.aljoschability.vilima.VilimaPackage"
+			genModel="model/vilima.xcore"/>
+	</extension>
+
+	<extension point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="com.aljoschability.vilima.emf.MkResourceFactory"
+			type="mk3d"/>
+		<parser
+			class="com.aljoschability.vilima.emf.MkResourceFactory"
+			type="mka"/>
+		<parser
+			class="com.aljoschability.vilima.emf.MkResourceFactory"
+			type="mkv"/>
+		<parser
+			class="com.aljoschability.vilima.emf.MkResourceFactory"
+			type="mks"/>
+	</extension>
 
 </plugin>
