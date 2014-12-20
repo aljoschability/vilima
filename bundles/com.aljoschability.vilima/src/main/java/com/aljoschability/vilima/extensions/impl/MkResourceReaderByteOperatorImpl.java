@@ -4,9 +4,8 @@ import java.nio.ByteBuffer;
 
 import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator;
 
-public class MkResourceReaderByteOperatorImpl implements
-		MkResourceReaderByteOperator {
-	private static final long UNIX_EPOCH_DELAY = 978307200;
+public class MkResourceReaderByteOperatorImpl implements MkResourceReaderByteOperator {
+	private static final long TIME_OFFSET = 978307200;
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
 	@Override
@@ -73,7 +72,7 @@ public class MkResourceReaderByteOperatorImpl implements
 		}
 
 		l /= 1000000000;
-		l += UNIX_EPOCH_DELAY;
+		l += TIME_OFFSET;
 
 		return l * 1000;
 	}

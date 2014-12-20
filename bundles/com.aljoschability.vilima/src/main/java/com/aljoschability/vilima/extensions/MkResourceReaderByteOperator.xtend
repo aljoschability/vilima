@@ -4,7 +4,7 @@ import java.nio.ByteBuffer
 import com.aljoschability.vilima.extensions.impl.MkResourceReaderByteOperatorImpl
 
 interface MkResourceReaderByteOperator {
-	val MkResourceReaderByteOperator INSTANCE = new MkResourceReaderByteOperatorImpl
+	val INSTANCE = new MkResourceReaderByteOperatorImpl()
 
 	def long bytesToLong(byte[] bytes)
 
