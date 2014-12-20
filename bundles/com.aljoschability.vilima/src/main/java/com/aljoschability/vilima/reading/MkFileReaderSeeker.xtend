@@ -14,6 +14,7 @@ import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
 import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
+import java.util.Arrays
 
 class MatroskaFileSeeker {
 	val ByteBuffer bufferHead
@@ -164,6 +165,7 @@ class MatroskaFileSeeker {
 		val node = MatroskaNode.get(id)
 
 		if(node == null) {
+			println('''unknown EBML element created: id=«Arrays::toString(id)»; hex=«bytesToHex(id)»''')
 			return new EbmlUnknownElement(id, headerSize, size)
 		} else if(EbmlElementType::MASTER == node.type) {
 			return new EbmlMasterElement(node, headerSize, size);
