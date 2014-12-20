@@ -9,7 +9,6 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.junit.BeforeClass
 import org.junit.Test
-import com.aljoschability.vilima.emf.MkResourceFactory
 
 class MatroskaReaderPerformanceTests {
 	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\'''
