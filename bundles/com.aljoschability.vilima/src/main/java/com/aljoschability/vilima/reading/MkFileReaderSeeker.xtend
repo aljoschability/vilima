@@ -13,6 +13,7 @@ import java.nio.file.StandardOpenOption
 import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
+import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
 
 class MatroskaFileSeeker {
 	val ByteBuffer bufferHead
@@ -88,7 +89,8 @@ class MatroskaFileSeeker {
 
 	def long readTimestamp(EbmlElement element) {
 		val data = readBytes(element as EbmlDataElement)
-		MkFileReaderSeekerExtension::readTimestamp(data)
+
+		return readTimestamp(data)
 	}
 
 	def String readString(EbmlElement element) {
@@ -112,11 +114,21 @@ class MatroskaFileSeeker {
 	}
 
 	def String readHex(EbmlElement element) {
-		MkFileReaderSeekerExtension::bytesToHex(element.readBytes)
+		bytesToHex(element.readBytes)
 	}
 
 	def MkTrackType readMkTrackType(EbmlElement element) {
-		MkFileReaderSeekerExtension::convertTrackType(element.readLong as byte)
+		val value = element.readLong
+
+		switch value {
+			case 0x01: return MkTrackType::VIDEO
+			case 0x02: return MkTrackType::AUDIO
+			case 0x03: return MkTrackType::COMPLEX
+			case 0x10: return MkTrackType::LOGO
+			case 0x11: return MkTrackType::SUBTITLE
+			case 0x20: return MkTrackType::CONTROL
+			default: throw new RuntimeException("cannot convert track type from " + value)
+		}
 	}
 
 	def boolean hasNext(EbmlElement element) {
@@ -141,7 +153,23 @@ class MatroskaFileSeeker {
 		// read element data size
 		val dataSize = toArray(readDataSize())
 
-		return MkFileReaderSeekerExtension::createElement(id, dataSize)
+		return createElement(id, dataSize)
+	}
+
+	extension MkResourceReaderByteOperator = MkResourceReaderByteOperator::INSTANCE
+
+	def private EbmlElement createElement(byte[] id, byte[] dataSize) {
+		val headerSize = id.length + dataSize.length
+		val size = bytesToLong(dataSize)
+		val node = MatroskaNode.get(id)
+
+		if(node == null) {
+			return new EbmlUnknownElement(id, headerSize, size)
+		} else if(EbmlElementType::MASTER == node.type) {
+			return new EbmlMasterElement(node, headerSize, size);
+		} else {
+			return new EbmlDataElement(node, headerSize, size);
+		}
 	}
 
 	def private ByteBuffer readElementId() {
@@ -154,7 +182,7 @@ class MatroskaFileSeeker {
 		}
 
 		// convert length
-		val length = MkFileReaderSeekerExtension::getLength(bufferHead.get(0))
+		val length = getLength(bufferHead.get(0))
 
 		// read rest of id
 		bufferHead.limit(length)
@@ -177,7 +205,7 @@ class MatroskaFileSeeker {
 		}
 
 		// convert length
-		val length = MkFileReaderSeekerExtension::getLength(bufferSize.get(0))
+		val length = getLength(bufferSize.get(0))
 
 		// read rest of id
 		bufferSize.limit(length)
@@ -186,7 +214,7 @@ class MatroskaFileSeeker {
 		}
 
 		// clear the first byte
-		MkFileReaderSeekerExtension::clearFirstByte(bufferSize, length)
+		clearFirstByte(bufferSize, length)
 
 		bufferSize.flip()
 
@@ -268,7 +296,7 @@ class MatroskaFileSeeker {
 
 		switch (element.getType()) {
 			case UINTEGER: {
-				return MkFileReaderSeekerExtension::uintToLong(element.data);
+				return bytesToLongUnsigned(element.data);
 			}
 			default: {
 				throw new RuntimeException();

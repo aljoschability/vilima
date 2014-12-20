@@ -5,16 +5,18 @@ import com.aljoschability.vilima.MkChapter
 import com.aljoschability.vilima.MkChapterText
 import com.aljoschability.vilima.MkEdition
 import com.aljoschability.vilima.MkFile
+import com.aljoschability.vilima.MkSegment
 import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.VilimaFactory
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
+import org.eclipse.emf.common.util.URI
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
-import com.aljoschability.vilima.MkSegment
 
 class MkFileReader {
 	extension MatroskaFileSeeker seeker = new MatroskaFileSeeker()
@@ -570,5 +572,16 @@ class MkFileReader {
 
 			element.skip
 		}
+	}
+
+	def MkFile read(URI uri) {
+		if(uri.file) {
+			return createMkFile(Paths::get(uri.toFileString))
+		}
+		return null
+	}
+
+	def void close() {
+		dispose()
 	}
 }

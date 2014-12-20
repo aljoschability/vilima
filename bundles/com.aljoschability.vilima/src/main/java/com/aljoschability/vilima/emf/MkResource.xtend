@@ -3,9 +3,10 @@ package com.aljoschability.vilima.emf
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
+import com.aljoschability.vilima.reading.MkFileReader
 
 class MkResource extends ResourceImpl {
-	MkResourceReader reader = new MkResourceReader
+	MkFileReader reader = new MkFileReader
 
 	new(URI uri) {
 		super(uri)
