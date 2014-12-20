@@ -6,4 +6,4 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: %bundle.vendor
 Fragment-Host: com.aljoschability.vilima
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.junit
+Require-Bundle: org.junit;bundle-version="4.11.0"
