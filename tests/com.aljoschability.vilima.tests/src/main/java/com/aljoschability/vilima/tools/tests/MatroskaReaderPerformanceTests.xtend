@@ -5,8 +5,11 @@ import com.google.common.base.Stopwatch
 import java.io.File
 import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
+import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
 import org.junit.BeforeClass
 import org.junit.Test
+import com.aljoschability.vilima.emf.MkResourceFactory
 
 class MatroskaReaderPerformanceTests {
 	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\'''
@@ -17,12 +20,41 @@ class MatroskaReaderPerformanceTests {
 	}
 
 	@Test
+	def void testMkResource() {
+		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
+
+		val resourceSet = new ResourceSetImpl
+
+		val factory = new MkResourceFactory
+
+		val extToFactMap = resourceSet.resourceFactoryRegistry.extensionToFactoryMap
+		extToFactMap.put("mkv", factory)
+		extToFactMap.put("mk3d", factory)
+		extToFactMap.put("mka", factory)
+		extToFactMap.put("mks", factory)
+
+		val watch = Stopwatch::createStarted
+		for (file : files) {
+			val uri = URI::createFileURI(file.toString)
+
+			val r = resourceSet.getResource(uri, true)
+
+			println(r.contents.get(0))
+		}
+		watch.stop
+
+		println('''resource («files.size»): «watch.elapsed(TimeUnit::MILLISECONDS)»ms''')
+	}
+
+	@Test
 	def void testMkvInfo() {
 		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
 
 		val watch = Stopwatch::createStarted
 		for (file : files) {
 			Runtime::getRuntime.exec('''mkvinfo "«file»"''').waitFor
+
+		//println(file)
 		}
 		watch.stop
 
@@ -37,7 +69,9 @@ class MatroskaReaderPerformanceTests {
 
 		val watch = Stopwatch::createStarted
 		for (file : files) {
-			reader.createMkFile(file.toPath)
+			val mkFile = reader.createMkFile(file.toPath)
+
+		//println(mkFile)
 		}
 		watch.stop
 
