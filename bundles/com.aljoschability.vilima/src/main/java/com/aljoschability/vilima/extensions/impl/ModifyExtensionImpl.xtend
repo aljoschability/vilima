@@ -2,14 +2,14 @@ package com.aljoschability.vilima.extensions.impl
 
 import com.aljoschability.vilima.Activator
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkInformation
+import com.aljoschability.vilima.MkSegment
 import com.aljoschability.vilima.extensions.MkFileExtension
 import com.aljoschability.vilima.extensions.ModifyExtension
 import com.google.common.io.CharStreams
 import java.io.InputStreamReader
 
 class ModifyExtensionImpl implements ModifyExtension {
-	override writeAll(MkInformation information) {
+	override writeAll(MkSegment information) {
 		val command = create(information.file)
 		command.append(''' --edit info''')
 

@@ -43,7 +43,7 @@ class MatroskaFileSeeker {
 	}
 
 	def void dispose() {
-		channel.close()
+		channel?.close()
 		channel = null
 
 		seeks = null

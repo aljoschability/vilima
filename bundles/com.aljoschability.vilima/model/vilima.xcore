@@ -22,7 +22,7 @@ class MkFile
 	/* The date/time of the last file modification. */
 	Long[1] dateModified
 	/* The segment information of the Matroska container. */
-	contains MkInformation[1] information opposite file
+	contains MkSegment[1] information opposite file
 	/* The tracks contained in the Matroska container. */
 	contains MkTrack[] tracks
 	/* The attachment inside the Matroska container. */
@@ -34,7 +34,7 @@ class MkFile
 }
 
 /* This contains all the information about the segment of a Matroska container. */
-class MkInformation
+class MkSegment
 {
 	/* The file the segment information belongs to. */
 	container MkFile file opposite information

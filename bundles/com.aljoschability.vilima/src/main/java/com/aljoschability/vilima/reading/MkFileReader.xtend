@@ -5,7 +5,6 @@ import com.aljoschability.vilima.MkChapter
 import com.aljoschability.vilima.MkChapterText
 import com.aljoschability.vilima.MkEdition
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.MkInformation
 import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
@@ -15,6 +14,7 @@ import java.nio.file.Path
 import java.nio.file.attribute.BasicFileAttributeView
 import java.util.Arrays
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
+import com.aljoschability.vilima.MkSegment
 
 class MkFileReader {
 	extension MatroskaFileSeeker seeker = new MatroskaFileSeeker()
@@ -163,8 +163,8 @@ class MkFileReader {
 		}
 	}
 
-	def private MkInformation createInfo(EbmlElement parent) {
-		val information = VilimaFactory::eINSTANCE.createMkInformation
+	def private MkSegment createInfo(EbmlElement parent) {
+		val information = VilimaFactory::eINSTANCE.createMkSegment
 
 		while(parent.hasNext) {
 			val element = parent.nextChild
