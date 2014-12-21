@@ -34,7 +34,7 @@ class TagsWriter {
 		val command = '''mkvpropedit "«realFile»" --tags global:"«tagFile»"'''
 		val process = Runtime::getRuntime.exec(command)
 
-		if (process.waitFor == 0) {
+		if(process.waitFor == 0) {
 			//tagFile.delete
 		}
 
@@ -66,8 +66,8 @@ class TagsWriter {
 
 	def private void writeTagTargets(MkTag tag, int indent) {
 		start("Targets", indent)
-		appendTag("TargetTypeValue", tag.getTarget, indent + 1)
-		appendTag("TargetType", tag.getTargetText, indent + 1)
+		appendTag("TargetTypeValue", tag.target, indent + 1)
+		appendTag("TargetType", tag.targetText, indent + 1)
 		end("Targets", indent)
 	}
 
