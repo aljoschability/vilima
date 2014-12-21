@@ -63,7 +63,7 @@ class MkSegment
 class MkTrack
 {
 	/* The track number as used in the Block Header (using more than 127 tracks is not encouraged, though the design allows an unlimited number). */
-	Integer[1] number
+	Long[1] number
 	/* A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file. */
 	Long[1] uid
 	/* The type of the track. */
@@ -85,29 +85,29 @@ class MkTrack
 	/* Set if the video is interlaced. */
 	Boolean videoFlagInterlaced = "false"
 	/* Width of the encoded video frames in pixels. */
-	Integer videoPixelWidth
+	Long videoPixelWidth
 	/* Height of the encoded video frames in pixels. */
-	Integer videoPixelHeight
+	Long videoPixelHeight
 	/* The number of video pixels to remove at the bottom of the image (for HDTV content). */
-	Integer videoPixelCropBottom = "0"
+	Long videoPixelCropBottom = "0"
 	/* The number of video pixels to remove at the top of the image. */
-	Integer videoPixelCropTop = "0"
+	Long videoPixelCropTop = "0"
 	/* The number of video pixels to remove on the left of the image. */
-	Integer videoPixelCropLeft = "0"
+	Long videoPixelCropLeft = "0"
 	/* The number of video pixels to remove on the right of the image. */
-	Integer videoPixelCropRight = "0"
+	Long videoPixelCropRight = "0"
 	/* Width of the video frames to display. The default value is only valid when DisplayUnit is 0. */
-	Integer videoDisplayWidth
+	Long videoDisplayWidth
 	/* Height of the video frames to display. The default value is only valid when DisplayUnit is 0. */
-	Integer videoDisplayHeight
+	Long videoDisplayHeight
 	/* How DisplayWidth & DisplayHeight should be interpreted (0: pixels, 1: centimeters, 2: inches, 3: Display Aspect Ratio). */
-	Integer videoDisplayUnit = "0"
+	Long videoDisplayUnit = "0"
 	/* Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed). */
-	Integer videoAspectRatioType = "0"
+	Long videoAspectRatioType = "0"
 	/* Sampling frequency in Hz. */
 	Double audioSamplingFrequency
 	/* Numbers of channels in the track. */
-	Integer audioChannels
+	Long audioChannels
 }
 
 enum MkTrackType
@@ -189,7 +189,7 @@ class MkChapterText
 class MkTag
 {
 	/* A number to indicate the logical level of the target. */
-	Integer target
+	Long target
 	/* An informational string that can be used to display the logical level of the target. */
 	String targetText
 	/* The actual nodes that contains the tag data. */

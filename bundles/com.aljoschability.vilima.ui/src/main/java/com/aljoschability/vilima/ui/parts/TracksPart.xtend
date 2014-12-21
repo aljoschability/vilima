@@ -38,7 +38,7 @@ class TracksPart {
 			override compare(Viewer viewer, Object a, Object b) {
 				if(a instanceof MkTrack) {
 					if(b instanceof MkTrack) {
-						return Integer.compare(a.getNumber, b.getNumber)
+						return Long.compare(a.number, b.number)
 					}
 				}
 				super.compare(viewer, a, b)

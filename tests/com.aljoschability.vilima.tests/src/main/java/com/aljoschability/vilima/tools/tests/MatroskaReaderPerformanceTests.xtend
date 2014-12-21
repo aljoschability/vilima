@@ -30,8 +30,9 @@ class MatroskaReaderPerformanceTests {
 			val uri = URI::createFileURI(file.toString)
 
 			val r = resourceSet.getResource(uri, true)
+			r.contents.get(0)
 
-			println(r.contents.get(0))
+		//println(r.contents.get(0))
 		}
 		watch.stop
 

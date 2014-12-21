@@ -13,7 +13,7 @@ class VilimaFormatter {
 
 	def static String getTrackInfo(MkTrack track) {
 		if(track.getCodec.startsWith("A_")) {
-			return '''«track.getCodec.substring(2)» («track.getAudioChannels» channels)'''
+			return '''«track.getCodec.substring(2)» («track.audioChannels» channels)'''
 		}
 
 		if(track.getCodec.startsWith("S_")) {

@@ -159,7 +159,7 @@ class TrackVideoResolutionColumn extends AbstractStringColumn {
 	}
 
 	def private static long getWidthSum(Collection<MkTrack> tracks) {
-		var result = 0
+		var long result = 0
 		for (track : tracks) {
 			result += track.videoPixelWidth
 		}
@@ -167,7 +167,7 @@ class TrackVideoResolutionColumn extends AbstractStringColumn {
 	}
 
 	def private static long getHeightSum(Collection<MkTrack> tracks) {
-		var result = 0
+		var long result = 0
 		for (track : tracks) {
 			result += track.videoPixelHeight
 		}
