@@ -9,7 +9,10 @@ import com.aljoschability.vilima.MkSegment
 import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
+import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.VilimaFactory
+import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
+import com.google.common.base.Charsets
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -42,7 +45,7 @@ class MkFileReader {
 
 		seeker.initialize(path)
 
-		seeker.skipEbmlHeader
+		skipEbmlHeader()
 
 		seeker.nextElement.parseSegment
 
@@ -54,7 +57,7 @@ class MkFileReader {
 	}
 
 	def private void parseSegment(EbmlElement parent) {
-		if(!MatroskaNode::Segment.matches(parent)) {
+		if(parent.node != MatroskaNode::Segment) {
 			throw new RuntimeException("Segment not the second element in the file.")
 		}
 
@@ -140,10 +143,10 @@ class MkFileReader {
 
 			switch element.node {
 				case SeekID: {
-					id = element.readBytes
+					id = element.data.asBytes
 				}
 				case SeekPosition: {
-					position = element.readLong
+					position = element.data.asLong
 				}
 				default: {
 				}
@@ -159,13 +162,42 @@ class MkFileReader {
 	}
 
 	def private void parseInfo(EbmlElement parent) {
-		val information = parent.createInfo
+		val information = parent.createMkSegment
 		if(information != null) {
 			file.information = information
 		}
 	}
 
-	def private MkSegment createInfo(EbmlElement parent) {
+	def private void skipEbmlHeader() {
+		val parent = nextElement
+
+		if(parent.node != MatroskaNode::EBML) {
+			throw new RuntimeException("EBML root element could not be read.")
+		}
+
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case DocType: {
+					val value = element.data.asString
+
+					if(value != "matroska" && value != "webm") {
+						throw new RuntimeException("EBML document type cannot be read.")
+					}
+				}
+				default: {
+				}
+			}
+
+			element.skip
+		}
+	}
+
+	def private MkSegment createMkSegment(EbmlElement parent) {
+		var long timecodeScale = 1000000
+		var double duration = -1
+
 		val information = VilimaFactory::eINSTANCE.createMkSegment
 
 		while(parent.hasNext) {
@@ -173,37 +205,40 @@ class MkFileReader {
 
 			switch element.node {
 				case Title: {
-					information.title = element.readString
+					information.title = element.data.asString
 				}
 				case SegmentUID: {
-					information.uid = element.readHex
+					information.uid = element.data.asHex
 				}
 				case PrevUID: {
-					information.previousUid = element.readHex
+					information.previousUid = element.data.asHex
 				}
 				case NextUID: {
-					information.nextUid = element.readHex
+					information.nextUid = element.data.asHex
 				}
 				case SegmentFilename: {
-					information.filename = element.readString
+					information.filename = element.data.asString
 				}
 				case PrevFilename: {
-					information.previousFilename = element.readString
+					information.previousFilename = element.data.asString
 				}
 				case NextFilename: {
-					information.nextFilename = element.readString
+					information.nextFilename = element.data.asString
 				}
 				case DateUTC: {
-					information.date = element.readTimestamp
+					information.date = element.data.asTimestamp
 				}
 				case Duration: {
-					information.duration = element.readDouble
+					duration = element.data.asDouble
+				}
+				case TimecodeScale: {
+					timecodeScale = element.data.asLong
 				}
 				case MuxingApp: {
-					information.muxingApp = element.readString
+					information.muxingApp = element.data.asString
 				}
 				case WritingApp: {
-					information.writingApp = element.readString
+					information.writingApp = element.data.asString
 				}
 				default: {
 				}
@@ -212,6 +247,10 @@ class MkFileReader {
 			element.skip
 		}
 
+		// TODO: scale duration
+		information.duration = duration
+
+		//println('''need to scale timecode: d=«duration»; tcs=«timecodeScale»''')
 		return information
 	}
 
@@ -224,6 +263,8 @@ class MkFileReader {
 					val track = VilimaFactory.eINSTANCE.createMkTrack
 					element.fill(track)
 					file.tracks += track
+				}
+				default: {
 				}
 			}
 
@@ -240,25 +281,25 @@ class MkFileReader {
 
 			switch element.node {
 				case TrackNumber: {
-					track.number = element.readInt
+					track.number = element.data.asLong
 				}
 				case TrackUID: {
-					track.uid = element.readLong
+					track.uid = element.data.asLong
 				}
 				case TrackType: {
-					track.type = element.readMkTrackType
+					track.type = element.data.asMkTrackType
 				}
 				case Name: {
-					track.name = element.readString
+					track.name = element.data.asString
 				}
 				case Language: {
-					track.language = element.readString
+					track.language = element.data.asString
 				}
 				case CodecID: {
-					codecId = element.readString
+					codecId = element.data.asString
 				}
 				case CodecPrivate: {
-					codecPrivate = element.readBytes
+					codecPrivate = element.data.asBytes
 				}
 				case Video: {
 					element.fillVideo(track)
@@ -289,16 +330,16 @@ class MkFileReader {
 
 			switch element.node {
 				case PixelWidth: {
-					track.videoPixelWidth = element.readInt
+					track.videoPixelWidth = element.data.asLong
 				}
 				case PixelHeight: {
-					track.videoPixelHeight = element.readInt
+					track.videoPixelHeight = element.data.asLong
 				}
 				case DisplayWidth: {
-					track.videoDisplayWidth = element.readInt
+					track.videoDisplayWidth = element.data.asLong
 				}
 				case DisplayHeight: {
-					track.videoDisplayHeight = element.readInt
+					track.videoDisplayHeight = element.data.asLong
 				}
 				default: {
 				}
@@ -314,10 +355,12 @@ class MkFileReader {
 
 			switch element.node {
 				case SamplingFrequency: {
-					track.audioSamplingFrequency = element.readDouble
+					track.audioSamplingFrequency = element.data.asDouble
 				}
 				case Channels: {
-					track.audioChannels = element.readInt
+					track.audioChannels = element.data.asLong
+				}
+				default: {
 				}
 			}
 
@@ -351,16 +394,16 @@ class MkFileReader {
 
 			switch element.node {
 				case FileUID: {
-					attachment.uid = element.readLong
+					attachment.uid = element.data.asLong
 				}
 				case FileDescription: {
-					attachment.description = element.readString
+					attachment.description = element.data.asString
 				}
 				case FileName: {
-					attachment.name = element.readString
+					attachment.name = element.data.asString
 				}
 				case FileMimeType: {
-					attachment.mimeType = element.readString
+					attachment.mimeType = element.data.asString
 				}
 				case FileData: {
 					attachment.size = element.size
@@ -398,16 +441,16 @@ class MkFileReader {
 
 			switch element.node {
 				case EditionUID: {
-					edition.uid = element.readLong
+					edition.uid = element.data.asLong
 				}
 				case EditionFlagDefault: {
-					edition.flagDefault = element.readBoolean
+					edition.flagDefault = element.data.asBoolean
 				}
 				case EditionFlagHidden: {
-					edition.flagHidden = element.readBoolean
+					edition.flagHidden = element.data.asBoolean
 				}
 				case EditionFlagOrdered: {
-					edition.flagOrdered = element.readBoolean
+					edition.flagOrdered = element.data.asBoolean
 				}
 				case ChapterAtom: {
 					val chapter = VilimaFactory::eINSTANCE.createMkChapter
@@ -430,19 +473,19 @@ class MkFileReader {
 
 			switch element.node {
 				case ChapterUID: {
-					chapter.uid = element.readLong
+					chapter.uid = element.data.asLong
 				}
 				case ChapterTimeStart: {
-					chapter.timeStart = element.readLong
+					chapter.timeStart = element.data.asLong
 				}
 				case ChapterTimeEnd: {
-					chapter.timeEnd = element.readLong
+					chapter.timeEnd = element.data.asLong
 				}
 				case ChapterFlagHidden: {
-					chapter.flagHidden = element.readBoolean
+					chapter.flagHidden = element.data.asBoolean
 				}
 				case ChapterFlagEnabled: {
-					chapter.flagEnabled = element.readBoolean
+					chapter.flagEnabled = element.data.asBoolean
 				}
 				case ChapterDisplay: {
 					val text = VilimaFactory.eINSTANCE.createMkChapterText()
@@ -465,10 +508,10 @@ class MkFileReader {
 
 			switch element.node {
 				case ChapString: {
-					text.text = element.readString
+					text.text = element.data.asString
 				}
 				case ChapLanguage: {
-					text.languages += element.readString
+					text.languages += element.data.asString
 				}
 				default: {
 				}
@@ -495,6 +538,8 @@ class MkFileReader {
 
 					file.tags += tag
 				}
+				default: {
+				}
 			}
 
 			element.skip
@@ -516,6 +561,8 @@ class MkFileReader {
 
 					tag.nodes += node
 				}
+				default: {
+				}
 			}
 
 			element.skip
@@ -528,10 +575,10 @@ class MkFileReader {
 
 			switch element. node {
 				case TargetTypeValue: {
-					tag.target = element.readInt
+					tag.target = element.data.asLong
 				}
 				case TargetType: {
-					tag.targetText = element.readString
+					tag.targetText = element.data.asString
 				}
 				case TagTrackUID: {
 					//XXX: println(this + "added non-global tag")
@@ -545,6 +592,8 @@ class MkFileReader {
 				case TagAttachmentUID: {
 					//XXX: println(this + "added non-global tag")
 				}
+				default: {
+				}
 			}
 
 			element.skip
@@ -556,10 +605,10 @@ class MkFileReader {
 			val element = parent.nextChild
 			switch element.node {
 				case TagName: {
-					node.name = element.readString
+					node.name = element.data.asString
 				}
 				case TagString: {
-					node.value = element.readString
+					node.value = element.data.asString
 				}
 				case SimpleTag: {
 					val child = VilimaFactory::eINSTANCE.createMkTagNode
@@ -567,6 +616,14 @@ class MkFileReader {
 					element.fill(child)
 
 					node.nodes += child
+				}
+				case TagLanguage: {
+					node.language = element.data.asString
+				}
+				case TagDefault: {
+					node.languageDefault = element.data.asBoolean
+				}
+				default: {
 				}
 			}
 
@@ -584,4 +641,78 @@ class MkFileReader {
 	def void close() {
 		dispose()
 	}
+
+	/*** END AS-* METHODS **************************************/
+	// TODO: use extension method here
+	def private static long asLong(byte[] data) {
+		return MkResourceReaderByteOperator::INSTANCE.bytesToLongUnsigned(data)
+	}
+
+	def private static long asLong(EbmlDataElement element) {
+		if(element.node.type == EbmlElementType::UINTEGER) {
+			return element.data.asLong
+		}
+
+		throw new RuntimeException
+	}
+
+	def private static MkTrackType asMkTrackType(EbmlDataElement element) {
+		switch element.asLong as int {
+			case 0x01: MkTrackType::VIDEO
+			case 0x02: MkTrackType::AUDIO
+			case 0x03: MkTrackType::COMPLEX
+			case 0x10: MkTrackType::LOGO
+			case 0x11: MkTrackType::SUBTITLE
+			case 0x20: MkTrackType::CONTROL
+			default: throw new RuntimeException("could not convert track type")
+		}
+	}
+
+	def private static boolean asBoolean(EbmlDataElement element) {
+		element.asLong == 1
+	}
+
+	def private static int asInteger(byte[] data) {
+		data.asLong as int
+	}
+
+	def private static double asDouble(EbmlDataElement element) {
+		if(element.node.type == EbmlElementType::FLOAT) {
+			if(element.size == 4) {
+				return Float::intBitsToFloat(element.data.asInteger)
+			}
+
+			if(element.size == 8) {
+				return Double::longBitsToDouble(element.data.asLong)
+			}
+		}
+		throw new RuntimeException
+	}
+
+	def private static String asString(EbmlDataElement element) {
+		switch element.node.type {
+			case ASCII:
+				return new String(element.data, Charsets::US_ASCII)
+			case STRING:
+				return new String(element.data, Charsets::UTF_8)
+			default: {
+			}
+		}
+	}
+
+	def private static byte[] asBytes(EbmlDataElement element) {
+		element.data
+	}
+
+	// TODO: use extension method here
+	def private static Long asTimestamp(EbmlDataElement element) {
+		MkResourceReaderByteOperator::INSTANCE.readTimestamp(element.data)
+	}
+
+	// TODO: use extension method here
+	def private static String asHex(EbmlDataElement element) {
+		MkResourceReaderByteOperator::INSTANCE.bytesToHex(element.data)
+	}
+
+/*** END AS-* METHODS **************************************/
 }

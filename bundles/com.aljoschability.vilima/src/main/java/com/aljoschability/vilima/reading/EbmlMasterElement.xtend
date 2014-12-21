@@ -1,17 +1,24 @@
 package com.aljoschability.vilima.reading;
 
 class EbmlMasterElement extends EbmlElement {
-	long readSize = 0
+	long bytesParsed = 0
 
-	new(MatroskaNode node, int headerSize, long size) {
-		super(node.id, node.type, headerSize, size)
+	new(byte[] id, byte[] dataSize) {
+		super(id, dataSize)
 	}
 
-	override getSkipSize() { size - readSize }
+	override getSkipSize() { size - bytesParsed }
 
-	def boolean hasNext() { readSize < size }
+	def boolean hasNext() { bytesParsed < size }
 
 	def void add(EbmlElement element) {
-		readSize += element.totalSize
+		bytesParsed += element.totalSize
+	}
+
+	def EbmlElement addChild(EbmlElement element) {
+		if(element != null) {
+			bytesParsed += element.totalSize
+		}
+		return element
 	}
 }

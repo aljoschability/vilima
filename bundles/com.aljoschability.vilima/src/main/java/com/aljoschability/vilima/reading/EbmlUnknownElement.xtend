@@ -1,8 +1,8 @@
 package com.aljoschability.vilima.reading;
 
 class EbmlUnknownElement extends EbmlElement {
-	new(byte[] id, int headerSize, long size) {
-		super(id, EbmlElementType::UNKNOWN, headerSize, size)
+	new(byte[] id, byte[] dataSize) {
+		super(id, dataSize)
 	}
 
 	override getSkipSize() { 0 }

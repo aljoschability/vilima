@@ -3,8 +3,8 @@ package com.aljoschability.vilima.reading;
 class EbmlDataElement extends EbmlElement {
 	byte[] data
 
-	new(MatroskaNode node, int headerSize, long size) {
-		super(node.id, node.type, headerSize, size);
+	new(byte[] id, byte[] dataSize) {
+		super(id, dataSize)
 	}
 
 	def void setData(byte[] data) {
