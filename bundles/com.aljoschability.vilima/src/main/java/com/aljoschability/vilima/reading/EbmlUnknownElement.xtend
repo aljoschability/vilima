@@ -5,5 +5,5 @@ class EbmlUnknownElement extends EbmlElement {
 		super(id, dataSize)
 	}
 
-	override getSkipSize() { 0 }
+	override getSkipLength() { 0 }
 }

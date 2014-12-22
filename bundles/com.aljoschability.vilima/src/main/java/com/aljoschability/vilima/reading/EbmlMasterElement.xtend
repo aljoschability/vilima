@@ -7,17 +7,13 @@ class EbmlMasterElement extends EbmlElement {
 		super(id, dataSize)
 	}
 
-	override getSkipSize() { size - bytesParsed }
+	override getSkipLength() { size - bytesParsed }
 
 	def boolean hasNext() { bytesParsed < size }
 
-	def void add(EbmlElement element) {
-		bytesParsed += element.totalSize
-	}
-
 	def EbmlElement addChild(EbmlElement element) {
 		if(element != null) {
-			bytesParsed += element.totalSize
+			bytesParsed += element.headerSize + element.size
 		}
 		return element
 	}

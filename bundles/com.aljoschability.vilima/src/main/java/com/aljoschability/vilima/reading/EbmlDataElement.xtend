@@ -15,7 +15,7 @@ class EbmlDataElement extends EbmlElement {
 		data != null
 	}
 
-	override getSkipSize() {
+	override getSkipLength() {
 		if(read()) {
 			return 0
 		} else {

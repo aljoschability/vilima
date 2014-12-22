@@ -30,7 +30,6 @@ class MkResource extends ResourceImpl {
 				notification?.eNotify
 				modified = false
 
-				reader.close()
 				timeStamp = System::currentTimeMillis
 			}
 		}

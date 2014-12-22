@@ -5,44 +5,32 @@ import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
 abstract class EbmlElement {
 	val byte[] id
 	val long size
-	val int headerLength
+	val int headerSize
 
 	new(byte[] id, byte[] size) {
 		this.id = id
-		this.size = MkResourceReaderByteOperator::INSTANCE.bytesToLong(size)
+		this.size = MkResourceReaderByteOperator::INSTANCE.bytesToLongUnsigned(size)
 
-		headerLength = id.length + size.length
+		headerSize = id.length + size.length
 	}
 
-	/* Returns the node which this element represents. */
-	def MatroskaNode getNode() {
-		MatroskaNode::get(id)
-	}
+	/**
+	 * Returns the node which this element represents.
+	 */
+	def MatroskaNode getNode() { MatroskaNode::get(id) }
 
-	/* Returns whether this element is a container node. */
-	def boolean isContainer() {
-		return node?.type == EbmlElementType::MASTER
-	}
+	/**
+	 * Returns the data size of the element.
+	 */
+	def long getSize() { size }
 
-	def long getSize() {
-		size
-	}
+	/**
+	 * Returns the header size of this element.
+	 */
+	def int getHeaderSize() { headerSize }
 
-	@Deprecated
-	def long getTotalSize() {
-		headerLength + size
-	}
-
-	@Deprecated
-	def int getHeaderSize() {
-		headerLength
-	}
-
-	@Deprecated
-	def long getSkipSize()
-
-	@Deprecated
-	def EbmlElementType getType() {
-		node?.type
-	}
+	/**
+	 * Returns the length needed to skip this element.
+	 */
+	def long getSkipLength()
 }

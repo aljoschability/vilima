@@ -13,6 +13,8 @@ import java.util.LinkedList
 import java.util.Queue
 
 class MatroskaFileSeeker {
+	extension MatroskaFileReaderHelper = MatroskaFileReaderHelper::INSTANCE
+
 	val ByteBuffer bufferHead = ByteBuffer::allocateDirect(8)
 	val ByteBuffer bufferSize = ByteBuffer::allocateDirect(8)
 
@@ -20,16 +22,95 @@ class MatroskaFileSeeker {
 
 	long offset
 	Queue<Long> seeks
-	public Collection<Long> positionsParsed
+	Collection<Long> positionsParsed
 
-	def void skip(EbmlElement element) {
-		val pos = channel.position
-		val len = channel.size
-		var newpos = pos + element.skipSize
-		if(newpos > len) {
-			newpos = len
+	new(Path path) {
+		seeks = new LinkedList
+		positionsParsed = newArrayList
+		offset = -1
+
+		if(channel != null) {
+			println('''the channel has not been closed!''')
+			channel.close
 		}
-		channel.position(newpos)
+
+		channel = Files::newByteChannel(path, StandardOpenOption::READ)
+	}
+
+	/**
+ 	 * Skips the rest of given element.
+ 	 */
+	def void skip(EbmlElement element) {
+		var position = channel.position + element.skipLength
+
+		// do not jump out of the file
+		val limit = channel.size
+		if(position > limit) {
+			position = limit
+		}
+
+		channel.position(position)
+	}
+
+	def boolean hasNext(EbmlElement parent) {
+		if(parent instanceof EbmlMasterElement) {
+			return parent.hasNext
+		}
+
+		return false
+	}
+
+	def EbmlElement nextChild(EbmlElement parent) {
+		if(parent instanceof EbmlMasterElement) {
+			return parent.addChild(nextElement)
+		}
+	}
+
+	def EbmlDataElement getData(EbmlElement element) {
+		if(element instanceof EbmlDataElement) {
+			if(element.data == null) {
+				val buffer = ByteBuffer.allocateDirect(element.size as int)
+
+				channel.read(buffer)
+
+				buffer.flip()
+
+				element.data = toArray(buffer)
+
+				if(element.size > Integer::MAX_VALUE) {
+					throw new RuntimeException()
+				}
+			}
+			return element
+		}
+	}
+
+	def void dispose() {
+		channel?.close()
+		channel = null
+
+		seeks = null
+		positionsParsed = null
+		offset = -1
+	}
+
+	def private EbmlElement nextElement() {
+		val id = readElementId()
+		val dataSize = readDataSize()
+
+		val node = MatroskaNode.get(id)
+
+		var EbmlElement element = null
+		if(node == null) {
+			println('''unknown EBML element created: id=«Arrays::toString(id)»; hex=«bytesToHex(id)»''')
+			element = new EbmlUnknownElement(id, dataSize)
+		} else if(EbmlElementType::MASTER == node.type) {
+			element = new EbmlMasterElement(id, dataSize);
+		} else {
+			element = new EbmlDataElement(id, dataSize);
+		}
+
+		return element
 	}
 
 	def private byte[] readElementId() {
@@ -81,85 +162,8 @@ class MatroskaFileSeeker {
 		return toArray(bufferSize)
 	}
 
-	def EbmlElement nextElement() {
-		val id = readElementId()
-		val dataSize = readDataSize()
-
-		val node = MatroskaNode.get(id)
-
-		if(node == null) {
-			println('''unknown EBML element created: id=«Arrays::toString(id)»; hex=«bytesToHex(id)»''')
-			return new EbmlUnknownElement(id, dataSize)
-		} else if(EbmlElementType::MASTER == node.type) {
-			return new EbmlMasterElement(id, dataSize);
-		} else {
-			return new EbmlDataElement(id, dataSize);
-		}
-	}
-
-	def boolean hasNext(EbmlElement parent) {
-		if(parent instanceof EbmlMasterElement) {
-			return parent.hasNext
-		}
-
-		return false
-	}
-
-	def EbmlElement nextChild(EbmlElement parent) {
-		if(parent instanceof EbmlMasterElement) {
-			return parent.addChild(nextElement)
-		}
-	}
-
-	def EbmlDataElement getData(EbmlElement element) {
-		if(element instanceof EbmlDataElement) {
-			if(element.data == null) {
-				val buffer = ByteBuffer.allocateDirect(element.size as int)
-
-				channel.read(buffer)
-
-				buffer.flip()
-
-				element.data = toArray(buffer)
-
-				if(element.size > Integer::MAX_VALUE) {
-					throw new RuntimeException()
-				}
-			}
-			return element
-		}
-	}
-
-	def void initialize(Path path) {
-		seeks = new LinkedList
-		positionsParsed = newArrayList
-		offset = -1
-
-		if(channel != null) {
-			println('''the channel has not been closed!''')
-			channel.close
-		}
-
-		channel = Files::newByteChannel(path, StandardOpenOption::READ)
-	}
-
-	def void dispose() {
-		channel?.close()
-		channel = null
-
-		seeks = null
-		positionsParsed = null
-		offset = -1
-	}
-
 	/*****************************************/
 	/*****************************************/
-	@Deprecated
-	def long offset(EbmlElement element) {
-		return position - element.headerSize
-	}
-
-	@Deprecated
 	def private static byte[] toArray(ByteBuffer buffer) {
 		val result = newByteArrayOfSize(buffer.limit)
 		buffer.get(result)
@@ -168,44 +172,142 @@ class MatroskaFileSeeker {
 
 	extension MkResourceReaderByteOperator = MkResourceReaderByteOperator::INSTANCE
 
-	@Deprecated
-	def long getPosition() {
+	MkFileBuilder builder
+
+	def private long getPosition() {
 		return channel.position()
 	}
 
-	/********************************************/
-	@Deprecated
-	def EbmlElement nextElement(long position) throws IOException {
+	def private EbmlElement nextElement(long position) throws IOException {
 		channel.position(position);
 		return nextElement();
 	}
 
-	/********************************************/
-	@Deprecated
-	def boolean hasSeeks() {
+	def private boolean hasSeeks() {
 		seeks -= positionsParsed
 
 		return !seeks.empty
 	}
 
-	@Deprecated
-	def long nextSeekPosition() {
-		seeks.poll
-	}
-
-	@Deprecated
-	def offer(long position) {
-		seeks.offer(position + offset)
-	}
-
-	@Deprecated
-	def setOffset(long offset) {
-		this.offset = offset
-	}
-
-	@Deprecated
-	def addPositionsParsed(long position) {
+	def private void addPositionsParsed(long position) {
 		positionsParsed += position
 		seeks.remove(position)
+	}
+
+	def private EbmlElement getSegmentElement() {
+		skipEbmlHeader()
+
+		val parent = nextElement()
+
+		if(parent.node != MatroskaNode::Segment) {
+			throw new RuntimeException("Segment not the second element in the file.")
+		}
+
+		this.offset = position
+
+		return parent
+	}
+
+	def private void skipEbmlHeader() {
+		val parent = nextElement
+
+		if(parent.node != MatroskaNode::EBML) {
+			throw new RuntimeException("EBML root element could not be read.")
+		}
+
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case DocType: {
+					val value = element.data.asString
+					if(value != "matroska" && value != "webm") {
+						throw new RuntimeException("EBML document type cannot be read.")
+					}
+				}
+				default: {
+				}
+			}
+			element.skip
+		}
+	}
+
+	def void readFile(MkFileBuilder builder) {
+		this.builder = builder
+		segmentElement.parseSegment
+
+		readSeeks()
+	}
+
+	def private void parseSegment(EbmlElement parent) {
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case SeekHead: {
+					element.handleSeekHead
+				}
+				case Cluster: {
+					return
+				}
+				default: {
+					addPositionsParsed(position - element.headerSize)
+					builder.readSegmentNode(element)
+				}
+			}
+
+			element.skip
+		}
+	}
+
+	def private void readSeeks() {
+		while(hasSeeks) {
+			val element = nextElement(seeks.poll)
+			builder.readSegmentNode(element)
+		}
+	}
+
+	def private void parseSeek(EbmlElement parent) {
+		var byte[] id = null
+		var long position = -1
+
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case SeekID: {
+					id = element.data.asBytes
+				}
+				case SeekPosition: {
+					position = element.data.asLong
+				}
+				default: {
+				}
+			}
+
+			element.skip
+		}
+
+		// ignore cluster
+		if(!Arrays::equals(MatroskaNode::Cluster.id, id)) {
+			seeks.offer(position + offset)
+		}
+	}
+
+	/* Called when a <code>SeekHead</code> element appears. */
+	def private void handleSeekHead(EbmlElement parent) {
+		while(parent.hasNext) {
+			val element = parent.nextChild
+
+			switch element.node {
+				case Seek: {
+					element.parseSeek
+				}
+				default: {
+				}
+			}
+
+			element.skip
+		}
 	}
 }
