@@ -1,9 +1,12 @@
 package com.aljoschability.vilima.tools.tests
 
+import com.aljoschability.vilima.jobs.VilimaFileWalker
 import com.aljoschability.vilima.reading.MkFileReader
 import com.google.common.base.Stopwatch
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.Collection
 import java.util.concurrent.TimeUnit
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl
@@ -11,17 +14,27 @@ import org.junit.BeforeClass
 import org.junit.Test
 
 class MatroskaReaderPerformanceTests {
-	static val PATH = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\'''
+	val static PATH = Paths::get('''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files''')
 
 	@BeforeClass
 	def static void preload() {
-		new MkFileReader().createMkFile(Paths::get(PATH, "cover_art.mkv"))
-		new ResourceSetImpl().getResource(URI::createFileURI(Paths::get(PATH, "cover_art.mkv").toString), true)
+		val p = '''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files\cover_art.mkv'''
+
+		new MkFileReader().createMkFile(Paths::get(p))
+		new ResourceSetImpl().getResource(URI::createFileURI(p), true).contents.get(0)
+	}
+
+	private static def Collection<File> getAllFiles() {
+		val walker = new VilimaFileWalker
+		Files::walkFileTree(PATH, walker)
+
+		//new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
+		return walker.files
 	}
 
 	@Test
 	def void testMkResource() {
-		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
+		val files = allFiles
 
 		val resourceSet = new ResourceSetImpl
 
@@ -31,8 +44,6 @@ class MatroskaReaderPerformanceTests {
 
 			val r = resourceSet.getResource(uri, true)
 			r.contents.get(0)
-
-		//println(r.contents.get(0))
 		}
 		watch.stop
 
@@ -40,8 +51,25 @@ class MatroskaReaderPerformanceTests {
 	}
 
 	@Test
+	def void testMatroskaFileReader() {
+		val files = allFiles
+
+		val reader = new MkFileReader
+
+		val watch = Stopwatch::createStarted
+		for (file : files) {
+
+			//println('''reading «file»...''')
+			reader.createMkFile(file.toPath)
+		}
+		watch.stop
+
+		println('''internal («files.size»): «watch.elapsed(TimeUnit::MILLISECONDS)»ms''')
+	}
+
+	@Test
 	def void testMkvInfo() {
-		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
+		val files = allFiles
 
 		val watch = Stopwatch::createStarted
 		for (file : files) {
@@ -52,22 +80,5 @@ class MatroskaReaderPerformanceTests {
 		watch.stop
 
 		println(''' mkvinfo («files.size»): «watch.elapsed(TimeUnit::MILLISECONDS)»ms''')
-	}
-
-	@Test
-	def void testMatroskaFileReader() {
-		val files = new File(PATH).listFiles([p, n|n.endsWith(".mkv")])
-
-		val reader = new MkFileReader
-
-		val watch = Stopwatch::createStarted
-		for (file : files) {
-			val mkFile = reader.createMkFile(file.toPath)
-
-		//println(mkFile)
-		}
-		watch.stop
-
-		println('''internal («files.size»): «watch.elapsed(TimeUnit::MILLISECONDS)»ms''')
 	}
 }
