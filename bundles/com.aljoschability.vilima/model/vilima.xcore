@@ -63,51 +63,35 @@ class MkSegment
 class MkTrack
 {
 	/* The track number as used in the Block Header (using more than 127 tracks is not encouraged, though the design allows an unlimited number). */
-	Long[1] number
+	long number
 	/* A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file. */
-	Long[1] uid
+	long uid
 	/* The type of the track. */
-	MkTrackType[1] ^type = "UNKNOWN"
+	MkTrackType ^type
 	/* Set if the track is usable. */
-	Boolean[1] flagEnabled = "true"
+	boolean flagEnabled
 	/* Set if that track (audio, video or subs) SHOULD be active if no language found matches the user preference. */
-	Boolean[1] flagDefault = "true"
+	boolean flagDefault
 	/* Set if that track MUST be active during playback. There can be many forced track for a kind (audio, video or subs), the player should select the one which language matches the user preference or the default + forced track. Overlay MAY happen between a forced and non-forced track of the same kind. */
-	Boolean[1] flagForced = "false"
+	boolean flagForced
 	/* Set if the track may contain blocks using lacing. */
-	Boolean[1] flagLacing = "true"
+	boolean flagLacing
 	/* A human-readable track name. */
 	String name
 	/* Specifies the language of the track in the Matroska languages form. */
-	String language = "eng"
+	String language
 	/* An ID corresponding to the codec, see the codec page for more info. */
-	String[1] codec
+	String codec
 	/* Set if the video is interlaced. */
-	Boolean videoFlagInterlaced = "false"
+	boolean videoFlagInterlaced
 	/* Width of the encoded video frames in pixels. */
-	Long videoPixelWidth
+	long videoPixelWidth
 	/* Height of the encoded video frames in pixels. */
-	Long videoPixelHeight
-	/* The number of video pixels to remove at the bottom of the image (for HDTV content). */
-	Long videoPixelCropBottom = "0"
-	/* The number of video pixels to remove at the top of the image. */
-	Long videoPixelCropTop = "0"
-	/* The number of video pixels to remove on the left of the image. */
-	Long videoPixelCropLeft = "0"
-	/* The number of video pixels to remove on the right of the image. */
-	Long videoPixelCropRight = "0"
-	/* Width of the video frames to display. The default value is only valid when DisplayUnit is 0. */
-	Long videoDisplayWidth
-	/* Height of the video frames to display. The default value is only valid when DisplayUnit is 0. */
-	Long videoDisplayHeight
-	/* How DisplayWidth & DisplayHeight should be interpreted (0: pixels, 1: centimeters, 2: inches, 3: Display Aspect Ratio). */
-	Long videoDisplayUnit = "0"
-	/* Specify the possible modifications to the aspect ratio (0: free resizing, 1: keep aspect ratio, 2: fixed). */
-	Long videoAspectRatioType = "0"
+	long videoPixelHeight
 	/* Sampling frequency in Hz. */
-	Double audioSamplingFrequency
+	double audioSamplingFrequency
 	/* Numbers of channels in the track. */
-	Long audioChannels
+	long audioChannels
 }
 
 enum MkTrackType
