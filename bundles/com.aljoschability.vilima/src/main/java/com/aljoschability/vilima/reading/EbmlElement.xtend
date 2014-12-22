@@ -1,6 +1,6 @@
 package com.aljoschability.vilima.reading;
 
-import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
+import com.aljoschability.vilima.extensions.impl.MatroskaFileReaderByteOperator
 
 abstract class EbmlElement {
 	val byte[] id
@@ -9,7 +9,7 @@ abstract class EbmlElement {
 
 	new(byte[] id, byte[] size) {
 		this.id = id
-		this.size = MkResourceReaderByteOperator::INSTANCE.bytesToLongUnsigned(size)
+		this.size = MatroskaFileReaderByteOperator::bytesToLongUnsigned(size)
 
 		headerSize = id.length + size.length
 	}

@@ -1,16 +1,14 @@
 package com.aljoschability.vilima.reading
 
 import com.aljoschability.vilima.MkTrackType
-import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
 import com.google.common.base.Charsets
+import com.aljoschability.vilima.extensions.impl.MatroskaFileReaderByteOperator
 
 class MatroskaFileReaderHelper {
 	val static public INSTANCE = new MatroskaFileReaderHelper
 
-	def long asLong(byte[] data) {
-
-		// TODO: use extension method here
-		return MkResourceReaderByteOperator::INSTANCE.bytesToLongUnsigned(data)
+	def private long asLong(byte[] data) {
+		MatroskaFileReaderByteOperator::bytesToLongUnsigned(data)
 	}
 
 	def long asLong(EbmlDataElement element) {
@@ -70,14 +68,10 @@ class MatroskaFileReaderHelper {
 	}
 
 	def Long asTimestamp(EbmlDataElement element) {
-
-		// TODO: use extension method here
-		MkResourceReaderByteOperator::INSTANCE.readTimestamp(element.data)
+		MatroskaFileReaderByteOperator::readTimestamp(element.data)
 	}
 
 	def String asHex(EbmlDataElement element) {
-
-		// TODO: use extension method here
-		MkResourceReaderByteOperator::INSTANCE.bytesToHex(element.data)
+		MatroskaFileReaderByteOperator::bytesToHex(element.data)
 	}
 }

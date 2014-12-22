@@ -13,7 +13,7 @@ import com.aljoschability.vilima.VilimaFactory
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
-class MkFileBuilder {
+class MatroskaFileBuilder {
 	val extension MatroskaFileReaderHelper = MatroskaFileReaderHelper::INSTANCE
 
 	val extension MatroskaFileSeeker seeker

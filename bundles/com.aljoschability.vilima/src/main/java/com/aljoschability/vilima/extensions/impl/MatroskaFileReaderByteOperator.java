@@ -2,14 +2,15 @@ package com.aljoschability.vilima.extensions.impl;
 
 import java.nio.ByteBuffer;
 
-import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator;
-
-public class MkResourceReaderByteOperatorImpl implements MkResourceReaderByteOperator {
+public class MatroskaFileReaderByteOperator {
 	private static final long TIME_OFFSET = 978307200;
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
-	@Override
-	public long bytesToLong(byte[] data) {
+	private MatroskaFileReaderByteOperator() {
+		// hide constructor
+	}
+
+	public static long bytesToLong(byte[] data) {
 		long size = 0;
 		long value = 0;
 		for (int i = 0; i < data.length; i++) {
@@ -19,8 +20,7 @@ public class MkResourceReaderByteOperatorImpl implements MkResourceReaderByteOpe
 		return size;
 	}
 
-	@Override
-	public long bytesToLongUnsigned(byte[] data) {
+	public static long bytesToLongUnsigned(byte[] data) {
 		long l = 0;
 		long tmp = 0;
 		for (int i = 0; i < data.length; i++) {
@@ -31,8 +31,7 @@ public class MkResourceReaderByteOperatorImpl implements MkResourceReaderByteOpe
 		return l;
 	}
 
-	@Override
-	public String bytesToHex(byte[] bytes) {
+	public static String bytesToHex(byte[] bytes) {
 		char[] hexChars = new char[bytes.length * 2];
 		for (int j = 0; j < bytes.length; j++) {
 			int v = bytes[j] & 0xFF;
@@ -42,13 +41,11 @@ public class MkResourceReaderByteOperatorImpl implements MkResourceReaderByteOpe
 		return new String(hexChars);
 	}
 
-	@Override
-	public void clearFirstByte(ByteBuffer buffer, int length) {
+	public static void clearFirstByte(ByteBuffer buffer, int length) {
 		buffer.put(0, (byte) (buffer.get(0) & ((0xFF >>> length))));
 	}
 
-	@Override
-	public int getLength(byte value) {
+	public static int getLength(byte value) {
 		int mask = 0x0080;
 		for (int length = 0; length < 8; length++) {
 			if ((value & mask) == mask) {
@@ -60,8 +57,7 @@ public class MkResourceReaderByteOperatorImpl implements MkResourceReaderByteOpe
 		throw new RuntimeException();
 	}
 
-	@Override
-	public long readTimestamp(byte[] data) {
+	public static long readTimestamp(byte[] data) {
 		long l = 0;
 		long tmp = 0;
 		l |= ((long) data[0] << (56 - ((8 - data.length) * 8)));

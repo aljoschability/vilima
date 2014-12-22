@@ -26,7 +26,7 @@ class MkFileReader {
 		result.dateCreated = attributes.creationTime.toMillis
 		result.size = attributes.size
 
-		val builder = new MkFileBuilder(seeker, result)
+		val builder = new MatroskaFileBuilder(seeker, result)
 
 		seeker.readFile(builder)
 

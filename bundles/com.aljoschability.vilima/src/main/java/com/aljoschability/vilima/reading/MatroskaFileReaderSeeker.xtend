@@ -1,6 +1,5 @@
 package com.aljoschability.vilima.reading;
 
-import com.aljoschability.vilima.extensions.MkResourceReaderByteOperator
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.SeekableByteChannel
@@ -11,6 +10,7 @@ import java.util.Arrays
 import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
+import com.aljoschability.vilima.extensions.impl.MatroskaFileReaderByteOperator
 
 class MatroskaFileSeeker {
 	extension MatroskaFileReaderHelper = MatroskaFileReaderHelper::INSTANCE
@@ -102,7 +102,9 @@ class MatroskaFileSeeker {
 
 		var EbmlElement element = null
 		if(node == null) {
-			println('''unknown EBML element created: id=«Arrays::toString(id)»; hex=«bytesToHex(id)»''')
+			println(
+				'''unknown EBML element created: id=«Arrays::toString(id)»; hex=«MatroskaFileReaderByteOperator::
+					bytesToHex(id)»''')
 			element = new EbmlUnknownElement(id, dataSize)
 		} else if(EbmlElementType::MASTER == node.type) {
 			element = new EbmlMasterElement(id, dataSize);
@@ -123,7 +125,7 @@ class MatroskaFileSeeker {
 		}
 
 		// convert length
-		val length = getLength(bufferHead.get(0))
+		val length = MatroskaFileReaderByteOperator::getLength(bufferHead.get(0))
 
 		// read rest of id
 		bufferHead.limit(length)
@@ -146,7 +148,7 @@ class MatroskaFileSeeker {
 		}
 
 		// convert length
-		val length = getLength(bufferSize.get(0))
+		val length = MatroskaFileReaderByteOperator::getLength(bufferSize.get(0))
 
 		// read rest of id
 		bufferSize.limit(length)
@@ -155,7 +157,7 @@ class MatroskaFileSeeker {
 		}
 
 		// clear the first byte
-		clearFirstByte(bufferSize, length)
+		MatroskaFileReaderByteOperator::clearFirstByte(bufferSize, length)
 
 		bufferSize.flip()
 
@@ -170,9 +172,7 @@ class MatroskaFileSeeker {
 		return result
 	}
 
-	extension MkResourceReaderByteOperator = MkResourceReaderByteOperator::INSTANCE
-
-	MkFileBuilder builder
+	MatroskaFileBuilder builder
 
 	def private long getPosition() {
 		return channel.position()
@@ -232,7 +232,7 @@ class MatroskaFileSeeker {
 		}
 	}
 
-	def void readFile(MkFileBuilder builder) {
+	def void readFile(MatroskaFileBuilder builder) {
 		this.builder = builder
 		segmentElement.parseSegment
 
