@@ -54,14 +54,6 @@ class GenresSelectionDialog extends Dialog {
 	override protected isResizable() { true }
 }
 
-class LanguageAwareStringColumn {
-	Integer level
-	String name
-}
-
-class LanguageAwareStringListColumn {
-}
-
 class VideoCodecPrivateColumn extends AbstractStringColumn {
 	override protected getString(MkFile file) {
 		val text = new StringBuilder

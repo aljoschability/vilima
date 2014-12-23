@@ -18,7 +18,7 @@ class FileExtensionsImpl implements FileExtensions {
 			replace('|', '.').replace('<', '(').replace('>', ')')
 	}
 
-	def private static String withoutUnicode(String text) {
+	def static String withoutUnicode(String text) {
 		Normalizer::normalize(text, Normalizer.Form::NFD).replaceAll('''\p{InCombiningDiacriticalMarks}|[^\w\s]''', "")
 	}
 

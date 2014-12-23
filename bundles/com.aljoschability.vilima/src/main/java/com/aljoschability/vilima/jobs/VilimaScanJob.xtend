@@ -16,8 +16,6 @@ import org.eclipse.core.runtime.Status
 import org.eclipse.core.runtime.jobs.Job
 
 class VilimaScanJob extends Job {
-	static val LOG_PATH = '''D:\downloads\vilima__log__test.log'''
-
 	static val DEBUG_NF = NumberFormat::getNumberInstance
 
 	IContentManager manager
@@ -61,8 +59,6 @@ class VilimaScanJob extends Job {
 		val walker = new VilimaFileWalker
 
 		Files::walkFileTree(path, walker)
-
-		val library = manager.library
 
 		val reader = new MkFileReader
 		for (file : walker.files) {

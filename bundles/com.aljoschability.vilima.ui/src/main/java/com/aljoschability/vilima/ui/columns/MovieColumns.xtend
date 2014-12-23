@@ -34,7 +34,7 @@ class TagExtensionsImpl implements TagExtensions {
 	}
 
 	/* this would be the exact one */
-	def private String getExactValue(MkFile file, Integer target, String targetText, String name, String language) {
+	def String getExactValue(MkFile file, Integer target, String targetText, String name, String language) {
 		for (tag : file.tags) {
 			if(tag.target == target && tag.targetText == targetText) {
 				for (node : tag.nodes) {

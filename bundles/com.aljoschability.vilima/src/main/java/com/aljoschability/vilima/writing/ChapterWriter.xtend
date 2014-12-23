@@ -113,7 +113,6 @@ class ChapterWriter {
 		return 0
 	}
 
-	@Deprecated
 	def static String toTime(Long time) {
 		if(time == null) {
 			return ""
