@@ -5,18 +5,18 @@ Bundle-SymbolicName: com.aljoschability.vilima.rcp;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: com.aljoschability.vilima.rcp.Activator
 Bundle-Vendor: %bundle.vendor
-Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport,
+Require-Bundle: javax.annotation,
+ javax.inject,
+ org.eclipse.core.runtime,
  org.eclipse.e4.core.di,
  org.eclipse.e4.core.services,
- org.eclipse.emf.ecore.xcore.lib;visibility:=reexport,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.xcore.lib,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.xtend.lib,
- org.eclipse.xtext.xbase.lib;visibility:=reexport,
+ org.eclipse.xtext.xbase.lib,
  com.aljoschability.eclipse.core.runtime,
- com.aljoschability.vilima;bundle-version="0.1.0",
- com.aljoschability.vilima.ui;bundle-version="0.1.0",
- javax.annotation,
- javax.inject
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+ com.aljoschability.vilima,
+ com.aljoschability.vilima.ui
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
