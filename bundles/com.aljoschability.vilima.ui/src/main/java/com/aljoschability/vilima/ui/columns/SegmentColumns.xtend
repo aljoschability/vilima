@@ -157,19 +157,19 @@ class SegmentDateColumn extends AbstractLongColumn {
 	override getString(MkFile file) { VilimaFormatter::date(file.number) }
 }
 
-class SegmentDurationColumn extends AbstractDoubleColumn {
+class SegmentDurationColumn extends AbstractLongColumn {
 	override protected getNumber(MkFile file) { file?.information?.duration }
 
 	override getString(MkFile file) { VilimaFormatter::getTime(file.number) }
 }
 
-class SegmentDurationSecondsColumn extends AbstractDoubleColumn {
+class SegmentDurationSecondsColumn extends AbstractLongColumn {
 	override protected getNumber(MkFile file) { file?.information?.duration }
 
 	override getString(MkFile file) { VilimaFormatter::getTimeSeconds(file.number) }
 }
 
-class SegmentDurationMinutesColumn extends AbstractDoubleColumn {
+class SegmentDurationMinutesColumn extends AbstractLongColumn {
 	override protected getNumber(MkFile file) { file?.information?.duration }
 
 	override getString(MkFile file) { VilimaFormatter::getTimeMinutes(file.number) }

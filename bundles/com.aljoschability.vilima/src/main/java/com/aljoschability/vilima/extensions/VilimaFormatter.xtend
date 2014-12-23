@@ -67,6 +67,72 @@ class VilimaFormatter {
 		return DATE_FORMATTER.format(timestamp)
 	}
 
+	def static String getTime(Long duration) {
+		getTime(duration, false)
+	}
+
+	def static String getTime(Long duration, boolean showMillis) {
+		if(duration == null) {
+			return ""
+		}
+
+		val ms = (duration % 1000) as int
+		val seconds = ((duration / 1000) % 60) as int
+		val minutes = ((duration / (1000 * 60)) % 60) as int
+		val hours = ((duration / (1000 * 60 * 60)) % 24) as int
+
+		val builder = new StringBuilder
+		if(hours > 0) {
+			builder.append(hours)
+			builder.append(":")
+		}
+
+		//			if(builder.length > 0|| minutes > 0 ) {
+		builder.append(String.format("%02d", minutes))
+		builder.append(":")
+
+		//			}
+		if(builder.length > 0 || seconds > 0) {
+			builder.append(String.format("%02d", seconds))
+			if(showMillis) {
+				builder.append(",")
+			}
+		}
+
+		if(showMillis) {
+			if(builder.length > 0 || ms > 0) {
+				builder.append(String.format("%03d", ms))
+			}
+		}
+
+		// val format = "%d:%02d:%02d,%03d"
+		// return String.format(format, hours, minutes, seconds, ms)
+		return builder.toString()
+	}
+
+	def static String getTimeSeconds(Long duration) {
+		if(duration == null) {
+			return ""
+		}
+
+		TIME_FORMAT_SEC.minimumFractionDigits = 0
+		TIME_FORMAT_SEC.maximumFractionDigits = 0
+
+		TIME_FORMAT_SEC.format(duration / 1000d) + " s"
+	}
+
+	def static String getTimeMinutes(Long duration) {
+		if(duration == null) {
+			return ""
+		}
+
+		TIME_FORMAT_MIN.minimumFractionDigits = 0
+		TIME_FORMAT_MIN.maximumFractionDigits = 0
+
+		TIME_FORMAT_MIN.format(duration / 60000d) + " min"
+	}
+
+	@Deprecated
 	def static String getTime(Double duration) {
 		getTime(duration, false)
 	}
@@ -74,6 +140,7 @@ class VilimaFormatter {
 	val static TIME_FORMAT_SEC = NumberFormat::getIntegerInstance
 	val static TIME_FORMAT_MIN = NumberFormat::getIntegerInstance
 
+	@Deprecated
 	def static String getTimeSeconds(Double duration) {
 		if(duration == null) {
 			return ""
@@ -85,6 +152,7 @@ class VilimaFormatter {
 		TIME_FORMAT_SEC.format(duration / 1000d) + " s"
 	}
 
+	@Deprecated
 	def static String getTimeMinutes(Double duration) {
 		if(duration == null) {
 			return ""
@@ -96,6 +164,7 @@ class VilimaFormatter {
 		TIME_FORMAT_MIN.format(duration / 60000d) + " min"
 	}
 
+	@Deprecated
 	def static String getTime(Double duration, boolean showMillis) {
 		if(duration == null) {
 			return ""

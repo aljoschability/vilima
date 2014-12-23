@@ -110,8 +110,10 @@ class MatroskaFileBuilder {
 		}
 
 		// scale duration
-		val durationNs = TimeUnit::NANOSECONDS.toMillis((durationValue * durationScale) as long)
-		result.duration = durationNs.doubleValue
+		if(durationValue != -1) {
+			val durationMs = TimeUnit::NANOSECONDS.toMillis((durationValue * durationScale) as long)
+			result.duration = durationMs
+		}
 
 		return result
 	}
