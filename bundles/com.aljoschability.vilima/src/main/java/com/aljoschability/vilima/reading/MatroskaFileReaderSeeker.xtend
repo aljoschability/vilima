@@ -1,5 +1,7 @@
 package com.aljoschability.vilima.reading;
 
+import com.aljoschability.vilima.extensions.MatroskaFileReaderExtension
+import com.aljoschability.vilima.extensions.impl.MatroskaFileReaderByteOperator
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.SeekableByteChannel
@@ -10,10 +12,9 @@ import java.util.Arrays
 import java.util.Collection
 import java.util.LinkedList
 import java.util.Queue
-import com.aljoschability.vilima.extensions.impl.MatroskaFileReaderByteOperator
 
 class MatroskaFileSeeker {
-	extension MatroskaFileReaderHelper = MatroskaFileReaderHelper::INSTANCE
+	extension MatroskaFileReaderExtension = MatroskaFileReaderExtension::INSTANCE
 
 	val ByteBuffer bufferHead = ByteBuffer::allocateDirect(8)
 	val ByteBuffer bufferSize = ByteBuffer::allocateDirect(8)

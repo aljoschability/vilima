@@ -10,11 +10,12 @@ import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.VilimaFactory
+import com.aljoschability.vilima.extensions.MatroskaFileReaderExtension
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
 
 class MatroskaFileBuilder {
-	val extension MatroskaFileReaderHelper = MatroskaFileReaderHelper::INSTANCE
+	val extension MatroskaFileReaderExtension = MatroskaFileReaderExtension::INSTANCE
 
 	val extension MatroskaFileSeeker seeker
 
