@@ -21,12 +21,14 @@ class ImportTagsFromFilenameJob extends Job {
 		val pattern1 = '''{show} S{season}E{episode} {title}'''
 		val pattern2 = '''(.*) S(.*)E(.*) (.*)'''
 
+		println('''instead of pattern "«pattern1»" the pattern "«pattern2»" is used''')
+
 		val pattern = Pattern::compile(pattern2)
 
 		for (file : path.listFiles([p, n|n.endsWith(".mkv")])) {
 			val matcher = pattern.matcher(file.name.substring(0, file.name.length - 4))
 
-			if (matcher.matches) {
+			if(matcher.matches) {
 				println(file.name)
 				for (var i = 1; i <= matcher.groupCount; i++) {
 					println("   " + i + ": " + matcher.group(i))
