@@ -31,6 +31,8 @@ class FindMovieTagDataJob extends Job {
 			val tagTitle = file.tagTitle
 			val segmentTitle = file.segmentTitle
 			val fileTitle = file.fileTitle
+
+			println('''tagIds=«tagIds»; tagTitle=«tagTitle»; segmentTitle=«segmentTitle»; fileTitle=«fileTitle»"''')
 		}
 
 		monitor.done
