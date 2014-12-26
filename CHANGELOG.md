@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org).
 
-## [Unreleased] (unreleased)
+## [Unreleased][unreleased]
 ### Added
 - 
 
@@ -11,6 +11,12 @@ This project adheres to [Semantic Versioning](http://semver.org).
 
 ### Fixed
 - 
+
+## [0.0.2] (2015-01-28)
+### Changed
+- instead of reading mkfiles directly they are now encapsulated in an emf mkresource which will be useful in later releases to support a commandstack, etc.
+- improved file reader which resulted in faster reading and easier maintainance
+- removed many unnecessary dependencies which resulted in faster loading time of the application
 
 ## 0.0.1 (2014-12-16)
 ### Added
@@ -25,5 +31,5 @@ This project adheres to [Semantic Versioning](http://semver.org).
 - data part which will be used to scrape information from databases (not useful at the moment, only for testing purposes)
 - covers part which shows covers contained in a selected file (not ready to use at the moment)
 
-[unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.2...HEAD
-[0.0.2]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...v0.0.2
+[unreleased]: https://github.com/aljoschability/vilima/compare/v0.0.2...HEAD
+[0.0.2]: https://github.com/aljoschability/vilima/compare/v0.0.1...v0.0.2
