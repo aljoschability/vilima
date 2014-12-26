@@ -1,8 +1,6 @@
 package com.aljoschability.vilima.reading;
 
 import com.aljoschability.vilima.extensions.MatroskaFileReaderExtension
-import com.aljoschability.vilima.extensions.impl.MatroskaFileReaderByteOperator
-import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.channels.SeekableByteChannel
 import java.nio.file.Files
@@ -14,28 +12,30 @@ import java.util.LinkedList
 import java.util.Queue
 
 class MatroskaFileSeeker {
+	val static RESERVED_ELEMENT = new EbmlElement(null, 0, 0) {
+		override getSkipLength() { 0 }
+	}
+
+	extension MatroskaFileReaderSeekerExtension = new MatroskaFileReaderSeekerExtension
 	extension MatroskaFileReaderExtension = MatroskaFileReaderExtension::INSTANCE
 
-	val ByteBuffer bufferHead = ByteBuffer::allocateDirect(8)
-	val ByteBuffer bufferSize = ByteBuffer::allocateDirect(8)
+	val ByteBuffer headerBuffer
+	val SeekableByteChannel channel
 
-	SeekableByteChannel channel
+	val Queue<Long> seeks
+	val Collection<Long> positionsParsed
 
 	long offset
-	Queue<Long> seeks
-	Collection<Long> positionsParsed
+
+	MatroskaFileBuilder builder
 
 	new(Path path) {
-		seeks = new LinkedList
-		positionsParsed = newArrayList
-		offset = -1
-
-		if(channel != null) {
-			println('''the channel has not been closed!''')
-			channel.close
-		}
+		headerBuffer = ByteBuffer::allocateDirect(8)
 
 		channel = Files::newByteChannel(path, StandardOpenOption::READ)
+
+		seeks = new LinkedList
+		positionsParsed = newArrayList
 	}
 
 	/**
@@ -57,7 +57,6 @@ class MatroskaFileSeeker {
 		if(parent instanceof EbmlMasterElement) {
 			return parent.hasNext
 		}
-
 		return false
 	}
 
@@ -76,112 +75,76 @@ class MatroskaFileSeeker {
 
 				buffer.flip()
 
-				element.data = toArray(buffer)
-
-				if(element.size > Integer::MAX_VALUE) {
-					throw new RuntimeException()
-				}
+				element.data = buffer.toArray
 			}
 			return element
 		}
 	}
 
 	def void dispose() {
-		channel?.close()
-		channel = null
-
-		seeks = null
-		positionsParsed = null
-		offset = -1
+		channel.close()
 	}
 
-	def private EbmlElement nextElement() {
-		val id = readElementId()
-		val dataSize = readDataSize()
+	/**
+	 * Rewinds the buffer, reads the first byte, encode its length and reads the rest.
+	 * 
+	 * @return Returns the length.
+	 */
+	def private void fillBuffer(ByteBuffer buffer) {
 
-		val node = MatroskaNode.get(id)
+		// read first byte
+		buffer.rewind()
+		buffer.limit(1)
+		channel.read(buffer)
 
-		var EbmlElement element = null
-		if(node == null) {
-			println(
-				'''unknown EBML element created: id=«Arrays::toString(id)»; hex=«MatroskaFileReaderByteOperator::
-					bytesToHex(id)»''')
-			element = new EbmlUnknownElement(id, dataSize)
-		} else if(EbmlElementType::MASTER == node.type) {
-			element = new EbmlMasterElement(id, dataSize);
-		} else {
-			element = new EbmlDataElement(id, dataSize);
-		}
-
-		return element
+		// read rest
+		buffer.limit(buffer.get(0).length)
+		channel.read(buffer)
 	}
 
 	def private byte[] readElementId() {
-		bufferHead.clear()
+		headerBuffer.fillBuffer
 
-		// read leading bit
-		bufferHead.limit(1)
-		if(channel.read(bufferHead) != 1) {
-			throw new RuntimeException()
-		}
+		headerBuffer.flip()
 
-		// convert length
-		val length = MatroskaFileReaderByteOperator::getLength(bufferHead.get(0))
-
-		// read rest of id
-		bufferHead.limit(length)
-		if(channel.read(bufferHead) != length - 1) {
-			throw new RuntimeException()
-		}
-
-		bufferHead.flip()
-
-		return toArray(bufferHead)
+		return headerBuffer.toArray
 	}
 
 	def private byte[] readDataSize() {
-		bufferSize.clear()
-
-		// read leading bit
-		bufferSize.limit(1)
-		if(channel.read(bufferSize) != 1) {
-			throw new RuntimeException()
-		}
-
-		// convert length
-		val length = MatroskaFileReaderByteOperator::getLength(bufferSize.get(0))
-
-		// read rest of id
-		bufferSize.limit(length)
-		if(channel.read(bufferSize) != length - 1) {
-			throw new RuntimeException()
-		}
+		headerBuffer.fillBuffer
 
 		// clear the first byte
-		MatroskaFileReaderByteOperator::clearFirstByte(bufferSize, length)
+		headerBuffer.clearFirstByte()
 
-		bufferSize.flip()
+		headerBuffer.flip()
 
-		return toArray(bufferSize)
+		return headerBuffer.toArray
 	}
 
-	/*****************************************/
-	/*****************************************/
-	def private static byte[] toArray(ByteBuffer buffer) {
-		val result = newByteArrayOfSize(buffer.limit)
-		buffer.get(result)
-		return result
+	def private EbmlElement nextElement() {
+
+		// read element id and catch its node
+		val id = readElementId()
+		val node = MatroskaNode.get(id)
+		if(node == null) {
+			return RESERVED_ELEMENT
+		}
+
+		// read element size
+		val sizeData = readDataSize()
+		val size = MatroskaFileReaderExtension.asLong(sizeData)
+		val headerSize = id.length + sizeData.length
+
+		if(EbmlElementType::MASTER == node.type) {
+			return new EbmlMasterElement(node, headerSize, size);
+		} else {
+			return new EbmlDataElement(node, headerSize, size);
+		}
 	}
 
-	MatroskaFileBuilder builder
-
-	def private long getPosition() {
-		return channel.position()
-	}
-
-	def private EbmlElement nextElement(long position) throws IOException {
-		channel.position(position);
-		return nextElement();
+	def private EbmlElement nextElement(long position) {
+		channel.position(position)
+		return nextElement()
 	}
 
 	def private boolean hasSeeks() {
@@ -204,7 +167,7 @@ class MatroskaFileSeeker {
 			throw new RuntimeException("Segment not the second element in the file.")
 		}
 
-		this.offset = position
+		this.offset = channel.position()
 
 		return parent
 	}
@@ -252,7 +215,7 @@ class MatroskaFileSeeker {
 					return
 				}
 				default: {
-					addPositionsParsed(position - element.headerSize)
+					addPositionsParsed(channel.position() - element.headerSize)
 					builder.readSegmentNode(element)
 				}
 			}
@@ -310,5 +273,29 @@ class MatroskaFileSeeker {
 
 			element.skip
 		}
+	}
+}
+
+class MatroskaFileReaderSeekerExtension {
+	def int getLength(byte value) {
+		var int mask = 0x0080
+		for (var int length = 0; length < 8; length++) {
+			if(value.bitwiseAnd(mask) == mask) {
+				return length + 1
+			}
+			mask = mask >>> 1
+		}
+
+		throw new RuntimeException
+	}
+
+	def void clearFirstByte(ByteBuffer buffer) {
+		buffer.put(0, buffer.get(0).bitwiseAnd(0xFF >>> buffer.limit).byteValue)
+	}
+
+	def byte[] toArray(ByteBuffer buffer) {
+		val result = newByteArrayOfSize(buffer.limit)
+		buffer.get(result)
+		return result
 	}
 }

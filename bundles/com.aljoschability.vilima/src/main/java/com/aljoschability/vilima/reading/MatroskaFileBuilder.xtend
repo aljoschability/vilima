@@ -241,7 +241,7 @@ class MatroskaFileBuilder {
 
 			switch element.node {
 				case AttachedFile: {
-					file.attachments += element.createMkAttachment(file.attachments.size)
+					file.attachments += element.createMkAttachment(file.attachments.size + 1)
 				}
 				default: {
 				}

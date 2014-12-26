@@ -3,8 +3,8 @@ package com.aljoschability.vilima.reading;
 class EbmlMasterElement extends EbmlElement {
 	long bytesParsed = 0
 
-	new(byte[] id, byte[] dataSize) {
-		super(id, dataSize)
+	new(MatroskaNode node, int headerSize, long size) {
+		super(node, headerSize, size)
 	}
 
 	/**
