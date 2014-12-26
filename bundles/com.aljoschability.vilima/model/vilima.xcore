@@ -63,19 +63,19 @@ class MkSegment
 class MkTrack
 {
 	/* The track number as used in the Block Header (using more than 127 tracks is not encouraged, though the design allows an unlimited number). */
-	long number
+	Long number
 	/* A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file. */
-	long uid
+	Long uid
 	/* The type of the track. */
 	MkTrackType ^type
 	/* Set if the track is usable. */
-	boolean flagEnabled
+	Boolean flagEnabled
 	/* Set if that track (audio, video or subs) SHOULD be active if no language found matches the user preference. */
-	boolean flagDefault
+	Boolean flagDefault
 	/* Set if that track MUST be active during playback. There can be many forced track for a kind (audio, video or subs), the player should select the one which language matches the user preference or the default + forced track. Overlay MAY happen between a forced and non-forced track of the same kind. */
-	boolean flagForced
+	Boolean flagForced
 	/* Set if the track may contain blocks using lacing. */
-	boolean flagLacing
+	Boolean flagLacing
 	/* A human-readable track name. */
 	String name
 	/* Specifies the language of the track in the Matroska languages form. */
@@ -83,15 +83,15 @@ class MkTrack
 	/* An ID corresponding to the codec, see the codec page for more info. */
 	String codec
 	/* Set if the video is interlaced. */
-	boolean videoFlagInterlaced
+	Boolean videoFlagInterlaced
 	/* Width of the encoded video frames in pixels. */
-	long videoPixelWidth
+	Long videoPixelWidth
 	/* Height of the encoded video frames in pixels. */
-	long videoPixelHeight
+	Long videoPixelHeight
 	/* Sampling frequency in Hz. */
-	double audioSamplingFrequency
+	Long audioSamplingFrequency
 	/* Numbers of channels in the track. */
-	long audioChannels
+	Long audioChannels
 }
 
 enum MkTrackType
