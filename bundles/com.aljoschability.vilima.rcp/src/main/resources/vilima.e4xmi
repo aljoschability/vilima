@@ -40,6 +40,13 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_PUIdYE1rEeSti-fsXBVUMQ" elementId="" label="Clean..." command="_XwvdUE1rEeSti-fsXBVUMQ"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_dsUCAFNMEeSquvVyYjhOiA" elementId="com.aljoschability.vilima.rcp.handledmenuitem.renameFiles" label="Rename Files..." command="_cKgT8EorEeSxLbcBSUEuUQ"/>
       </children>
+      <children xsi:type="menu:Menu" xmi:id="_xXBw4N9sEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.menu.view" label="View">
+        <children xsi:type="menu:MenuSeparator" xmi:id="_-npSYN9sEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.menuseparator.3"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_CRP2UN9tEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handledmenuitem.general" label="General"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="__zpLcN9sEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handledmenuitem.general" label="Movies"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_EFD9UN9tEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handledmenuitem.general" label="TV Shows"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_BvAE4N9tEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.menuseparator.4"/>
+      </children>
       <children xsi:type="menu:Menu" xmi:id="_ekqZrgc0EeOgF6k0_n958Q" label="Help">
         <children xsi:type="menu:HandledMenuItem" xmi:id="__7UukAntEeOIkI63lPisZg" elementId="" label="Documentation" iconURI="" command="_K4x6oAnuEeOIkI63lPisZg"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="__BqisAntEeOIkI63lPisZg" elementId="com.aljoschability.siborg.ui.menuseparator.0"/>
