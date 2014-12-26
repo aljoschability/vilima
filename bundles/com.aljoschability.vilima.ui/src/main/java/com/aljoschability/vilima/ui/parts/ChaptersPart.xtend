@@ -11,6 +11,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.services.IServiceConstants
+import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.resource.JFaceResources
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
@@ -19,93 +20,14 @@ import org.eclipse.jface.viewers.ITreeContentProvider
 import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.swt.SWT
-import org.eclipse.swt.custom.SashForm
 import org.eclipse.swt.widgets.Button
-import org.eclipse.swt.widgets.Combo
 import org.eclipse.swt.widgets.Composite
-import org.eclipse.swt.widgets.Group
-import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
-import org.eclipse.swt.widgets.Tree
 import org.eclipse.swt.widgets.TreeColumn
-import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
-import org.eclipse.swt.widgets.Control
-import org.eclipse.jface.viewers.Viewer
-import org.eclipse.jface.layout.GridDataFactory
 
 class ChaptersPart {
 	extension SwtExtension = SwtExtension::INSTANCE
 
-	@Deprecated
-	def boolean isActive(Control control) { control != null && !control.disposed }
-
-	@Deprecated
-	def boolean isActive(Viewer viewer) { viewer != null && viewer.control.active }
-
-	@Deprecated
-	def SashForm newSashForm(Composite parent, int style, Procedure1<SashForm> function) {
-		val result = new SashForm(parent, style)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Label newLabel(Composite parent, int style, Procedure1<Label> function) {
-		val result = new Label(parent, style)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Combo newCombo(Composite parent, int style, Procedure1<Combo> function) {
-		val result = new Combo(parent, style)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Composite newComposite(Composite parent, Procedure1<Composite> function) {
-		val result = new Composite(parent, SWT::NONE)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Group newGroup(Composite parent, Procedure1<Group> function) {
-		val result = new Group(parent, SWT::NONE)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Tree newTree(Composite parent, int style, Procedure1<Tree> function) {
-		val result = new Tree(parent, style)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def TreeViewer newTreeViewer(Tree parent, Procedure1<TreeViewer> function) {
-		val result = new TreeViewer(parent)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Button newButton(Composite parent, int style, Procedure1<Button> function) {
-		val result = new Button(parent, style)
-		function.apply(result)
-		return result
-	}
-
-	@Deprecated
-	def Text newText(Composite parent, int style, Procedure1<Text> function) {
-		val result = new Text(parent, style)
-		function.apply(result)
-		return result
-	}
-
-	/* ******************************************** */
 	TreeViewer chaptersViewer
 
 	MkFile file
