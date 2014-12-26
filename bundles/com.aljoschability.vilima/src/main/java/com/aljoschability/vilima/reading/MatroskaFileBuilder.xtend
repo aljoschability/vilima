@@ -219,7 +219,7 @@ class MatroskaFileBuilder {
 					track.videoFlagInterlaced = element.data.asBoolean
 				}
 				case SamplingFrequency: {
-					track.audioSamplingFrequency = element.data.asDouble
+					track.audioSamplingFrequency = element.data.asDouble.longValue
 				}
 				case Channels: {
 					track.audioChannels = element.data.asLong
