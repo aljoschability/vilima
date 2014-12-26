@@ -4,6 +4,8 @@ import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.extensions.VilimaFormatter
 import com.aljoschability.vilima.ui.VilimaImages
+import com.aljoschability.vilima.ui.extensions.SwtExtension
+import java.util.function.Function
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
@@ -17,116 +19,162 @@ import org.eclipse.jface.viewers.TableViewerColumn
 import org.eclipse.jface.viewers.Viewer
 import org.eclipse.jface.viewers.ViewerComparator
 import org.eclipse.swt.SWT
+import org.eclipse.swt.events.ControlAdapter
+import org.eclipse.swt.events.ControlEvent
 import org.eclipse.swt.widgets.Composite
-import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.TableColumn
+import org.eclipse.swt.custom.SashForm
+import java.util.Collection
+import org.eclipse.swt.widgets.Text
 
 class TracksPart {
-	Object input
+	extension SwtExtension = SwtExtension::INSTANCE
+
+	Collection<MkTrack> input
 
 	TableViewer viewer
 
+	Text detailsUidText
+
 	@PostConstruct
 	def postConstruct(Composite parent) {
-		val table = new Table(parent, SWT::MULTI.bitwiseOr(SWT::FULL_SELECTION))
-		table.headerVisible = true
-		table.linesVisible = true
+		val sash = parent.newSashForm(SWT::HORIZONTAL, [layoutData = newGridData(true, true)])
 
-		viewer = new TableViewer(table)
-		viewer.contentProvider = ArrayContentProvider::getInstance()
-		viewer.comparator = new ViewerComparator() {
-			override compare(Viewer viewer, Object a, Object b) {
-				if(a instanceof MkTrack) {
-					if(b instanceof MkTrack) {
-						return Long.compare(a.number, b.number)
+		sash.createTable()
+
+		sash.createDetails()
+
+		sash.weights = #[4, 1]
+	}
+
+	def void createTable(Composite parent) {
+		val composite = parent.newComposite [
+			layout = newGridLayoutSwt
+			layoutData = newGridData(true, true)
+		]
+
+		viewer = composite.newTableViewer(
+			[
+				table.layoutData = newGridData(true, true)
+				table.headerVisible = true
+				table.linesVisible = true
+				contentProvider = ArrayContentProvider::getInstance()
+				comparator = new ViewerComparator() {
+					override compare(Viewer viewer, Object a, Object b) {
+						if(a instanceof MkTrack) {
+							if(b instanceof MkTrack) {
+								return Long.compare(a.number, b.number)
+							}
+						}
+						super.compare(viewer, a, b)
 					}
 				}
-				super.compare(viewer, a, b)
-			}
-		}
+				addSelectionChangedListener(
+					[ e |
+						val selection = e.selection as IStructuredSelection
+						selectTrack(selection.firstElement as MkTrack)
+					])
+			], SWT::SINGLE, SWT::FULL_SELECTION, SWT::BORDER)
 
-		createTrackColumn()
-		createLanguageColumn()
-		createNameColumn()
+		createColumn("Number", 56, [t|String::valueOf(t.number ?: "")], true)
+		createColumn("UID", 80, [t|String::valueOf(t.uid ?: "")])
+		createColumn("Enabled", 80, [t|String::valueOf(t.flagEnabled ?: "")])
+		createColumn("Default", 80, [t|String::valueOf(t.flagDefault ?: "")])
+		createColumn("Forced", 80, [t|String::valueOf(t.flagForced ?: "")])
+		createColumn("Lacing", 80, [t|String::valueOf(t.flagLacing ?: "")])
+		createColumn("Name", 100, [t|t.name])
+		createColumn("Codec", 160, [t|t.codec])
+		createColumn("Language", 64, [t|t.language])
+		createColumn("Audio Channels", 100, [t|String::valueOf(t.audioChannels ?: "")])
+		createColumn("Audio Frequency", 108, [t|String::valueOf(t.audioSamplingFrequency ?: "")])
+		createColumn("Video Width", 77, [t|String::valueOf(t.videoPixelWidth ?: "")])
+		createColumn("Video Height", 82, [t|String::valueOf(t.videoPixelHeight ?: "")])
+		createColumn("Info", 160, [t|VilimaFormatter::getTrackInfo(t)])
 
 		viewer.input = input
 	}
 
-	def private void createTrackColumn() {
-		val column = new TableColumn(viewer.table, SWT::CENTER)
+	def void createDetails(Composite parent) {
+		val composite = parent.newComposite [
+			layout = newGridLayoutSwt
+			layoutData = newGridData(true, true)
+		]
 
+		val group = composite.newGroup [
+			text = "Details"
+			layout = newGridLayoutSwt(2)
+			layoutData = newGridData(true, true)
+		]
+
+		// video
+		val uidLabel = group.newLabel(SWT::TRAIL,
+			[
+				text = "UID:"
+			])
+
+		detailsUidText = group.newText(
+			[
+				layoutData = newGridData(true, false)
+			], SWT::LEAD, SWT::BORDER)
+	}
+
+	private def void selectTrack(MkTrack track) {
+		if(detailsUidText.active) {
+			detailsUidText.text = String::valueOf(track?.uid ?: "")
+		}
+		println('''track selected: «track»''')
+	}
+
+	def private void createColumn(String title, int width, Function<MkTrack, String> function) {
+		createColumn(title, width, function, false)
+	}
+
+	def private void createColumn(String title, int width, Function<MkTrack, String> function, boolean showIcon) {
+		val column = new TableColumn(viewer.table, SWT::LEAD)
 		column.moveable = true
 		column.resizable = true
-		column.width = 160
-		column.text = "Track"
+		column.width = width
+		column.text = title
+
+		column.addControlListener(
+			new ControlAdapter {
+				override controlResized(ControlEvent e) {
+					println((e.widget as TableColumn).width)
+				}
+			})
 
 		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if(element instanceof MkTrack) {
-					return VilimaFormatter::getTrackInfo(element)
+					val value = function.apply(element)
+					if(value != null) {
+						return String::valueOf(value)
+					}
 				}
 				return ""
 			}
 
 			override getImage(Object element) {
-				if(element instanceof MkTrack) {
-					switch (element.getType) {
-						case VIDEO: {
-							return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
-						}
-						case AUDIO: {
-							return VilimaImages::image(VilimaImages::TRACK_TYPE_AUDIO)
-						}
-						case SUBTITLE: {
-							return VilimaImages::image(VilimaImages::TRACK_TYPE_SUBTITLE)
-						}
-						default: {
-							println("trying to show image for track - type not known: " + element.getType)
+				if(showIcon) {
+					if(element instanceof MkTrack) {
+						switch (element.getType) {
+							case VIDEO: {
+								return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
+							}
+							case AUDIO: {
+								return VilimaImages::image(VilimaImages::TRACK_TYPE_AUDIO)
+							}
+							case SUBTITLE: {
+								return VilimaImages::image(VilimaImages::TRACK_TYPE_SUBTITLE)
+							}
+							default: {
+								println("trying to show image for track - type not known: " + element.getType)
+								return null
+							}
 						}
 					}
 				}
-
-				return null
-			}
-		}
-	}
-
-	def private void createLanguageColumn() {
-		val column = new TableColumn(viewer.table, SWT::LEAD)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 90
-		column.text = "Language"
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
-				if(element instanceof MkTrack) {
-					return VilimaFormatter::getLanguage(element.getLanguage)
-				}
-				return ""
-			}
-		}
-	}
-
-	def private void createNameColumn() {
-		val column = new TableColumn(viewer.table, SWT::LEAD)
-
-		column.moveable = true
-		column.resizable = true
-		column.width = 100
-		column.text = "Name"
-		val viewerColumn = new TableViewerColumn(viewer, column)
-		viewerColumn.labelProvider = new ColumnLabelProvider() {
-			override getText(Object element) {
-				if(element instanceof MkTrack) {
-					val name = element.getName
-					if(name != null) {
-						return name
-					}
-				}
-				return ""
 			}
 		}
 	}
@@ -142,7 +190,7 @@ class TracksPart {
 			}
 		}
 
-		if(viewer != null && !viewer.table.disposed) {
+		if(viewer.active) {
 			viewer.input = input
 		}
 	}
