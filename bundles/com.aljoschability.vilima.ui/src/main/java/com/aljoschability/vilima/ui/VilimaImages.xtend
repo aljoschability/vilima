@@ -1,5 +1,8 @@
 package com.aljoschability.vilima.ui
 
+import org.eclipse.jface.resource.ImageDescriptor
+import org.eclipse.swt.graphics.Image
+
 final class VilimaImages {
 	public static val TRACK_TYPE_VIDEO = "icons/data/tracktypes/video.png"
 	public static val TRACK_TYPE_AUDIO = "icons/data/tracktypes/audio.png"
@@ -15,11 +18,11 @@ final class VilimaImages {
 	public static val TRIANGLE_RIGHT = "icons/entypo/triangle-right.png"
 	public static val TRIANGLE_UP = "icons/entypo/triangle-up.png"
 
-	def static image(String key) {
+	def static Image get(String key) {
 		Activator::get.getImage(key)
 	}
 
-	def static descriptor(String key) {
+	def static ImageDescriptor getDescriptor(String key) {
 		Activator::get.getImageDescriptor(key)
 	}
 }

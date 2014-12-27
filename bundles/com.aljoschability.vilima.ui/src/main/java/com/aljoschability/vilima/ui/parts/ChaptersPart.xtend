@@ -105,21 +105,21 @@ class ChaptersPart {
 				toolTipText = "A unique ID to identify the edition. It's useful for tagging an edition."
 			])
 
-		editionFlagHidden = editionComposite.newButton(SWT::CHECK,
+		editionFlagHidden = editionComposite.newButton(
 			[
 				text = "Hidden"
 				toolTipText = "If an edition is hidden, it should not be available to the user interface (but still to Control Tracks)."
-			])
-		editionFlagDefault = editionComposite.newButton(SWT::CHECK,
+			], SWT::CHECK)
+		editionFlagDefault = editionComposite.newButton(
 			[
 				text = "Default"
 				toolTipText = "If an edition is set to default it should be used as the default one."
-			])
-		editionFlagOrdered = editionComposite.newButton(SWT::CHECK,
+			], SWT::CHECK)
+		editionFlagOrdered = editionComposite.newButton(
 			[
 				text = "Ordered"
 				toolTipText = "Specify if the chapters can be defined multiple times and the order to play them is enforced."
-			])
+			], SWT::CHECK)
 
 		sash.weights = #[1, 1]
 	}

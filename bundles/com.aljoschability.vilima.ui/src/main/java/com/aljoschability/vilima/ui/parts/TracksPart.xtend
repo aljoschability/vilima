@@ -229,13 +229,13 @@ class TracksPart {
 					if(element instanceof MkTrack) {
 						switch (element.getType) {
 							case VIDEO: {
-								return VilimaImages::image(VilimaImages::TRACK_TYPE_VIDEO)
+								return VilimaImages::get(VilimaImages::TRACK_TYPE_VIDEO)
 							}
 							case AUDIO: {
-								return VilimaImages::image(VilimaImages::TRACK_TYPE_AUDIO)
+								return VilimaImages::get(VilimaImages::TRACK_TYPE_AUDIO)
 							}
 							case SUBTITLE: {
-								return VilimaImages::image(VilimaImages::TRACK_TYPE_SUBTITLE)
+								return VilimaImages::get(VilimaImages::TRACK_TYPE_SUBTITLE)
 							}
 							default: {
 								println("trying to show image for track - type not known: " + element.getType)

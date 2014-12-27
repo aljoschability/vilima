@@ -261,7 +261,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val addButton = new Button(moveComposite, SWT::PUSH)
 		addButton.layoutData = newGridData
-		addButton.image = VilimaImages::image(VilimaImages::TRIANGLE_RIGHT)
+		addButton.image = VilimaImages::get(VilimaImages::TRIANGLE_RIGHT)
 		addButton.toolTipText = "Add Selected Column"
 		addButton.addSelectionListener(
 			new SelectionAdapter {
@@ -272,7 +272,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val removeButton = new Button(moveComposite, SWT::PUSH)
 		removeButton.layoutData = newGridData
-		removeButton.image = VilimaImages::image(VilimaImages::TRIANGLE_LEFT)
+		removeButton.image = VilimaImages::get(VilimaImages::TRIANGLE_LEFT)
 		removeButton.toolTipText = "Remove Selected Column"
 		removeButton.addSelectionListener(
 			new SelectionAdapter {
@@ -288,7 +288,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val upButton = new Button(orderComposite, SWT::PUSH)
 		upButton.layoutData = newGridData
-		upButton.image = VilimaImages::image(VilimaImages::TRIANGLE_UP)
+		upButton.image = VilimaImages::get(VilimaImages::TRIANGLE_UP)
 		upButton.toolTipText = "Move Selected Column Up"
 		upButton.addSelectionListener(
 			new SelectionAdapter {
@@ -299,7 +299,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val downButton = new Button(orderComposite, SWT::PUSH)
 		downButton.layoutData = newGridData
-		downButton.image = VilimaImages::image(VilimaImages::TRIANGLE_DOWN)
+		downButton.image = VilimaImages::get(VilimaImages::TRIANGLE_DOWN)
 		downButton.toolTipText = "Move Selected Column Down"
 		downButton.addSelectionListener(
 			new SelectionAdapter {
