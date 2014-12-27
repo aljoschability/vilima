@@ -11,7 +11,6 @@ import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.services.IServiceConstants
-import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.resource.JFaceResources
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
@@ -95,11 +94,11 @@ class ChaptersPart {
 			layout = newGridLayout(2)
 			layoutData = newGridData(true, false)
 		]
-		editionUid.newLabel(SWT::LEAD,
+		editionUid.newLabel(
 			[
 				text = "UID:"
-				layoutData = GridDataFactory::fillDefaults.align(SWT::FILL, SWT::CENTER).create
-			])
+				layoutData = newGridDataCentered
+			], SWT::LEAD)
 		editionUidText = editionUid.newText(SWT::LEAD.bitwiseOr(SWT::BORDER),
 			[
 				layoutData = newGridData(true, false)

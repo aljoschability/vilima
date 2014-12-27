@@ -2,9 +2,12 @@ package com.aljoschability.vilima.ui.parts;
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrack
-import com.aljoschability.vilima.extensions.VilimaFormatter
 import com.aljoschability.vilima.ui.VilimaImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.widgets.MkTrackDetailCheckWidget
+import com.aljoschability.vilima.ui.widgets.MkTrackDetailTextWidget
+import com.aljoschability.vilima.ui.widgets.MkTrackDetailWidget
+import java.util.Collection
 import java.util.function.Function
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -23,9 +26,9 @@ import org.eclipse.swt.events.ControlAdapter
 import org.eclipse.swt.events.ControlEvent
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.TableColumn
-import org.eclipse.swt.custom.SashForm
-import java.util.Collection
 import org.eclipse.swt.widgets.Text
+
+import static extension com.aljoschability.vilima.ui.parts.TracksPart.*
 
 class TracksPart {
 	extension SwtExtension = SwtExtension::INSTANCE
@@ -34,7 +37,15 @@ class TracksPart {
 
 	TableViewer viewer
 
-	Text detailsUidText
+	Text detailsLanguageText
+
+	MkTrackDetailWidget uidWidget
+	MkTrackDetailWidget nameWidget
+
+	MkTrackDetailWidget flagEnabledWidget
+	MkTrackDetailWidget flagLacingWidget
+	MkTrackDetailWidget flagDefaultWidget
+	MkTrackDetailWidget flagForcedWidget
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
@@ -76,22 +87,29 @@ class TracksPart {
 					])
 			], SWT::SINGLE, SWT::FULL_SELECTION, SWT::BORDER)
 
-		createColumn("Number", 56, [t|String::valueOf(t.number ?: "")], true)
-		createColumn("UID", 80, [t|String::valueOf(t.uid ?: "")])
-		createColumn("Enabled", 80, [t|String::valueOf(t.flagEnabled ?: "")])
-		createColumn("Default", 80, [t|String::valueOf(t.flagDefault ?: "")])
-		createColumn("Forced", 80, [t|String::valueOf(t.flagForced ?: "")])
-		createColumn("Lacing", 80, [t|String::valueOf(t.flagLacing ?: "")])
-		createColumn("Name", 100, [t|t.name])
-		createColumn("Codec", 160, [t|t.codec])
-		createColumn("Language", 64, [t|t.language])
+		createColumn("Type", 96, [t|t.formatType], true)
+		createColumn("Name", 100, [t|t.formatName])
+		createColumn("Codec", 160, [t|t.formatCodec])
+
+		createColumn("Number", 56, [t|String::valueOf(t.number ?: "")])
 		createColumn("Audio Channels", 100, [t|String::valueOf(t.audioChannels ?: "")])
 		createColumn("Audio Frequency", 108, [t|String::valueOf(t.audioSamplingFrequency ?: "")])
 		createColumn("Video Width", 77, [t|String::valueOf(t.videoPixelWidth ?: "")])
 		createColumn("Video Height", 82, [t|String::valueOf(t.videoPixelHeight ?: "")])
-		createColumn("Info", 160, [t|VilimaFormatter::getTrackInfo(t)])
 
 		viewer.input = input
+	}
+
+	private static def String formatType(MkTrack track) {
+		track.type.toString.toLowerCase.toFirstUpper
+	}
+
+	private static def String formatName(MkTrack track) {
+		track.name ?: ""
+	}
+
+	private static def String formatCodec(MkTrack track) {
+		track.codec ?: ""
 	}
 
 	def void createDetails(Composite parent) {
@@ -102,27 +120,78 @@ class TracksPart {
 
 		val group = composite.newGroup [
 			text = "Details"
-			layout = newGridLayoutSwt(2)
+			layout = newGridLayoutSwt(3)
 			layoutData = newGridData(true, true)
 		]
 
-		// video
-		val uidLabel = group.newLabel(SWT::TRAIL,
-			[
-				text = "UID:"
-			])
+		// UID
+		uidWidget = new MkTrackDetailTextWidget("UID", "The unique identifier for the track.") {
+			override protected updateContents(MkTrack track) {
+				widget.enabled = track != null
+				widget.text = String::valueOf(track?.uid ?: "")
+			}
+		}
+		uidWidget.create(group)
 
-		detailsUidText = group.newText(
-			[
-				layoutData = newGridData(true, false)
-			], SWT::LEAD, SWT::BORDER)
+		// name
+		nameWidget = new MkTrackDetailTextWidget("Name", "The name of the track.") {
+			override protected updateContents(MkTrack track) {
+				widget.enabled = track != null
+				widget.text = String::valueOf(track?.name ?: "")
+			}
+		}
+		nameWidget.create(group)
+
+		// language
+		//		detailsLanguageText = group.newDetailText("Language")
+		//		group.newLabel([], SWT::NONE)
+		// flags
+		flagEnabledWidget = new MkTrackDetailCheckWidget("Enabled", "Whether or this track is enabled.") {
+			override protected updateContents(MkTrack track) {
+				widget.enabled = track != null
+				widget.selection = track?.flagEnabled ?: true
+			}
+		}
+		flagEnabledWidget.create(group)
+
+		flagDefaultWidget = new MkTrackDetailCheckWidget("Default", "???") {
+			override protected updateContents(MkTrack track) {
+				widget.enabled = track != null
+				widget.selection = track?.flagDefault ?: true
+			}
+		}
+		flagDefaultWidget.create(group)
+
+		flagForcedWidget = new MkTrackDetailCheckWidget("Forced", "???") {
+			override protected updateContents(MkTrack track) {
+				widget.enabled = track != null
+				widget.selection = track?.flagForced ?: false
+			}
+		}
+		flagForcedWidget.create(group)
+
+		flagLacingWidget = new MkTrackDetailCheckWidget("Lacing", "???") {
+			override protected updateContents(MkTrack track) {
+				widget.enabled = track != null
+				widget.selection = track?.flagLacing ?: true
+			}
+		}
+		flagLacingWidget.create(group)
 	}
 
 	private def void selectTrack(MkTrack track) {
-		if(detailsUidText.active) {
-			detailsUidText.text = String::valueOf(track?.uid ?: "")
-		}
-		println('''track selected: «track»''')
+		uidWidget.update(track)
+		nameWidget.update(track)
+
+		flagEnabledWidget.update(track)
+		flagDefaultWidget.update(track)
+		flagForcedWidget.update(track)
+		flagLacingWidget.update(track)
+
+	//		if(detailsLanguageText.active) {
+	//			detailsLanguageText.text = String::valueOf(track?.language ?: "")
+	//		}
+	//
 	}
 
 	def private void createColumn(String title, int width, Function<MkTrack, String> function) {
