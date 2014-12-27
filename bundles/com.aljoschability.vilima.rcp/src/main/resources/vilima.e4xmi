@@ -46,6 +46,7 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="__zpLcN9sEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handledmenuitem.general" label="Movies" command="_ekqZnAc0EeOgF6k0_n958Q"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_EFD9UN9tEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handledmenuitem.general" label="TV Shows" command="_ekqZnAc0EeOgF6k0_n958Q"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_BvAE4N9tEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.menuseparator.4"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WbXjoN_YEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handledmenuitem.general" label="Open Configuration Wizard" command="_lqMeQN_YEeSk7oHYr1-fNg"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_ekqZrgc0EeOgF6k0_n958Q" label="Help">
         <children xsi:type="menu:HandledMenuItem" xmi:id="__7UukAntEeOIkI63lPisZg" elementId="" label="Documentation" iconURI="" command="_K4x6oAnuEeOIkI63lPisZg"/>
@@ -61,6 +62,7 @@
   <handlers xmi:id="_F6ZVEAnuEeOIkI63lPisZg" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_K4x6oAnuEeOIkI63lPisZg"/>
   <handlers xmi:id="_ekqZpwc0EeOgF6k0_n958Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_ekqZpgc0EeOgF6k0_n958Q"/>
   <handlers xmi:id="_V4hXcE1rEeSti-fsXBVUMQ" elementId="" command="_XwvdUE1rEeSti-fsXBVUMQ"/>
+  <handlers xmi:id="_Zp_bwN_YEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handler.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.OpenConfigurationWizardHandler" command="_lqMeQN_YEeSk7oHYr1-fNg"/>
   <bindingTables xmi:id="_ekqZngc0EeOgF6k0_n958Q" bindingContext="_sUwwQA_jEeO_4LEaCI1c-g">
     <bindings xmi:id="_Jz_AgEd2EeSeSshVzL7ILQ" elementId="com.aljoschability.vilima.rcp.keybinding.1" keySequence="M1+X" command="_CSzXMD0nEeSYS5JDjizolA"/>
     <bindings xmi:id="_EUoPkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.keybinding.0" keySequence="M1+C" command="_FjsgMD0nEeSYS5JDjizolA"/>
@@ -86,6 +88,7 @@
   <commands xmi:id="_QTiWcE-QEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.rcp.command.switchPerspective" commandName="Switch Perspective">
     <parameters xmi:id="_Rn9ywE-QEeSmnYfQADCQZw" elementId="com.aljoschability.vilima.parameters.perspective" name="Perspective" optional="false"/>
   </commands>
+  <commands xmi:id="_lqMeQN_YEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.command.openConfigurationWizard" commandName="Open Configuration Wizard"/>
   <addons xmi:id="_ekqZkgc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_ekqZkwc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_ekqZlAc0EeOgF6k0_n958Q" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
