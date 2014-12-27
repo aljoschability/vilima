@@ -33,8 +33,8 @@ class SwtExtension {
 		return result
 	}
 
-	def Label newLabel(Composite parent, int style, Procedure1<Label> function) {
-		val result = new Label(parent, style)
+	def Label newLabel(Composite parent, Procedure1<Label> function, int... styles) {
+		val result = new Label(parent, styles.flagged)
 		function.apply(result)
 		return result
 	}
@@ -91,8 +91,15 @@ class SwtExtension {
 		return result
 	}
 
+	@Deprecated
 	def Button newButton(Composite parent, int style, Procedure1<Button> function) {
 		val result = new Button(parent, style)
+		function.apply(result)
+		return result
+	}
+
+	def Button newButton(Composite parent, Procedure1<Button> function, int... styles) {
+		val result = new Button(parent, styles.flagged)
 		function.apply(result)
 		return result
 	}
@@ -115,6 +122,10 @@ class SwtExtension {
 
 	def GridData newGridData() {
 		newGridData(false, false)
+	}
+
+	def GridData newGridDataCentered() {
+		GridDataFactory::fillDefaults.align(SWT::FILL, SWT::CENTER).create
 	}
 
 	def GridLayout newGridLayout() {
