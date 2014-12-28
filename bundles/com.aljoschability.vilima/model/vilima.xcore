@@ -24,7 +24,7 @@ class MkFile
 	/* The segment information of the Matroska container. */
 	contains MkSegment[1] information opposite file
 	/* The tracks contained in the Matroska container. */
-	contains MkTrack[] tracks
+	contains MkTrack[] tracks opposite file
 	/* The attachment inside the Matroska container. */
 	contains MkAttachment[] attachments opposite file
 	/* The editions contained in the Matroska container. */
@@ -62,6 +62,7 @@ class MkSegment
 /* This represents a track of the Matroska container and describes the track with all elements. */
 class MkTrack
 {
+	container MkFile file opposite tracks
 	/* The track number as used in the Block Header (using more than 127 tracks is not encouraged, though the design allows an unlimited number). */
 	Long number
 	/* A unique ID to identify the Track. This should be kept the same when making a direct stream copy of the Track to another file. */
