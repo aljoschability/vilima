@@ -4,9 +4,10 @@ import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.ui.VilimaImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
-import com.aljoschability.vilima.ui.widgets.MkTrackDetailCheckWidget
-import com.aljoschability.vilima.ui.widgets.MkTrackDetailTextWidget
-import com.aljoschability.vilima.ui.widgets.MkTrackDetailWidget
+import com.aljoschability.vilima.ui.widgets.BaseTextWidget
+import com.aljoschability.vilima.ui.widgets.HelpfulCheckboxEditingWidget
+import com.aljoschability.vilima.ui.widgets.MkTrackNameWidget
+import com.aljoschability.vilima.ui.widgets.MkTrackUidWidget
 import java.util.Collection
 import java.util.function.Function
 import javax.annotation.PostConstruct
@@ -26,7 +27,6 @@ import org.eclipse.swt.events.ControlAdapter
 import org.eclipse.swt.events.ControlEvent
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.TableColumn
-import org.eclipse.swt.widgets.Text
 
 import static extension com.aljoschability.vilima.ui.parts.TracksPart.*
 
@@ -37,15 +37,14 @@ class TracksPart {
 
 	TableViewer viewer
 
-	Text detailsLanguageText
+	BaseTextWidget<MkTrack> uidWidget
+	BaseTextWidget<MkTrack> nameWidget
+	BaseTextWidget<MkTrack> languageWidget
 
-	MkTrackDetailWidget uidWidget
-	MkTrackDetailWidget nameWidget
-
-	MkTrackDetailWidget flagEnabledWidget
-	MkTrackDetailWidget flagLacingWidget
-	MkTrackDetailWidget flagDefaultWidget
-	MkTrackDetailWidget flagForcedWidget
+	HelpfulCheckboxEditingWidget<MkTrack> flagEnabledWidget
+	HelpfulCheckboxEditingWidget<MkTrack> flagLacingWidget
+	HelpfulCheckboxEditingWidget<MkTrack> flagDefaultWidget
+	HelpfulCheckboxEditingWidget<MkTrack> flagForcedWidget
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
@@ -88,7 +87,9 @@ class TracksPart {
 			], SWT::SINGLE, SWT::FULL_SELECTION, SWT::BORDER)
 
 		createColumn("Type", 96, [t|t.formatType], true)
-		createColumn("Name", 100, [t|t.formatName])
+		val column = createColumn("Name", 100, [t|t.formatName])
+
+		//		createDataBinding(column)
 		createColumn("Codec", 160, [t|t.formatCodec])
 
 		createColumn("Number", 56, [t|String::valueOf(t.number ?: "")])
@@ -125,80 +126,94 @@ class TracksPart {
 		]
 
 		// UID
-		uidWidget = new MkTrackDetailTextWidget("UID", "The unique identifier for the track.") {
-			override protected updateContents(MkTrack track) {
-				widget.enabled = track != null
-				widget.text = String::valueOf(track?.uid ?: "")
-			}
-		}
+		uidWidget = new MkTrackUidWidget
 		uidWidget.create(group)
 
 		// name
-		nameWidget = new MkTrackDetailTextWidget("Name", "The name of the track.") {
-			override protected updateContents(MkTrack track) {
-				widget.enabled = track != null
-				widget.text = String::valueOf(track?.name ?: "")
-			}
-		}
+		nameWidget = new MkTrackNameWidget
 		nameWidget.create(group)
 
-		// language
-		//		detailsLanguageText = group.newDetailText("Language")
-		//		group.newLabel([], SWT::NONE)
-		// flags
-		flagEnabledWidget = new MkTrackDetailCheckWidget("Enabled", "Whether or this track is enabled.") {
+	// language
+	/*
+		languageWidget = new BaseTextWidget<MkTrack>("Language") {
+			override getValue(MkTrack element) {
+				element?.language
+			}
+
+			override setValue(MkTrack element, String value) {
+				element.language = value
+			}
+
+			override protected getStatus(MkTrack element) {
+				if(element?.language == "test") {
+					return newError("The language must not be 'test'.")
+				}
+				return newInformation("The language of the track.")
+			}
+		}
+		languageWidget.create(group)
+
+		// enabled
+		flagEnabledWidget = new HelpfulCheckboxEditingWidget<MkTrack>(group, "Enabled") {
 			override protected updateContents(MkTrack track) {
 				widget.enabled = track != null
+				widget.grayed = track?.flagEnabled == null
 				widget.selection = track?.flagEnabled ?: true
 			}
 		}
 		flagEnabledWidget.create(group)
 
-		flagDefaultWidget = new MkTrackDetailCheckWidget("Default", "???") {
+		// default
+		flagDefaultWidget = new HelpfulCheckboxEditingWidget<MkTrack>("Default", "???") {
 			override protected updateContents(MkTrack track) {
 				widget.enabled = track != null
+				widget.grayed = track?.flagDefault == null
 				widget.selection = track?.flagDefault ?: true
 			}
 		}
 		flagDefaultWidget.create(group)
 
-		flagForcedWidget = new MkTrackDetailCheckWidget("Forced", "???") {
+		// forced
+		flagForcedWidget = new HelpfulCheckboxEditingWidget<MkTrack>("Forced", "???") {
 			override protected updateContents(MkTrack track) {
 				widget.enabled = track != null
+				widget.grayed = track?.flagForced == null
 				widget.selection = track?.flagForced ?: false
 			}
 		}
 		flagForcedWidget.create(group)
 
-		flagLacingWidget = new MkTrackDetailCheckWidget("Lacing", "???") {
+		// lacing
+		flagLacingWidget = new HelpfulCheckboxEditingWidget<MkTrack>("Lacing", "???") {
 			override protected updateContents(MkTrack track) {
 				widget.enabled = track != null
+				widget.grayed = track?.flagLacing == null
 				widget.selection = track?.flagLacing ?: true
 			}
 		}
 		flagLacingWidget.create(group)
+*/
 	}
 
 	private def void selectTrack(MkTrack track) {
-		uidWidget.update(track)
-		nameWidget.update(track)
+		uidWidget.input = track
+		nameWidget.input = track
 
-		flagEnabledWidget.update(track)
-		flagDefaultWidget.update(track)
-		flagForcedWidget.update(track)
-		flagLacingWidget.update(track)
+	/*
+		 * languageWidget.input = track
 
-	//		if(detailsLanguageText.active) {
-	//			detailsLanguageText.text = String::valueOf(track?.language ?: "")
-	//		}
-	//
+	flagEnabledWidget.input = track
+		flagDefaultWidget.input = track
+		flagForcedWidget.input = track
+		flagLacingWidget.input = track*/
 	}
 
-	def private void createColumn(String title, int width, Function<MkTrack, String> function) {
+	def private TableViewerColumn createColumn(String title, int width, Function<MkTrack, String> function) {
 		createColumn(title, width, function, false)
 	}
 
-	def private void createColumn(String title, int width, Function<MkTrack, String> function, boolean showIcon) {
+	def private TableViewerColumn createColumn(String title, int width, Function<MkTrack, String> function,
+		boolean showIcon) {
 		val column = new TableColumn(viewer.table, SWT::LEAD)
 		column.moveable = true
 		column.resizable = true
@@ -246,6 +261,7 @@ class TracksPart {
 				}
 			}
 		}
+		return viewerColumn
 	}
 
 	@Inject
