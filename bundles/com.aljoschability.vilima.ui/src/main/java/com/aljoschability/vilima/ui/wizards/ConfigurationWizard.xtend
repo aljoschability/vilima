@@ -5,9 +5,10 @@ import org.eclipse.jface.wizard.Wizard
 
 class ConfigurationWizard extends Wizard {
 	new() {
+
+		// TODO: choose image defaultPageImageDescriptor = null
 		helpAvailable = false
 		needsProgressMonitor = false
-		defaultPageImageDescriptor = null // TODO: choose image
 		windowTitle = "Basic Configuration"
 
 		// dialog settings

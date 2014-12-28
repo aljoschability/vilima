@@ -2,10 +2,16 @@ package com.aljoschability.vilima.ui.extensions
 
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory
+import org.eclipse.jface.viewers.TableViewer
 import org.eclipse.jface.viewers.TreeViewer
 import org.eclipse.jface.viewers.Viewer
 import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.SashForm
+import org.eclipse.swt.events.ModifyEvent
+import org.eclipse.swt.events.ModifyListener
+import org.eclipse.swt.events.SelectionAdapter
+import org.eclipse.swt.events.SelectionEvent
+import org.eclipse.swt.events.SelectionListener
 import org.eclipse.swt.layout.GridData
 import org.eclipse.swt.layout.GridLayout
 import org.eclipse.swt.widgets.Button
@@ -14,11 +20,10 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Control
 import org.eclipse.swt.widgets.Group
 import org.eclipse.swt.widgets.Label
+import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.Text
 import org.eclipse.swt.widgets.Tree
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
-import org.eclipse.swt.widgets.Table
-import org.eclipse.jface.viewers.TableViewer
 
 class SwtExtension {
 	val public static INSTANCE = new SwtExtension
@@ -150,5 +155,21 @@ class SwtExtension {
 
 	def Group newGroup(Composite parent) {
 		new Group(parent, SWT::NONE)
+	}
+
+	def ModifyListener newModifyListener(Procedure1<ModifyEvent> procedure) {
+		new ModifyListener() {
+			override modifyText(ModifyEvent e) {
+				procedure.apply(e)
+			}
+		}
+	}
+
+	def SelectionListener newSelectionListener(Procedure1<SelectionEvent> procedure) {
+		new SelectionAdapter() {
+			override widgetSelected(SelectionEvent e) {
+				procedure.apply(e)
+			}
+		}
 	}
 }
