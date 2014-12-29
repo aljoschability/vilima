@@ -4,6 +4,9 @@ import com.aljoschability.vilima.IContentManager
 import com.aljoschability.vilima.VilimaColumnConfiguration
 import com.aljoschability.vilima.VilimaEventTopics
 import com.aljoschability.vilima.VilimaFactory
+import com.aljoschability.vilima.VilimaManager
+import com.aljoschability.vilima.VilimaManagerImpl
+import com.aljoschability.vilima.VilimaManagerProvider
 import com.aljoschability.vilima.XVilimaLibrary
 import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
@@ -36,10 +39,12 @@ import org.eclipse.swt.widgets.Menu
 import org.eclipse.swt.widgets.MenuItem
 import org.eclipse.swt.widgets.TreeColumn
 
-class FilesPart {
+class FilesPart implements VilimaManagerProvider {
 	static val SETTINGS_COLUMN_IDS = "COLUMN_IDS"
 	static val SETTINGS_COLUMN_WIDTHS = "COLUMN_WIDTHS"
 	static val SETTINGS_SORT_ID = "SORT_ID"
+
+	VilimaManager vilimaManager
 
 	@Inject IContentManager manager
 	@Inject ESelectionService selectionService
@@ -52,6 +57,8 @@ class FilesPart {
 	SelectionListener sortListener
 
 	new() {
+		vilimaManager = new VilimaManagerImpl
+
 		initializeDialogSettings()
 	}
 
@@ -98,8 +105,6 @@ class FilesPart {
 		viewer.contentProvider = new VilimaContentProvider(manager)
 		viewer.addSelectionChangedListener(
 			[ e |
-				
-				
 				selectionService.selection = viewer.selection
 			])
 
@@ -287,4 +292,6 @@ class FilesPart {
 			viewer.input = content
 		}
 	}
+
+	override getVilimaManager() { vilimaManager }
 }
