@@ -41,7 +41,6 @@ class MkResource extends ResourceImpl {
 		val file = getContents().get(0) as MkFile
 
 		println('''save the file «uri» with content «file»''')
-		
 
 		modified = false
 	}
