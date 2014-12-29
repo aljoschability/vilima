@@ -2,6 +2,7 @@ package com.aljoschability.vilima.ui.widgets
 
 import com.aljoschability.vilima.MkTrack
 import java.math.BigInteger
+import com.google.common.primitives.UnsignedLong
 
 class MkTrackNameWidget extends BaseTextWidget<MkTrack> {
 	new() {
@@ -30,7 +31,7 @@ class MkTrackUidWidget extends BaseTextWidget<MkTrack> {
 
 		val value = element.uid
 		if(value < 0) {
-			return BigInteger::valueOf(value).toString
+			return UnsignedLong::fromLongBits(value).toString
 		}
 		return value.toString
 	}

@@ -24,6 +24,9 @@ import org.eclipse.swt.widgets.Table
 import org.eclipse.swt.widgets.Text
 import org.eclipse.swt.widgets.Tree
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure1
+import org.eclipse.swt.events.FocusListener
+import org.eclipse.swt.events.FocusEvent
+import org.eclipse.swt.events.FocusAdapter
 
 class SwtExtension {
 	val public static INSTANCE = new SwtExtension
@@ -168,6 +171,14 @@ class SwtExtension {
 	def SelectionListener newSelectionListener(Procedure1<SelectionEvent> procedure) {
 		new SelectionAdapter() {
 			override widgetSelected(SelectionEvent e) {
+				procedure.apply(e)
+			}
+		}
+	}
+
+	def FocusListener newFocusLostListener(Procedure1<FocusEvent> procedure) {
+		new FocusAdapter {
+			override focusLost(FocusEvent e) {
 				procedure.apply(e)
 			}
 		}
