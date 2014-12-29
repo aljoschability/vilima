@@ -23,6 +23,15 @@ Require-Bundle: javax.annotation,
  com.aljoschability.eclipse.core.preferences,
  com.aljoschability.eclipse.core.runtime,
  com.aljoschability.eclipse.core.ui,
- com.aljoschability.vilima
+ com.aljoschability.vilima,
+ org.eclipse.core.databinding;bundle-version="1.4.2",
+ org.eclipse.core.databinding.observable;bundle-version="1.4.1",
+ org.eclipse.emf.databinding;bundle-version="1.3.0",
+ org.eclipse.emf.databinding.edit;bundle-version="1.3.0",
+ org.eclipse.core.databinding.property;bundle-version="1.4.200",
+ org.eclipse.jface.databinding;bundle-version="1.6.200",
+ org.eclipse.core.databinding.beans;bundle-version="1.2.200",
+ org.eclipse.emf.transaction;bundle-version="1.8.0",
+ org.eclipse.emf.transaction.ui;bundle-version="1.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
