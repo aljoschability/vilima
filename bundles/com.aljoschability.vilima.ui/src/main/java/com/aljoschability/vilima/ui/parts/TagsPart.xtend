@@ -3,6 +3,7 @@ package com.aljoschability.vilima.ui.parts
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTag
 import com.aljoschability.vilima.MkTagNode
+import com.aljoschability.vilima.ui.util.DataAllPartContentProvider
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
@@ -17,7 +18,6 @@ import org.eclipse.jface.viewers.TreeViewerColumn
 import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Tree
-import com.aljoschability.vilima.ui.tests_unused.DataAllPartContentProvider
 
 class TagsPart {
 	MkFile input
