@@ -61,6 +61,7 @@
   <handlers xmi:id="_ekqZpwc0EeOgF6k0_n958Q" elementId="" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.ShowDialogHandler" command="_ekqZpgc0EeOgF6k0_n958Q"/>
   <handlers xmi:id="_V4hXcE1rEeSti-fsXBVUMQ" elementId="" command="_XwvdUE1rEeSti-fsXBVUMQ"/>
   <handlers xmi:id="_Zp_bwN_YEeSk7oHYr1-fNg" elementId="com.aljoschability.vilima.rcp.handler.0" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.OpenConfigurationWizardHandler" command="_lqMeQN_YEeSk7oHYr1-fNg"/>
+  <handlers xmi:id="_F2TvIORoEeSnErJA3THZyQ" elementId="com.aljoschability.vilima.rcp.handler.1" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.handlers.EditUndoHandler" command="_KM9KUD0nEeSYS5JDjizolA"/>
   <bindingTables xmi:id="_ekqZngc0EeOgF6k0_n958Q" bindingContext="_sUwwQA_jEeO_4LEaCI1c-g">
     <bindings xmi:id="_Jz_AgEd2EeSeSshVzL7ILQ" elementId="com.aljoschability.vilima.rcp.keybinding.1" keySequence="M1+X" command="_CSzXMD0nEeSYS5JDjizolA"/>
     <bindings xmi:id="_EUoPkD0oEeSYS5JDjizolA" elementId="com.aljoschability.vilima.rcp.keybinding.0" keySequence="M1+C" command="_FjsgMD0nEeSYS5JDjizolA"/>
