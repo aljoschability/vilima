@@ -3,15 +3,16 @@ package com.aljoschability.vilima
 import java.nio.file.Files
 import java.nio.file.Path
 
+@Deprecated
 interface IVilimaManager {
 	def void dispose()
 
 	def Path getCachePath()
 }
 
-class VilimaManagerImpl implements IVilimaManager {
+class XVilimaManagerImpl implements IVilimaManager {
 	def static void main(String[] args) {
-		val m = new VilimaManagerImpl
+		val m = new XVilimaManagerImpl
 
 		m.cachePath
 	}
