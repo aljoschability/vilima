@@ -19,32 +19,32 @@ abstract class AbstractVilimaManagerHandler {
 		return false
 	}
 
-	def protected boolean canExecute(VilimaManager manager)
-
 	@Execute
 	def final void execute(@Named(IServiceConstants::ACTIVE_PART) MPart part) {
 		execute((part.object as VilimaManagerProvider).vilimaManager)
 	}
+
+	def protected boolean canExecute(VilimaManager manager)
 
 	def protected void execute(VilimaManager manager)
 }
 
 class EditUndoHandler extends AbstractVilimaManagerHandler {
 	override protected canExecute(VilimaManager manager) {
-		manager.editingDomain.commandStack.canUndo
+		manager.commandStack.canUndo
 	}
 
 	override protected execute(VilimaManager manager) {
-		manager.editingDomain.commandStack.undo
+		manager.commandStack.undo
 	}
 }
 
 class EditRedoHandler extends AbstractVilimaManagerHandler {
 	override protected canExecute(VilimaManager manager) {
-		manager.editingDomain.commandStack.canRedo
+		manager.commandStack.canRedo
 	}
 
 	override protected execute(VilimaManager manager) {
-		manager.editingDomain.commandStack.redo
+		manager.commandStack.redo
 	}
 }
