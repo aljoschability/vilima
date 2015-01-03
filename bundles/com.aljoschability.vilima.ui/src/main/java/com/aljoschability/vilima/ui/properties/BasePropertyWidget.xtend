@@ -1,18 +1,17 @@
 package com.aljoschability.vilima.ui.properties
 
-import com.aljoschability.vilima.ui.extensions.SwtExtension
-import org.eclipse.swt.widgets.Composite
-import org.eclipse.swt.SWT
 import com.aljoschability.core.ui.CoreImages
+import com.aljoschability.vilima.ui.extensions.SwtExtension
+import org.eclipse.core.databinding.DataBindingContext
+import org.eclipse.emf.databinding.EMFProperties
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.emf.ecore.EStructuralFeature
+import org.eclipse.jface.databinding.swt.WidgetProperties
+import org.eclipse.jface.resource.JFaceResources
+import org.eclipse.swt.SWT
+import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
-import org.eclipse.jface.resource.JFaceResources
-import org.eclipse.emf.databinding.EMFObservables
-import org.eclipse.emf.ecore.EObject
-import org.eclipse.core.databinding.DataBindingContext
-import org.eclipse.jface.databinding.swt.WidgetProperties
-import org.eclipse.emf.databinding.EMFProperties
-import org.eclipse.emf.ecore.EStructuralFeature
 
 /**
  * @param E The element type.
