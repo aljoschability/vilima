@@ -6,7 +6,6 @@ import com.aljoschability.vilima.VilimaEventTopics
 import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.VilimaManager
 import com.aljoschability.vilima.VilimaManagerImpl
-import com.aljoschability.vilima.VilimaManagerProvider
 import com.aljoschability.vilima.XVilimaLibrary
 import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
@@ -17,6 +16,7 @@ import com.aljoschability.vilima.ui.util.ProgramImageLabelProvider
 import com.aljoschability.vilima.ui.util.VilimaViewerEditorActivationStrategy
 import javax.annotation.PostConstruct
 import javax.inject.Inject
+import javax.inject.Provider
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.di.PersistState
 import org.eclipse.e4.ui.di.UIEventTopic
@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Menu
 import org.eclipse.swt.widgets.MenuItem
 import org.eclipse.swt.widgets.TreeColumn
 
-class FilesPart implements VilimaManagerProvider {
+class FilesPart implements Provider<VilimaManager> {
 	static val SETTINGS_COLUMN_IDS = "COLUMN_IDS"
 	static val SETTINGS_COLUMN_WIDTHS = "COLUMN_WIDTHS"
 	static val SETTINGS_SORT_ID = "SORT_ID"
@@ -293,5 +293,5 @@ class FilesPart implements VilimaManagerProvider {
 		}
 	}
 
-	override getVilimaManager() { vilimaManager }
+	override get() { vilimaManager }
 }
