@@ -9,10 +9,6 @@ import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
-import org.eclipse.swt.events.FocusAdapter
-import org.eclipse.swt.events.FocusEvent
-import org.eclipse.swt.events.ModifyListener
-import org.eclipse.swt.events.ModifyEvent
 
 abstract class BaseWidget<E> {
 	protected static val EMPTY = ""

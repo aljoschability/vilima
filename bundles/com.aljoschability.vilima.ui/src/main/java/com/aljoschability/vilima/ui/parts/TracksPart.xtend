@@ -5,7 +5,6 @@ import com.aljoschability.vilima.MkTrack
 import com.aljoschability.vilima.ui.VilimaImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
 import com.aljoschability.vilima.ui.widgets.BaseTextWidget
-import com.aljoschability.vilima.ui.widgets.HelpfulCheckboxEditingWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackNameWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackUidWidget
 import java.util.Collection
@@ -40,11 +39,6 @@ class TracksPart {
 	BaseTextWidget<MkTrack> uidWidget
 	BaseTextWidget<MkTrack> nameWidget
 	BaseTextWidget<MkTrack> languageWidget
-
-	HelpfulCheckboxEditingWidget<MkTrack> flagEnabledWidget
-	HelpfulCheckboxEditingWidget<MkTrack> flagLacingWidget
-	HelpfulCheckboxEditingWidget<MkTrack> flagDefaultWidget
-	HelpfulCheckboxEditingWidget<MkTrack> flagForcedWidget
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
