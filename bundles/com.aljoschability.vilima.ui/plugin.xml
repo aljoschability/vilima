@@ -3,6 +3,12 @@
 <plugin>
 	<extension-point id="column" name="File Table Column" schema="schema/column.exsd"/>
 
+	<extension point="org.eclipse.e4.workbench.model" id="com.aljoschability.vilima.ui.bugs.FixBindingContextModelProcessor">
+		<processor
+			beforefragment="true"
+			class="com.aljoschability.vilima.ui.bugs.FixBindingContextModelProcessor"/>
+	</extension>
+
 	<extension point="org.eclipse.core.runtime.preferences">
 		<initializer class="com.aljoschability.vilima.ui.preferences.VilimaPreferenceInitializer"/>
 	</extension>
