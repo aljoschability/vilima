@@ -4,7 +4,11 @@
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_ekrAoAc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.perspectivestack">
       <children xsi:type="advanced:Perspective" xmi:id="_ekrAoQc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.perspective" selectedElement="_0T3-8E7REeSrVrHtXHAVzg" label="Default">
         <children xsi:type="basic:PartSashContainer" xmi:id="_0T3-8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.partsashcontainer" containerData="">
-          <children xsi:type="basic:Part" xmi:id="_LqXpgFBtEeSTY8WzyertyA" elementId="com.aljoschability.vilima.part.files" containerData="75" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="Files"/>
+          <children xsi:type="basic:Part" xmi:id="_LqXpgFBtEeSTY8WzyertyA" elementId="com.aljoschability.vilima.part.files" containerData="75" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.FilesPart" label="Files">
+            <menus xsi:type="menu:PopupMenu" xmi:id="_NImcAOjREeSr6-XWJg4B5w" elementId="com.aljoschability.vilima.menu.popup.files">
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_R2JJMOjREeSr6-XWJg4B5w" elementId="com.aljoschability.vilima.rcp.handledmenuitem.save" label="Save" command="_sQLZAOjGEeSr6uXWJg4B5w"/>
+            </menus>
+          </children>
           <children xsi:type="basic:PartStack" xmi:id="_2PKm8E7REeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.partstack" containerData="25">
             <children xsi:type="basic:Part" xmi:id="_3l1fIE72EeSmnYfQADCQZw" elementId="com.aljoschability.vilima.part.tracks" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.TracksPart" label="Tracks" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/tracks.png"/>
             <children xsi:type="basic:Part" xmi:id="_zWdXoE7VEeSrVrHtXHAVzg" elementId="com.aljoschability.vilima.part.attachments" contributionURI="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.parts.AttachmentsPart" label="Attachments" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/parts/attachments.png"/>
@@ -15,8 +19,8 @@
         </children>
       </children>
     </children>
-    <mainMenu xmi:id="_ekqZqQc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.menu.main">
-      <children xsi:type="menu:Menu" xmi:id="_ekqZqgc0EeOgF6k0_n958Q" elementId="com.aljoschability.vilima.menu.main.file" label="&amp;File" mnemonics="">
+    <mainMenu xmi:id="_ekqZqQc0EeOgF6k0_n958Q" elementId="org.eclipse.ui.main.menu">
+      <children xsi:type="menu:Menu" xmi:id="_ekqZqgc0EeOgF6k0_n958Q" elementId="org.eclipse.ui.file.menu" label="&amp;File" mnemonics="">
         <children xsi:type="menu:MenuSeparator" xmi:id="_N4hNMOf5EeSr6uXWJg4B5w" elementId="com.aljoschability.vilima.menu.main.file.separator.save"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_gL3rAOTTEeSDPvkpGylwLA" elementId="com.aljoschability.vilima.menu.main.file.save" label="&amp;Save" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/file/save.png" command="_sQLZAOjGEeSr6uXWJg4B5w"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_T_plwOTTEeSDPvkpGylwLA" elementId="com.aljoschability.vilima.menu.main.file.saveAll" label="Save &amp;All" iconURI="platform:/plugin/com.aljoschability.vilima.ui/icons/menu/file/saveAll.png" command="_np2HEOjGEeSr6uXWJg4B5w"/>
