@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Shell
 import org.eclipse.jface.dialogs.MessageDialog
 import org.eclipse.jface.dialogs.IDialogConstants
 
-class FileClearHandler {
+class XFileClearHandler {
 
 	@CanExecute
 	def boolean canExecute(@Named(IServiceConstants::ACTIVE_PART) MPart part) {

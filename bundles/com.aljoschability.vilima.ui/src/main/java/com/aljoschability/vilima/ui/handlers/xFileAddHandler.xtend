@@ -6,7 +6,7 @@ import java.io.File
 import org.eclipse.swt.widgets.DirectoryDialog
 import org.eclipse.swt.SWT
 
-class FileAddHandler extends AbstractVilimaManagerHandler {
+class xFileAddHandler extends AbstractVilimaManagerHandler {
 	override protected canExecute(VilimaManager manager) {
 		true
 	}

@@ -34,20 +34,22 @@ abstract class AbstractVilimaManagerHandler {
 
 class EditUndoHandler extends AbstractVilimaManagerHandler {
 	override protected canExecute(VilimaManager manager) {
-		true||manager.commandStack.canUndo
+		true || manager.commandStack.canUndo
 	}
 
 	override protected execute(VilimaManager manager) {
+		println('''undo''')
 		manager.commandStack.undo
 	}
 }
 
 class EditRedoHandler extends AbstractVilimaManagerHandler {
 	override protected canExecute(VilimaManager manager) {
-		manager.commandStack.canRedo
+		true || manager.commandStack.canRedo
 	}
 
 	override protected execute(VilimaManager manager) {
+		println('''redo''')
 		manager.commandStack.redo
 	}
 }
