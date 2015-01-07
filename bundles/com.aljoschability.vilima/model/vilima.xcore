@@ -199,6 +199,45 @@ class MkTagNode
 //
 // #############################################################################
 // #############################################################################
+class AppConfiguration {
+	contains PartSettings files
+	contains PartSettings tracks
+	contains PartSettings chapters
+	contains PartSettings attachments
+}
+
+abstract class PartSettings
+{
+	String sortIdentifier
+	contains DataColumn[] columns
+	contains DataField[] fields
+}
+
+abstract class DataEntry
+{
+	String[1] identifier
+	String title
+	contains DataEntryParameter[] parameters
+}
+
+class DataEntryParameter
+{
+	String[1] key
+	String[1] value
+}
+
+class DataColumn extends DataEntry
+{
+	int[1] width
+}
+
+class DataField extends DataEntry
+{
+}
+
+//
+// #############################################################################
+// #############################################################################
 //
 /*  */
 class VilimaColumnConfiguration
