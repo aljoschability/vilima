@@ -42,7 +42,7 @@ import org.eclipse.e4.ui.services.EMenuService
 
 class FilesPart implements Provider<VilimaManager> {
 	static val ID_CONTEXT_MENU = "com.aljoschability.vilima.menu.popup.files"
-	
+
 	static val SETTINGS_COLUMN_IDS = "COLUMN_IDS"
 	static val SETTINGS_COLUMN_WIDTHS = "COLUMN_WIDTHS"
 	static val SETTINGS_SORT_ID = "SORT_ID"
@@ -167,7 +167,7 @@ class FilesPart implements Provider<VilimaManager> {
 		// configured columns
 		handleColumnsChanged(createConfigurationFromDialogSettings())
 
-		println(menuService.registerContextMenu(viewer.control, ID_CONTEXT_MENU))
+		menuService.registerContextMenu(viewer.control, ID_CONTEXT_MENU)
 	}
 
 	def private VilimaColumnConfiguration createConfigurationFromDialogSettings() {

@@ -28,9 +28,14 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.TableColumn
 
 import static extension com.aljoschability.vilima.ui.parts.TracksPart.*
+import org.eclipse.e4.ui.services.EMenuService
 
 class TracksPart {
+	static val ID_CONTEXT_MENU = "com.aljoschability.vilima.menu.popup.tracks"
+
 	extension SwtExtension = SwtExtension::INSTANCE
+
+	@Inject EMenuService menuService
 
 	Collection<MkTrack> input
 
@@ -91,6 +96,8 @@ class TracksPart {
 		createColumn("Audio Frequency", 108, [t|String::valueOf(t.audioSamplingFrequency ?: "")])
 		createColumn("Video Width", 77, [t|String::valueOf(t.videoPixelWidth ?: "")])
 		createColumn("Video Height", 82, [t|String::valueOf(t.videoPixelHeight ?: "")])
+
+		menuService.registerContextMenu(viewer.control, ID_CONTEXT_MENU)
 
 		viewer.input = input
 	}
