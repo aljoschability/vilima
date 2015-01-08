@@ -3,6 +3,10 @@ package com.aljoschability.vilima.ui;
 import com.aljoschability.core.ui.runtime.AbstractActivator
 import com.aljoschability.vilima.scraper.ScraperExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
+import com.aljoschability.vilima.ui.services.ColumnService
+import com.aljoschability.vilima.ui.services.ImageService
+import com.aljoschability.vilima.ui.services.impl.ColumnServiceImpl
+import com.aljoschability.vilima.ui.services.impl.ImageServiceImpl
 import org.eclipse.swt.graphics.Image
 import org.eclipse.ui.plugin.AbstractUIPlugin
 
@@ -14,16 +18,14 @@ final class Activator extends AbstractActivator {
 	}
 
 	override protected initialize() {
+
+		// register image service
+		bundleContext.registerService(typeof(ImageService), new ImageServiceImpl(bundleContext), null)
+
+		// register column service
+		bundleContext.registerService(typeof(ColumnService), new ColumnServiceImpl(bundleContext), null)
+
 		Activator::INSTANCE = this
-
-		addImage(VilimaImages::TRIANGLE_DOWN)
-		addImage(VilimaImages::TRIANGLE_LEFT)
-		addImage(VilimaImages::TRIANGLE_RIGHT)
-		addImage(VilimaImages::TRIANGLE_UP)
-
-		addImage(VilimaImages::TRACK_TYPE_VIDEO)
-		addImage(VilimaImages::TRACK_TYPE_AUDIO)
-		addImage(VilimaImages::TRACK_TYPE_SUBTITLE)
 
 		val reg = com.aljoschability.vilima.Activator::get.scraperRegistry
 

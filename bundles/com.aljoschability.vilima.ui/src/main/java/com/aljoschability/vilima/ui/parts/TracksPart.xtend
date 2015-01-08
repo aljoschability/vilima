@@ -2,8 +2,8 @@ package com.aljoschability.vilima.ui.parts;
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrack
-import com.aljoschability.vilima.ui.VilimaImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.services.ImageService
 import com.aljoschability.vilima.ui.widgets.BaseTextWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackNameWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackUidWidget
@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Optional
+import org.eclipse.e4.ui.services.EMenuService
 import org.eclipse.e4.ui.services.IServiceConstants
 import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
@@ -24,17 +25,19 @@ import org.eclipse.jface.viewers.ViewerComparator
 import org.eclipse.swt.SWT
 import org.eclipse.swt.events.ControlAdapter
 import org.eclipse.swt.events.ControlEvent
+import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Composite
+import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.TableColumn
 
 import static extension com.aljoschability.vilima.ui.parts.TracksPart.*
-import org.eclipse.e4.ui.services.EMenuService
 
 class TracksPart {
 	static val ID_CONTEXT_MENU = "com.aljoschability.vilima.menu.popup.tracks"
 
 	extension SwtExtension = SwtExtension::INSTANCE
 
+	@Inject ImageService imageService
 	@Inject EMenuService menuService
 
 	Collection<MkTrack> input
@@ -243,26 +246,23 @@ class TracksPart {
 			override getImage(Object element) {
 				if(showIcon) {
 					if(element instanceof MkTrack) {
-						switch (element.getType) {
-							case VIDEO: {
-								return VilimaImages::get(VilimaImages::TRACK_TYPE_VIDEO)
-							}
-							case AUDIO: {
-								return VilimaImages::get(VilimaImages::TRACK_TYPE_AUDIO)
-							}
-							case SUBTITLE: {
-								return VilimaImages::get(VilimaImages::TRACK_TYPE_SUBTITLE)
-							}
-							default: {
-								println("trying to show image for track - type not known: " + element.getType)
-								return null
-							}
+						return switch element.type {
+							case VIDEO: ImageService::IMG_TRACK_VIDEO.asImage
+							case AUDIO: ImageService::IMG_TRACK_AUDIO.asImage
+							case SUBTITLE: ImageService::IMG_TRACK_SUBTITLE.asImage
+							default: null
 						}
 					}
 				}
 			}
 		}
 		return viewerColumn
+	}
+
+	@Inject Display display
+
+	private def Image asImage(String path) {
+		imageService.getImage(display, path)
 	}
 
 	@Inject

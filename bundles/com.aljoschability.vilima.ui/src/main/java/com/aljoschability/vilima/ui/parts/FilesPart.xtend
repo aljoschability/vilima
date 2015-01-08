@@ -12,6 +12,7 @@ import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import com.aljoschability.vilima.ui.dialogs.ColumnConfigurationDialog
 import com.aljoschability.vilima.ui.providers.VilimaContentProvider
+import com.aljoschability.vilima.ui.services.ImageService
 import com.aljoschability.vilima.ui.util.ProgramImageLabelProvider
 import com.aljoschability.vilima.ui.util.VilimaViewerEditorActivationStrategy
 import javax.annotation.PostConstruct
@@ -20,6 +21,7 @@ import javax.inject.Provider
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.di.PersistState
 import org.eclipse.e4.ui.di.UIEventTopic
+import org.eclipse.e4.ui.services.EMenuService
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService
 import org.eclipse.jface.dialogs.IDialogSettings
 import org.eclipse.jface.layout.GridDataFactory
@@ -38,7 +40,8 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Menu
 import org.eclipse.swt.widgets.MenuItem
 import org.eclipse.swt.widgets.TreeColumn
-import org.eclipse.e4.ui.services.EMenuService
+
+import static com.aljoschability.vilima.ui.parts.FilesPart.*
 
 class FilesPart implements Provider<VilimaManager> {
 	static val ID_CONTEXT_MENU = "com.aljoschability.vilima.menu.popup.files"
@@ -99,6 +102,8 @@ class FilesPart implements Provider<VilimaManager> {
 		settings.put(SETTINGS_SORT_ID, configuration.sortColumnId)
 	}
 
+	@Inject ImageService imageService
+
 	@PostConstruct
 	def void create(Composite parent) {
 		viewer = new TreeViewer(parent, SWT::FULL_SELECTION.bitwiseOr(SWT::MULTI).bitwiseOr(SWT::BORDER))
@@ -122,7 +127,8 @@ class FilesPart implements Provider<VilimaManager> {
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
 					val configuration = readColumnConfiguration()
-					val dialog = new ColumnConfigurationDialog(viewer.tree.shell, columnRegistry, configuration)
+					val dialog = new ColumnConfigurationDialog(imageService, viewer.tree.shell, columnRegistry,
+						configuration)
 					if(dialog.open == Window::OK) {
 						handleColumnsChanged(configuration)
 						viewer.refresh

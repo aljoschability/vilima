@@ -4,11 +4,11 @@ import com.aljoschability.vilima.VilimaColumn
 import com.aljoschability.vilima.VilimaColumnConfiguration
 import com.aljoschability.vilima.VilimaFactory
 import com.aljoschability.vilima.ui.Activator
-import com.aljoschability.vilima.ui.VilimaImages
 import com.aljoschability.vilima.ui.columns.MkFileColumnCategoryExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.services.ImageService
 import java.util.Collection
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl
@@ -24,6 +24,7 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.custom.SashForm
 import org.eclipse.swt.events.SelectionAdapter
 import org.eclipse.swt.events.SelectionEvent
+import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.FileDialog
@@ -39,6 +40,8 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 	extension SwtExtension = SwtExtension::INSTANCE
 
+	val ImageService imageService
+
 	MkFileColumnRegistry registry
 
 	VilimaColumnConfiguration configuration
@@ -49,9 +52,10 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 	TreeViewer activeViewer
 	TreeViewer inactiveViewer
 
-	new(Shell shell, MkFileColumnRegistry registry, VilimaColumnConfiguration configuration) {
+	new(ImageService imageService, Shell shell, MkFileColumnRegistry registry, VilimaColumnConfiguration configuration) {
 		super(shell)
 
+		this.imageService = imageService
 		this.registry = registry
 		this.configuration = configuration
 
@@ -261,7 +265,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val addButton = new Button(moveComposite, SWT::PUSH)
 		addButton.layoutData = newGridData
-		addButton.image = VilimaImages::get(VilimaImages::TRIANGLE_RIGHT)
+		addButton.image = ImageService::TRIANGLE_RIGHT.asImage
 		addButton.toolTipText = "Add Selected Column"
 		addButton.addSelectionListener(
 			new SelectionAdapter {
@@ -272,7 +276,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val removeButton = new Button(moveComposite, SWT::PUSH)
 		removeButton.layoutData = newGridData
-		removeButton.image = VilimaImages::get(VilimaImages::TRIANGLE_LEFT)
+		removeButton.image = ImageService::TRIANGLE_LEFT.asImage
 		removeButton.toolTipText = "Remove Selected Column"
 		removeButton.addSelectionListener(
 			new SelectionAdapter {
@@ -288,7 +292,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val upButton = new Button(orderComposite, SWT::PUSH)
 		upButton.layoutData = newGridData
-		upButton.image = VilimaImages::get(VilimaImages::TRIANGLE_UP)
+		upButton.image = ImageService::TRIANGLE_UP.asImage
 		upButton.toolTipText = "Move Selected Column Up"
 		upButton.addSelectionListener(
 			new SelectionAdapter {
@@ -299,7 +303,7 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		val downButton = new Button(orderComposite, SWT::PUSH)
 		downButton.layoutData = newGridData
-		downButton.image = VilimaImages::get(VilimaImages::TRIANGLE_DOWN)
+		downButton.image = ImageService::TRIANGLE_DOWN.asImage
 		downButton.toolTipText = "Move Selected Column Down"
 		downButton.addSelectionListener(
 			new SelectionAdapter {
@@ -307,6 +311,10 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 					handleMoveColumns(activeViewer.selectedVilimaColumns, false)
 				}
 			})
+	}
+
+	private def Image asImage(String path) {
+		imageService.getImage(shell.display, path)
 	}
 
 	def private void handleAddColumns(Collection<MkFileColumnExtension> extensions) {
