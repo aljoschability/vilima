@@ -1,4 +1,4 @@
-package com.aljoschability.vilima.ui.extensions
+package com.aljoschability.vilima.ui.xtend
 
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.layout.GridLayoutFactory

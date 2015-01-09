@@ -1,6 +1,6 @@
 package com.aljoschability.vilima.ui.properties
 
-import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.aljoschability.vilima.ui.services.ImageService
 import org.eclipse.core.databinding.DataBindingContext
 import org.eclipse.emf.databinding.EMFProperties

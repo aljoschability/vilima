@@ -4,7 +4,7 @@ import com.aljoschability.vilima.MkChapter
 import com.aljoschability.vilima.MkChapterText
 import com.aljoschability.vilima.MkEdition
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.aljoschability.vilima.writing.ChapterWriter
 import javax.annotation.PostConstruct
 import javax.inject.Inject

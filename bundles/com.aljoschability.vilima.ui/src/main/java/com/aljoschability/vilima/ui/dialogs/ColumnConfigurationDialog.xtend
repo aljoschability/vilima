@@ -7,7 +7,7 @@ import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.columns.MkFileColumnCategoryExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
-import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.aljoschability.vilima.ui.services.ImageService
 import java.util.Collection
 import org.eclipse.emf.common.util.URI

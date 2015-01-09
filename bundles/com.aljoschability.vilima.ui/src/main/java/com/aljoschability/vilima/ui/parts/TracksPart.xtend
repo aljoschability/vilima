@@ -2,7 +2,7 @@ package com.aljoschability.vilima.ui.parts;
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrack
-import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.aljoschability.vilima.ui.services.ImageService
 import com.aljoschability.vilima.ui.widgets.BaseTextWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackNameWidget

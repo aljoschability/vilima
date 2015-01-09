@@ -2,7 +2,7 @@ package com.aljoschability.vilima.ui.columns
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.ui.Activator
-import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import org.eclipse.jface.dialogs.Dialog
 import org.eclipse.jface.dialogs.IDialogSettings
 import org.eclipse.jface.viewers.DialogCellEditor

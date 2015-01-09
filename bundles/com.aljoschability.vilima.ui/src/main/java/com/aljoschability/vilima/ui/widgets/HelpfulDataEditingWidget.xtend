@@ -1,6 +1,6 @@
 package com.aljoschability.vilima.ui.widgets
 
-import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.aljoschability.vilima.ui.services.ImageService
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.swt.SWT
