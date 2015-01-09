@@ -1,6 +1,6 @@
 package com.aljoschability.vilima
 
-import com.aljoschability.core.runtime.AbstractCoreActivator
+import com.aljoschability.vilima.runtime.AbstractLoggingBundleActivator
 import com.aljoschability.vilima.scraper.ScraperRegistry
 import com.aljoschability.vilima.scraper.impl.ScraperRegistryImpl
 import com.aljoschability.vilima.services.ScraperService
@@ -9,7 +9,7 @@ import com.aljoschability.vilima.services.impl.ScraperServiceImpl
 import com.aljoschability.vilima.services.impl.VilimaServiceImpl
 import org.eclipse.core.runtime.IExtensionRegistry
 
-final class Activator extends AbstractCoreActivator {
+final class Activator extends AbstractLoggingBundleActivator {
 	static Activator INSTANCE
 
 	def static get() {

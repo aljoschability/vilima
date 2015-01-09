@@ -13,8 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore.xcore.lib,
  org.eclipse.emf.transaction,
  org.eclipse.xtend.lib,
- org.eclipse.xtext.xbase.lib,
- com.aljoschability.eclipse.core.runtime
+ org.eclipse.xtext.xbase.lib
 Export-Package: com.aljoschability.vilima,
  com.aljoschability.vilima.extensions,
  com.aljoschability.vilima.helpers,
@@ -22,6 +21,7 @@ Export-Package: com.aljoschability.vilima,
  com.aljoschability.vilima.jobs,
  com.aljoschability.vilima.reading,
  com.aljoschability.vilima.resources,
+ com.aljoschability.vilima.runtime,
  com.aljoschability.vilima.scraper,
  com.aljoschability.vilima.util,
  com.aljoschability.vilima.writing
