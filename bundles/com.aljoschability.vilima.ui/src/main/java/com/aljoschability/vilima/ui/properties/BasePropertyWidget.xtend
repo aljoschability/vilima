@@ -1,7 +1,7 @@
 package com.aljoschability.vilima.ui.properties
 
-import com.aljoschability.core.ui.CoreImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.services.ImageService
 import org.eclipse.core.databinding.DataBindingContext
 import org.eclipse.emf.databinding.EMFProperties
 import org.eclipse.emf.ecore.EObject
@@ -26,6 +26,12 @@ abstract class BasePropertyWidget<E extends EObject, V> {
 
 	Label helpWidget
 
+	ImageService imageService
+
+	new(ImageService imageService) {
+		this.imageService = imageService
+	}
+
 	/* creates the controls on the given parent (3 columns) */
 	def final void createWidget(Composite parent) {
 		createLabelWidget(parent)
@@ -41,9 +47,13 @@ abstract class BasePropertyWidget<E extends EObject, V> {
 		helpWidget = parent.newLabel(
 			[
 				layoutData = newGridDataCentered
-				image = CoreImages::get(CoreImages::STATE_INFORMATION)
+				image = ImageService::STATE_INFO.toImage
 				enabled = false
 			], SWT::CENTER)
+	}
+
+	private def toImage(String path) {
+		imageService.getImage(helpWidget.display, path)
 	}
 
 	/* configures the controls for the given element */
@@ -74,7 +84,8 @@ class BasePropertyTextWidget<E extends EObject> extends BasePropertyWidget<E, St
 	Label labelWidget
 	Text controlWidget
 
-	new(String labelDescription) {
+	new(ImageService imageService, String labelDescription) {
+		super(imageService)
 		this.labelDescription = labelDescription
 	}
 

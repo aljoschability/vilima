@@ -1,7 +1,6 @@
 package com.aljoschability.vilima.ui.widgets
 
 import com.aljoschability.vilima.MkTrack
-import java.math.BigInteger
 import com.google.common.primitives.UnsignedLong
 
 class MkTrackNameWidget extends BaseTextWidget<MkTrack> {

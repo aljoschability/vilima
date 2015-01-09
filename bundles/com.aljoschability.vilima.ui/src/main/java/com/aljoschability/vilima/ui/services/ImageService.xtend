@@ -18,5 +18,13 @@ interface ImageService {
 	val TRIANGLE_RIGHT = "icons/entypo/triangle-right.png"
 	val TRIANGLE_UP = "icons/entypo/triangle-up.png"
 
+	val STATE_INFO = "icons/entypo/triangle-up.png"
+	val STATE_WARN = "icons/entypo/triangle-up.png"
+	val STATE_ERROR = "icons/entypo/triangle-up.png"
+	val STATE_QUESTION = "icons/entypo/triangle-up.png"
+
+	val CONTROL_ADD = "icons/entypo/arrow-up.png"
+	val CONTROL_REMOVE = "icons/entypo/arrow-up.png"
+
 	def Image getImage(Display display, String path)
 }

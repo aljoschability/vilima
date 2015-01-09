@@ -1,16 +1,18 @@
 package com.aljoschability.vilima.ui.wizards
 
-import com.aljoschability.core.ui.CoreImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.services.ImageService
 import java.io.File
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.jface.operation.IRunnableWithProgress
 import org.eclipse.jface.wizard.WizardPage
 import org.eclipse.swt.SWT
+import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.FileDialog
 import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
+import com.aljoschability.vilima.ui.Activator
 
 class ConfigurationWizardExternalsPage extends WizardPage {
 	extension SwtExtension = SwtExtension::INSTANCE
@@ -21,8 +23,12 @@ class ConfigurationWizardExternalsPage extends WizardPage {
 
 	Text extractText
 
+	ImageService imageService
+
 	new(String name) {
 		super(name)
+
+		this.imageService = Activator::get.imageService
 
 		title = "External Applications"
 
@@ -63,7 +69,7 @@ class ConfigurationWizardExternalsPage extends WizardPage {
 		group.newLabel(
 			[
 				layoutData = newGridData
-				image = CoreImages::get(CoreImages::STATE_INFORMATION)
+				image = ImageService::STATE_INFO.toImage
 				toolTipText = "Select the directory of MKVToolNix"
 			], SWT::NONE)
 
@@ -93,7 +99,7 @@ class ConfigurationWizardExternalsPage extends WizardPage {
 		group.newLabel(
 			[
 				layoutData = newGridData
-				image = CoreImages::get(CoreImages::STATE_ERROR)
+				image = ImageService::STATE_ERROR.toImage
 				toolTipText = "none found"
 			], SWT::NONE)
 
@@ -117,7 +123,7 @@ class ConfigurationWizardExternalsPage extends WizardPage {
 		group.newLabel(
 			[
 				layoutData = newGridData
-				image = CoreImages::get(CoreImages::STATE_ERROR)
+				image = ImageService::STATE_ERROR.toImage
 				toolTipText = "none found"
 			], SWT::NONE)
 
@@ -143,11 +149,15 @@ class ConfigurationWizardExternalsPage extends WizardPage {
 		extractHint = group.newLabel(
 			[
 				layoutData = newGridData
-				image = CoreImages::get(CoreImages::STATE_ERROR)
+				image = ImageService::STATE_ERROR.toImage
 				toolTipText = "none found"
 			], SWT::NONE)
 
 		control = composite
+	}
+
+	private def Image toImage(String path) {
+		imageService.getImage(shell.display, path)
 	}
 
 	def void modifyText(Text text) {
@@ -156,7 +166,7 @@ class ConfigurationWizardExternalsPage extends WizardPage {
 				val process = Runtime::getRuntime.exec(text.text)
 				val result = process.waitFor
 				println('''run process «process»''')
-				extractHint.image = CoreImages::get(CoreImages::ADD)
+				extractHint.image = ImageService::CONTROL_ADD.toImage
 				extractHint.toolTipText = extractText.text
 			]
 			wizard.container.run(false, false, runnable)

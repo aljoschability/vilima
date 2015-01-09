@@ -1,14 +1,16 @@
 package com.aljoschability.vilima.ui.widgets
 
-import com.aljoschability.core.ui.CoreImages
 import com.aljoschability.vilima.ui.extensions.SwtExtension
+import com.aljoschability.vilima.ui.services.ImageService
 import org.eclipse.jface.layout.GridDataFactory
 import org.eclipse.swt.SWT
+import org.eclipse.swt.graphics.Color
 import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Button
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
+import com.aljoschability.vilima.ui.Activator
 
 abstract class BaseWidget<E> {
 	protected static val EMPTY = ""
@@ -21,7 +23,10 @@ abstract class BaseWidget<E> {
 
 	protected Label helpControl
 
+	ImageService imageService
+
 	new(String helpMessage) {
+		this.imageService = Activator::get.getImageService()
 		this.helpMessage = helpMessage
 	}
 
@@ -32,7 +37,7 @@ abstract class BaseWidget<E> {
 		helpControl = parent.newLabel(
 			[
 				layoutData = newGridDataCentered
-				image = CoreImages::get(CoreImages::STATE_INFORMATION)
+				image = imageService.getImage(parent.display, ImageService::STATE_INFO)
 				enabled = false
 			], SWT::CENTER)
 	}
@@ -65,7 +70,7 @@ abstract class BaseWidget<E> {
 		if(helpControl.active) {
 			helpControl.enabled = false
 			helpControl.toolTipText = helpMessage
-			helpControl.image = CoreImages::get(CoreImages::STATE_INFORMATION)
+			helpControl.image = imageService.getImage(helpControl.display, ImageService::STATE_INFO)
 		}
 	}
 
@@ -78,6 +83,10 @@ abstract class BaseWidget<E> {
 			helpControl.image = state?.image
 			helpControl.toolTipText = state?.message
 		}
+	}
+
+	private def Image getImage(ElementState state) {
+		imageService.getImage(helpControl.display, ImageService::STATE_INFO)
 	}
 
 	/* must return the current value for the given element. */
@@ -117,7 +126,7 @@ abstract class BaseTextWidget<E> extends BaseWidget<E> {
 	}
 
 	def protected void validateValue(E element, String text) {
-		
+
 		println('''validate value "«text»" for element «element»''')
 	}
 
@@ -140,6 +149,10 @@ abstract class BaseTextWidget<E> extends BaseWidget<E> {
 		super.inputChanged(element, value, state)
 	}
 
+	private def Color getColor(ElementState state) {
+		null
+	}
+
 	def final void modifyValue(E element, String value) {
 		if(element == null) {
 			return
@@ -158,7 +171,11 @@ abstract class HelpfulDataEditingWidget<T> {
 
 	protected Label helpControl
 
-	new(Composite parent, String description) {
+	ImageService imageService
+
+	new(ImageService imageService, Composite parent, String description) {
+		this.imageService = imageService
+
 		this.description = description
 
 		parent.createContentControls()
@@ -171,8 +188,12 @@ abstract class HelpfulDataEditingWidget<T> {
 		helpControl = parent.newLabel(
 			[
 				layoutData = newGridDataCentered
-				image = CoreImages::get(CoreImages::STATE_QUESTION)
+				image = ImageService::STATE_QUESTION.toImage
 			], SWT::CENTER)
+	}
+
+	private def Image toImage(String path) {
+		imageService.getImage(helpControl.display, path)
 	}
 
 	def void setInput(T element) {
@@ -182,15 +203,15 @@ abstract class HelpfulDataEditingWidget<T> {
 	def protected void update(T element)
 
 	def protected void info(Label control, String text) {
-		control.fill(CoreImages::get(CoreImages::STATE_INFORMATION), text)
+		control.fill(ImageService::STATE_INFO.toImage, text)
 	}
 
 	def protected void warning(Label control, String text) {
-		control.fill(CoreImages::get(CoreImages::STATE_WARNING), text)
+		control.fill(ImageService::STATE_WARN.toImage, text)
 	}
 
 	def protected void error(Label control, String text) {
-		control.fill(CoreImages::get(CoreImages::STATE_ERROR), text)
+		control.fill(ImageService::STATE_ERROR.toImage, text)
 	}
 
 	def private void fill(Label control, Image image, String text) {
@@ -204,8 +225,8 @@ abstract class HelpfulTextEditingWidget<T> extends HelpfulDataEditingWidget<T> {
 
 	protected Text widget
 
-	new(Composite parent, String description) {
-		super(parent, description)
+	new(ImageService imageService, Composite parent, String description) {
+		super(imageService, parent, description)
 	}
 
 	protected def String getValue(T element)
@@ -234,8 +255,8 @@ abstract class HelpfulTextEditingWidget<T> extends HelpfulDataEditingWidget<T> {
 abstract class HelpfulCheckboxEditingWidget<T> extends HelpfulDataEditingWidget<T> {
 	protected Button widget
 
-	new(Composite parent, String description) {
-		super(parent, description)
+	new(ImageService imageService, Composite parent, String description) {
+		super(imageService, parent, description)
 	}
 
 	override protected createContentControls(Composite parent) {

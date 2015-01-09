@@ -193,7 +193,8 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 				switch element {
 					MkFileColumnCategoryExtension: {
 						if(element.imagePath != null) {
-							return Activator::get.getImage('''«element.namespace»/«element.imagePath»''')
+							val path = '''«element.namespace»/«element.imagePath»'''
+							return imageService.getImage(shell.display, path)
 						}
 					}
 					default:

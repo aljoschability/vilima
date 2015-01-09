@@ -1,6 +1,5 @@
 package com.aljoschability.vilima.ui.columns
 
-import com.aljoschability.core.ui.CoreColors
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.ui.Activator
 import java.util.Collection
@@ -292,9 +291,12 @@ abstract class AbstractStringColumn implements MkFileColumn {
 
 	def private Color getColor(MkFileDiagnose diagnose) {
 		if(diagnose != null) {
+
+			// TODO: color service possibly needed
+			println('''CoreColors not available anymore!''')
 			switch diagnose.status {
-				case WARNING: return CoreColors::get(CoreColors::WARNING)
-				case ERROR: return CoreColors::get(CoreColors::ERROR)
+				//case WARNING: return CoreColors::get(CoreColors::WARNING)
+				//case ERROR: return CoreColors::get(CoreColors::ERROR)
 				default: return null
 			}
 		}
