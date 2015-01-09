@@ -1,5 +1,6 @@
 package com.aljoschability.vilima.runtime
 
+import java.text.SimpleDateFormat
 import org.osgi.framework.BundleContext
 import org.osgi.service.log.LogService
 
@@ -79,6 +80,24 @@ abstract class AbstractLoggingBundleActivator implements LoggingBundleActivator 
 
 	private def void log(int level, String message, Throwable throwable) {
 		logService.log(level, message, throwable)
-		println('''logged "«message»" on osgi log service''')
+
+		// TODO: check how to do this properly
+		val type = switch level {
+			case LogService::LOG_DEBUG: "DEBUG"
+			case LogService::LOG_INFO: "INFO"
+			case LogService::LOG_WARNING: "WARNING"
+			case LogService::LOG_ERROR: "ERROR"
+			default: String::valueOf(level)
+		}
+
+		println('''«time» [«type»] «message»''')
 	}
+
+	@Deprecated
+	private def String getTime() {
+		LDF.format(System::currentTimeMillis)
+	}
+
+	@Deprecated
+	static val LDF = new SimpleDateFormat("HH:mm:ss,SSS")
 }

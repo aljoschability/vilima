@@ -28,15 +28,15 @@ final class Activator extends AbstractLoggingBundleActivator {
 
 		// register image service
 		bundleContext.registerService(typeof(ImageService), new ImageServiceImpl(bundleContext), null)
-		info("The image service has been registered.")
+		debug("The image service has been registered.")
 
 		// register column service
 		bundleContext.registerService(typeof(ColumnService), new ColumnServiceImpl(bundleContext), null)
-		info("The column service has been registered.")
+		debug("The column service has been registered.")
 
 		// register dialog settings service
 		bundleContext.registerService(typeof(DialogService), new DialogServiceImpl(bundleContext), null)
-		info("The dialog service has been registered.")
+		debug("The dialog service has been registered.")
 
 		Activator::INSTANCE = this
 
