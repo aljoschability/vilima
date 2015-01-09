@@ -7,7 +7,6 @@ import com.aljoschability.vilima.services.ScraperService
 import com.aljoschability.vilima.services.VilimaService
 import com.aljoschability.vilima.services.impl.ScraperServiceImpl
 import com.aljoschability.vilima.services.impl.VilimaServiceImpl
-import org.eclipse.core.runtime.IExtensionRegistry
 
 final class Activator extends AbstractLoggingBundleActivator {
 	static Activator INSTANCE
@@ -20,21 +19,17 @@ final class Activator extends AbstractLoggingBundleActivator {
 
 	override protected initialize() {
 
-		// get extension registry
-		val extensionRegistryReference = bundleContext.getServiceReference(typeof(IExtensionRegistry))
-		val extensionRegistry = bundleContext.getService(extensionRegistryReference)
+		// register vilima service
+		bundleContext.registerService(typeof(VilimaService), new VilimaServiceImpl(bundleContext), null)
+		debug("The vilima service has been registered.")
 
 		// register scraper service
-		val scraperService = new ScraperServiceImpl(extensionRegistry)
-		bundleContext.registerService(typeof(ScraperService), scraperService, null)
+		bundleContext.registerService(typeof(ScraperService), new ScraperServiceImpl(bundleContext), null)
+		debug("The scraper service has been registered.")
 
-		// register vilima service
-		val vilimaService = new VilimaServiceImpl
-		bundleContext.registerService(typeof(VilimaService), vilimaService, null)
-
-		// OLD STUFF
 		Activator::INSTANCE = this
 
+		// TODO: OLD STUFF
 		scraperRegistry = new ScraperRegistryImpl
 
 		for (ms : scraperRegistry.getMovieScraperExtensions) {
@@ -44,7 +39,6 @@ final class Activator extends AbstractLoggingBundleActivator {
 		for (ss : scraperRegistry.getShowScraperExtensions) {
 			//			println(ss)
 		}
-
 	}
 
 	override protected dispose() {

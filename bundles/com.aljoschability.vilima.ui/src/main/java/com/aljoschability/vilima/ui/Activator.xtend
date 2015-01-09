@@ -21,12 +21,15 @@ final class Activator extends AbstractActivator {
 
 		// register image service
 		bundleContext.registerService(typeof(ImageService), new ImageServiceImpl(bundleContext), null)
+		info("The image service has been registered.")
 
 		// register column service
 		bundleContext.registerService(typeof(ColumnService), new ColumnServiceImpl(bundleContext), null)
+		info("The column service has been registered.")
 
 		Activator::INSTANCE = this
 
+		// TODO: stuff
 		val reg = com.aljoschability.vilima.Activator::get.scraperRegistry
 
 		// add movie scraper icons
