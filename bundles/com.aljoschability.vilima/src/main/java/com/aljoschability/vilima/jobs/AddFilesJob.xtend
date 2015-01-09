@@ -1,13 +1,12 @@
 package com.aljoschability.vilima.jobs
 
-import org.eclipse.core.runtime.jobs.Job
-import org.eclipse.core.runtime.IProgressMonitor
-import java.io.File
-import java.util.Collection
 import com.aljoschability.vilima.VilimaManager
-import org.eclipse.core.runtime.Status
-import java.nio.file.Paths
+import java.io.File
 import java.nio.file.Files
+import java.util.Collection
+import org.eclipse.core.runtime.IProgressMonitor
+import org.eclipse.core.runtime.Status
+import org.eclipse.core.runtime.jobs.Job
 
 class AddFilesJob extends Job {
 	val VilimaManager manager
