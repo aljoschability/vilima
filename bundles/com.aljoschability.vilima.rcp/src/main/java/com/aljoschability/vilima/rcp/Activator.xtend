@@ -1,10 +1,10 @@
 package com.aljoschability.vilima.rcp
 
-import com.aljoschability.core.runtime.AbstractCoreActivator
-import com.aljoschability.core.runtime.ICoreActivator
+import com.aljoschability.vilima.runtime.AbstractLoggingBundleActivator
+import com.aljoschability.vilima.runtime.LoggingBundleActivator
 
-final class Activator extends AbstractCoreActivator {
-	static ICoreActivator INSTANCE
+final class Activator extends AbstractLoggingBundleActivator {
+	static LoggingBundleActivator INSTANCE
 
 	def static get() {
 		Activator::INSTANCE
