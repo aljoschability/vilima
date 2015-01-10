@@ -1,18 +1,17 @@
 package com.aljoschability.vilima.ui.handlers
 
-import javax.inject.Named
-import org.eclipse.e4.core.di.annotations.Execute
-import org.eclipse.e4.ui.services.IServiceConstants
-import org.eclipse.e4.ui.workbench.IWorkbench
-import org.eclipse.swt.widgets.Shell
-import org.eclipse.jface.wizard.WizardDialog
 import com.aljoschability.vilima.ui.wizards.ConfigurationWizard
+import org.eclipse.e4.core.contexts.IEclipseContext
+import org.eclipse.e4.core.di.annotations.Execute
+import org.eclipse.jface.wizard.WizardDialog
+import org.eclipse.swt.widgets.Shell
 
 class OpenConfigurationWizardHandler {
 	@Execute
-	def void execute(IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
-		val wizard = new ConfigurationWizard
+	def void execute(IEclipseContext context) {
+		val shell = context.get(Shell)
+		val wizard = new ConfigurationWizard(context)
 
-		new WizardDialog(shell, wizard).open
+		new WizardDialog(shell, wizard).open()
 	}
 }

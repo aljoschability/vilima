@@ -1,24 +1,20 @@
 package com.aljoschability.vilima.ui.wizards
 
-import com.aljoschability.vilima.ui.Activator
+import com.aljoschability.vilima.ui.services.DialogService
+import org.eclipse.e4.core.contexts.IEclipseContext
 import org.eclipse.jface.wizard.Wizard
 
 class ConfigurationWizard extends Wizard {
-	new() {
+	new(IEclipseContext context) {
 
+		// configuration
 		// TODO: choose image defaultPageImageDescriptor = null
 		helpAvailable = false
 		needsProgressMonitor = false
 		windowTitle = "Basic Configuration"
 
 		// dialog settings
-		val bundleSettings = Activator::get.dialogSettings
-		dialogSettings = bundleSettings.getSection(ConfigurationWizard.canonicalName)
-		if(dialogSettings == null) {
-
-			// TODO: new settings
-			dialogSettings = bundleSettings.addNewSection(ConfigurationWizard.canonicalName)
-		}
+		dialogSettings = context.get(DialogService).getSettings(ConfigurationWizard)
 	}
 
 	override performFinish() {

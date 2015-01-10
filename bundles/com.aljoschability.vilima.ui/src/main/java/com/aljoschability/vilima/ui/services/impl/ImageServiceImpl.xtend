@@ -29,13 +29,15 @@ class ImageServiceImpl implements ImageService {
 		var image = cacheImages.get(path)
 		if(image == null) {
 			val url = FileLocator::find(context.bundle, new Path(path), null)
-			val stream = url.openStream
+			if(url != null) {
+				val stream = url.openStream
 
-			image = new Image(display, stream)
+				image = new Image(display, stream)
 
-			stream.close
+				stream.close
 
-			cacheImages.put(path, image)
+				cacheImages.put(path, image)
+			}
 		}
 
 		return image

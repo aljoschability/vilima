@@ -3,13 +3,15 @@ package com.aljoschability.vilima.ui.dialogs
 import com.aljoschability.vilima.VilimaColumn
 import com.aljoschability.vilima.VilimaColumnConfiguration
 import com.aljoschability.vilima.VilimaFactory
-import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.columns.MkFileColumnCategoryExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
-import com.aljoschability.vilima.ui.xtend.SwtExtension
+import com.aljoschability.vilima.ui.services.ColumnService
+import com.aljoschability.vilima.ui.services.DialogService
 import com.aljoschability.vilima.ui.services.ImageService
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import java.util.Collection
+import org.eclipse.e4.core.contexts.IEclipseContext
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl
 import org.eclipse.jface.dialogs.IDialogSettings
@@ -52,14 +54,30 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 	TreeViewer activeViewer
 	TreeViewer inactiveViewer
 
-	new(ImageService imageService, Shell shell, MkFileColumnRegistry registry, VilimaColumnConfiguration configuration) {
-		super(shell)
+	new(IEclipseContext context, MkFileColumnRegistry registry, VilimaColumnConfiguration configuration) {
+		super(context.get(Shell))
 
-		this.imageService = imageService
+		// image service
+		imageService = context.get(ImageService)
+
+		// dialog settings
+		settings = context.get(DialogService).getSettings(ColumnConfigurationDialog)
+		if(settings.get(SASH_WIDTH) == null) {
+			settings.put(SASH_WIDTH, #["2", "3"])
+		}
+		if(settings.get(COLUMN_WIDTH_ACTIVE_TITLE) == null) {
+			settings.put(COLUMN_WIDTH_ACTIVE_TITLE, 160)
+		}
+		if(settings.get(COLUMN_WIDTH_ACTIVE_WIDTH) == null) {
+			settings.put(COLUMN_WIDTH_ACTIVE_WIDTH, 47)
+		}
+
+		// column service
+		// TODO: replace registry by this!
+		val cs = context.get(ColumnService)
+
 		this.registry = registry
 		this.configuration = configuration
-
-		initializeDialogSettings()
 	}
 
 	override protected createDialogArea(Composite parent) {
@@ -354,18 +372,6 @@ class ColumnConfigurationDialog extends TitleAreaDialog {
 
 		if(changed) {
 			activeViewer.refresh
-		}
-	}
-
-	def private void initializeDialogSettings() {
-		val bundleSettings = Activator::get.dialogSettings
-		settings = bundleSettings.getSection(ColumnConfigurationDialog.name)
-		if(settings == null) {
-			settings = bundleSettings.addNewSection(ColumnConfigurationDialog.name)
-
-			settings.put(SASH_WIDTH, #["2", "3"])
-			settings.put(COLUMN_WIDTH_ACTIVE_TITLE, 160)
-			settings.put(COLUMN_WIDTH_ACTIVE_WIDTH, 47)
 		}
 	}
 

@@ -1,8 +1,10 @@
 package com.aljoschability.vilima.ui.columns
 
 import com.aljoschability.vilima.MkFile
-import com.aljoschability.vilima.ui.Activator
+import com.aljoschability.vilima.MkTrackType
+import com.aljoschability.vilima.ui.services.DialogService
 import com.aljoschability.vilima.ui.xtend.SwtExtension
+import org.eclipse.e4.core.contexts.IEclipseContext
 import org.eclipse.jface.dialogs.Dialog
 import org.eclipse.jface.dialogs.IDialogSettings
 import org.eclipse.jface.viewers.DialogCellEditor
@@ -13,7 +15,6 @@ import org.eclipse.swt.SWT
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Control
 import org.eclipse.swt.widgets.Shell
-import com.aljoschability.vilima.MkTrackType
 
 class GenresSelectionDialog extends Dialog {
 	extension SwtExtension = SwtExtension::INSTANCE
@@ -21,10 +22,10 @@ class GenresSelectionDialog extends Dialog {
 
 	TableViewer viewer
 
-	new(Shell parent) {
-		super(parent)
+	new(IEclipseContext context) {
+		super(context.get(Shell))
 
-		initializeSettings()
+		settings = context.get(DialogService).getSettings(GenresSelectionDialog)
 	}
 
 	override protected createDialogArea(Composite parent) {
@@ -39,14 +40,6 @@ class GenresSelectionDialog extends Dialog {
 		viewer = new TableViewer(parent, SWT::BORDER.bitwiseOr(SWT::MULTI))
 		viewer.control.layoutData = newGridData(true, true)
 
-	}
-
-	def private void initializeSettings() {
-		val bundleSettings = Activator::get.dialogSettings
-		settings = bundleSettings.getSection(GenresSelectionDialog.canonicalName)
-		if(settings == null) {
-			bundleSettings.addNewSection(GenresSelectionDialog.canonicalName)
-		}
 	}
 
 	override protected getDialogBoundsSettings() { settings }
@@ -137,7 +130,10 @@ class TestColumn extends AbstractStringColumn {
 				override protected getCellEditor(Object element) {
 					val editor = new DialogCellEditor(treeViewer.tree) {
 						override protected openDialogBox(Control parent) {
-							val dialog = new GenresSelectionDialog(parent.shell)
+
+							// TODO: we will need the current eclipse context reference!
+							val context = null
+							val dialog = new GenresSelectionDialog(context)
 
 							return dialog.open
 						}

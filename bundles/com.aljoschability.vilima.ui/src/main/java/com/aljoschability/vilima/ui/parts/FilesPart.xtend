@@ -12,12 +12,12 @@ import com.aljoschability.vilima.ui.columns.MkFileColumnExtension
 import com.aljoschability.vilima.ui.columns.MkFileColumnRegistry
 import com.aljoschability.vilima.ui.dialogs.ColumnConfigurationDialog
 import com.aljoschability.vilima.ui.providers.VilimaContentProvider
-import com.aljoschability.vilima.ui.services.ImageService
 import com.aljoschability.vilima.ui.util.ProgramImageLabelProvider
 import com.aljoschability.vilima.ui.util.VilimaViewerEditorActivationStrategy
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Provider
+import org.eclipse.e4.core.contexts.IEclipseContext
 import org.eclipse.e4.core.di.annotations.Optional
 import org.eclipse.e4.ui.di.PersistState
 import org.eclipse.e4.ui.di.UIEventTopic
@@ -102,7 +102,8 @@ class FilesPart implements Provider<VilimaManager> {
 		settings.put(SETTINGS_SORT_ID, configuration.sortColumnId)
 	}
 
-	@Inject ImageService imageService
+	@Inject
+	IEclipseContext context
 
 	@PostConstruct
 	def void create(Composite parent) {
@@ -127,8 +128,7 @@ class FilesPart implements Provider<VilimaManager> {
 			new SelectionAdapter {
 				override widgetSelected(SelectionEvent e) {
 					val configuration = readColumnConfiguration()
-					val dialog = new ColumnConfigurationDialog(imageService, viewer.tree.shell, columnRegistry,
-						configuration)
+					val dialog = new ColumnConfigurationDialog(context, columnRegistry, configuration)
 					if(dialog.open == Window::OK) {
 						handleColumnsChanged(configuration)
 						viewer.refresh
