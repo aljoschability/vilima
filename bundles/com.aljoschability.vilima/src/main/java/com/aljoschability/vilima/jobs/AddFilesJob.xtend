@@ -1,7 +1,9 @@
 package com.aljoschability.vilima.jobs
 
+import com.aljoschability.vilima.Activator
 import com.aljoschability.vilima.VilimaManager
 import java.io.File
+import java.nio.file.AccessDeniedException
 import java.nio.file.Files
 import java.util.Collection
 import org.eclipse.core.runtime.IProgressMonitor
@@ -56,7 +58,11 @@ class AddFilesJob extends Job {
 
 		if(root != null && root.directory && files == null) {
 			val walker = new VilimaFileWalker
-			Files::walkFileTree(root.toPath, walker)
+			try {
+				Files::walkFileTree(root.toPath, walker)
+			} catch(AccessDeniedException e) {
+				Activator::get.warn('''[AddFilesJob] Access denied for something. Aborting.''')
+			}
 			for (file : walker.files) {
 				manager.addFile(file.toString)
 			}
