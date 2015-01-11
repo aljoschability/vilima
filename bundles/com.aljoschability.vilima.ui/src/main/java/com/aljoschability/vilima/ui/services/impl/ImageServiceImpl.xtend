@@ -1,5 +1,7 @@
 package com.aljoschability.vilima.ui.services.impl
 
+import com.aljoschability.vilima.MkTrackType
+import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.services.ImageService
 import java.util.Map
 import org.eclipse.core.runtime.FileLocator
@@ -9,13 +11,11 @@ import org.eclipse.swt.widgets.Display
 import org.osgi.framework.BundleContext
 
 class ImageServiceImpl implements ImageService {
-	val Map<Display, Map<String, Image>> cache
+	val Map<Display, Map<String, Image>> cache = newLinkedHashMap
 
 	val BundleContext context
 
 	new(BundleContext context) {
-		cache = newLinkedHashMap
-
 		this.context = context
 	}
 
@@ -41,5 +41,29 @@ class ImageServiceImpl implements ImageService {
 		}
 
 		return image
+	}
+
+	override getImage(Display display, MkTrackType element) {
+		val path = switch element {
+			case VIDEO: MODEL_TRACK_TYPE_VIDEO
+			case AUDIO: MODEL_TRACK_TYPE_AUDIO
+			case SUBTITLE: MODEL_TRACK_TYPE_SUBTITLE
+			default: null
+		}
+
+		if(path == null) {
+			Activator::get.warn('''There is no image for this track type.''')
+			return null
+		}
+
+		return getImage(display, path)
+	}
+
+	override start() {
+		Activator::get.debug("The image service has been started.")
+	}
+
+	override stop() {
+		Activator::get.debug("The image service has been stopped.")
 	}
 }
