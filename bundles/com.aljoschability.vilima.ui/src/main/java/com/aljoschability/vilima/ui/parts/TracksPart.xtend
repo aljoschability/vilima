@@ -2,11 +2,11 @@ package com.aljoschability.vilima.ui.parts;
 
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.MkTrack
-import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.aljoschability.vilima.ui.services.ImageService
 import com.aljoschability.vilima.ui.widgets.BaseTextWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackNameWidget
 import com.aljoschability.vilima.ui.widgets.MkTrackUidWidget
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import java.util.Collection
 import java.util.function.Function
 import javax.annotation.PostConstruct
@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.ViewerComparator
 import org.eclipse.swt.SWT
 import org.eclipse.swt.events.ControlAdapter
 import org.eclipse.swt.events.ControlEvent
-import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Display
 import org.eclipse.swt.widgets.TableColumn
@@ -246,12 +245,7 @@ class TracksPart {
 			override getImage(Object element) {
 				if(showIcon) {
 					if(element instanceof MkTrack) {
-						return switch element.type {
-							case VIDEO: ImageService::IMG_TRACK_VIDEO.asImage
-							case AUDIO: ImageService::IMG_TRACK_AUDIO.asImage
-							case SUBTITLE: ImageService::IMG_TRACK_SUBTITLE.asImage
-							default: null
-						}
+						return imageService.getImage(display, element.type)
 					}
 				}
 			}
@@ -260,10 +254,6 @@ class TracksPart {
 	}
 
 	@Inject Display display
-
-	private def Image asImage(String path) {
-		imageService.getImage(display, path)
-	}
 
 	@Inject
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
