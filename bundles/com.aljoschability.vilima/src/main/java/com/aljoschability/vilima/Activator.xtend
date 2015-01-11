@@ -1,8 +1,6 @@
 package com.aljoschability.vilima
 
 import com.aljoschability.vilima.runtime.AbstractLoggingBundleActivator
-import com.aljoschability.vilima.scraper.ScraperRegistry
-import com.aljoschability.vilima.scraper.impl.ScraperRegistryImpl
 import com.aljoschability.vilima.services.ScraperService
 import com.aljoschability.vilima.services.VilimaService
 import com.aljoschability.vilima.services.impl.ScraperServiceImpl
@@ -15,8 +13,6 @@ final class Activator extends AbstractLoggingBundleActivator {
 		Activator::INSTANCE
 	}
 
-	ScraperRegistry scraperRegistry
-
 	override protected initialize() {
 
 		// register vilima service
@@ -28,24 +24,9 @@ final class Activator extends AbstractLoggingBundleActivator {
 		debug("The scraper service has been registered.")
 
 		Activator::INSTANCE = this
-
-		// TODO: OLD STUFF
-		scraperRegistry = new ScraperRegistryImpl
-
-		for (ms : scraperRegistry.getMovieScraperExtensions) {
-			//			println(ms)
-		}
-
-		for (ss : scraperRegistry.getShowScraperExtensions) {
-			//			println(ss)
-		}
 	}
 
 	override protected dispose() {
 		Activator::INSTANCE = null
-	}
-
-	def ScraperRegistry getScraperRegistry() {
-		return scraperRegistry
 	}
 }
