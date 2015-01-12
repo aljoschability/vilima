@@ -8,6 +8,7 @@ import com.aljoschability.vilima.scraper.ShowScraperExtension
 import com.aljoschability.vilima.scraper.impl.MovieScraperExtensionImpl
 import com.aljoschability.vilima.scraper.impl.ShowScraperExtensionImpl
 import com.aljoschability.vilima.services.ScraperService
+import com.aljoschability.vilima.xtend.LogExtension
 import java.util.List
 import org.eclipse.core.runtime.CoreException
 import org.eclipse.core.runtime.IConfigurationElement
@@ -30,11 +31,15 @@ class ScraperServiceImpl implements ScraperService {
 
 	List<ShowScraperExtension> showScraperExtensions
 
+	extension LogExtension = new LogExtension("ScraperServiceImpl", Activator::get)
+
 	val IExtensionRegistry registry
 
 	new(BundleContext context) {
 		val reference = context.getServiceReference(typeof(IExtensionRegistry))
 		registry = context.getService(reference)
+
+		debug("created service")
 	}
 
 	def private void initialize() {

@@ -1,11 +1,14 @@
 package com.aljoschability.vilima.ui.services.impl
 
+import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.services.ColumnService
+import com.aljoschability.vilima.xtend.LogExtension
 import org.eclipse.core.runtime.IExtensionRegistry
 import org.osgi.framework.BundleContext
-import com.aljoschability.vilima.ui.Activator
 
 class ColumnServiceImpl implements ColumnService {
+	extension LogExtension = new LogExtension("ColumnServiceImpl", Activator::get)
+
 	val IExtensionRegistry registry
 
 	new(BundleContext context) {
@@ -18,10 +21,10 @@ class ColumnServiceImpl implements ColumnService {
 	}
 
 	override start() {
-		Activator::get.debug("The column service has been started.")
+		debug("The column service has been started.")
 	}
 
 	override stop() {
-		Activator::get.debug("The column service has been stopped.")
+		debug("The column service has been stopped.")
 	}
 }

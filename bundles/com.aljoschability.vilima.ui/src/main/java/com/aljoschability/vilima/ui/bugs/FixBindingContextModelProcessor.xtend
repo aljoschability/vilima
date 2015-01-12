@@ -1,8 +1,9 @@
 package com.aljoschability.vilima.ui.bugs
 
+import com.aljoschability.vilima.ui.Activator
+import com.aljoschability.vilima.xtend.LogExtension
 import org.eclipse.e4.core.di.annotations.Execute
 import org.eclipse.e4.ui.model.application.MApplication
-import com.aljoschability.vilima.ui.Activator
 
 /* fixes removed key bindings by adding a <code>type:user</code> tag to each defined binding.
  * @see http://techblog.ralph-schuster.eu/2013/10/13/eclipsee4-problem-with-key-bindings/comment-page-1
@@ -10,6 +11,8 @@ import com.aljoschability.vilima.ui.Activator
  */
 class FixBindingContextModelProcessor {
 	static val MAGIC_TAG = "type:user"
+
+	extension LogExtension = new LogExtension("FixBindingContextModelProcessor", Activator::get)
 
 	@Execute
 	def void execute(MApplication application) {
@@ -22,9 +25,5 @@ class FixBindingContextModelProcessor {
 				}
 			}
 		}
-	}
-
-	private def void debug(String message) {
-		Activator::get.debug('''[FixBindingContextModelProcessor] «message»''')
 	}
 }

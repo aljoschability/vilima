@@ -14,16 +14,13 @@ final class Activator extends AbstractLoggingBundleActivator {
 	}
 
 	override protected initialize() {
+		Activator::INSTANCE = this
 
 		// register vilima service
 		bundleContext.registerService(typeof(VilimaService), new VilimaServiceImpl(bundleContext), null)
-		debug("The vilima service has been registered.")
 
 		// register scraper service
 		bundleContext.registerService(typeof(ScraperService), new ScraperServiceImpl(bundleContext), null)
-		debug("The scraper service has been registered.")
-
-		Activator::INSTANCE = this
 	}
 
 	override protected dispose() {

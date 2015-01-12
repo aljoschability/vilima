@@ -25,4 +25,5 @@ Export-Package: com.aljoschability.vilima,
  com.aljoschability.vilima.scraper,
  com.aljoschability.vilima.services,
  com.aljoschability.vilima.util,
- com.aljoschability.vilima.writing
+ com.aljoschability.vilima.writing,
+ com.aljoschability.vilima.xtend

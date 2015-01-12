@@ -2,6 +2,7 @@ package com.aljoschability.vilima.ui.services.impl
 
 import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.services.DialogService
+import com.aljoschability.vilima.xtend.LogExtension
 import java.io.File
 import org.eclipse.core.runtime.Platform
 import org.eclipse.jface.dialogs.DialogSettings
@@ -12,8 +13,9 @@ class DialogServiceImpl implements DialogService {
 	static val FILENAME = "dialog_settings.xml"
 
 	val BundleContext context
-
 	val IDialogSettings settings
+
+	extension LogExtension = new LogExtension("DialogServiceImpl", Activator::get)
 
 	new(BundleContext context) {
 		this.context = context
@@ -59,6 +61,4 @@ class DialogServiceImpl implements DialogService {
 	private def File getSettingsFile() {
 		Platform::getStateLocation(context.bundle).append(FILENAME).toFile
 	}
-
-	private static def void debug(String message) { Activator::get.debug('''[Dialog Service] «message»''') }
 }

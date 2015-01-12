@@ -3,6 +3,7 @@ package com.aljoschability.vilima.ui.services.impl
 import com.aljoschability.vilima.MkTrackType
 import com.aljoschability.vilima.ui.Activator
 import com.aljoschability.vilima.ui.services.ImageService
+import com.aljoschability.vilima.xtend.LogExtension
 import java.util.Map
 import org.eclipse.core.runtime.FileLocator
 import org.eclipse.core.runtime.Path
@@ -11,6 +12,8 @@ import org.eclipse.swt.widgets.Display
 import org.osgi.framework.BundleContext
 
 class ImageServiceImpl implements ImageService {
+	extension LogExtension = new LogExtension("ImageServiceImpl", Activator::get)
+
 	val Map<Display, Map<String, Image>> cache = newLinkedHashMap
 
 	val BundleContext context
@@ -60,10 +63,10 @@ class ImageServiceImpl implements ImageService {
 	}
 
 	override start() {
-		Activator::get.debug("The image service has been started.")
+		debug("The image service has been started.")
 	}
 
 	override stop() {
-		Activator::get.debug("The image service has been stopped.")
+		debug("The image service has been stopped.")
 	}
 }
