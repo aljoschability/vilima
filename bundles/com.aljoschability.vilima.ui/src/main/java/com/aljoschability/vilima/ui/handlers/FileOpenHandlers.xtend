@@ -1,8 +1,9 @@
 package com.aljoschability.vilima.ui.handlers
 
-import com.aljoschability.vilima.VilimaManager
 import com.aljoschability.vilima.jobs.AddFilesJob
+import com.aljoschability.vilima.services.VilimaService
 import java.io.File
+import javax.inject.Inject
 import javax.inject.Named
 import org.eclipse.e4.core.di.annotations.Execute
 import org.eclipse.e4.ui.services.IServiceConstants
@@ -12,7 +13,9 @@ import org.eclipse.swt.widgets.FileDialog
 import org.eclipse.swt.widgets.Shell
 
 abstract class BaseFileDirectoryHandler {
-	protected def void executeJob(Shell shell, VilimaManager manager, boolean clear) {
+	@Inject VilimaService service
+
+	protected def void executeJob(Shell shell, boolean clear) {
 		val dialog = new DirectoryDialog(shell)
 		dialog.message = "the message"
 		dialog.text = "Select Directory"
@@ -22,28 +25,28 @@ abstract class BaseFileDirectoryHandler {
 			return
 		}
 
-		new AddFilesJob(manager, new File(path), clear).schedule
+		new AddFilesJob(service, new File(path), clear).schedule
 	}
 }
 
 class FileOpenDirectoryHandler extends BaseFileDirectoryHandler {
 	@Execute
 	def void execute(@Named(IServiceConstants::ACTIVE_SHELL) Shell shell) {
-		val manager = null // TODO: find manager
-		executeJob(shell, manager, true)
+		executeJob(shell, true)
 	}
 }
 
 class FileAddDirectoryHandler extends BaseFileDirectoryHandler {
 	@Execute
 	def void execute(@Named(IServiceConstants::ACTIVE_SHELL) Shell shell) {
-		val manager = null // TODO: find manager
-		executeJob(shell, manager, false)
+		executeJob(shell, false)
 	}
 }
 
 abstract class BaseFileFilesHandler {
-	protected def void executeJob(Shell shell, VilimaManager manager, boolean clear) {
+	@Inject VilimaService service
+
+	protected def void executeJob(Shell shell, boolean clear) {
 		val dialog = new FileDialog(shell, SWT::OPEN.bitwiseOr(SWT::MULTI))
 		dialog.filterExtensions = #["*.mkv;*.mk3d;*.mka;*.mks", "*.*"]
 		dialog.filterIndex = 0
@@ -59,22 +62,20 @@ abstract class BaseFileFilesHandler {
 			files += new File(dialog.filterPath, name)
 		}
 
-		new AddFilesJob(manager, files, clear).schedule
+		new AddFilesJob(service, files, clear).schedule
 	}
 }
 
 class FileOpenFilesHandler extends BaseFileFilesHandler {
 	@Execute
 	def void execute(@Named(IServiceConstants::ACTIVE_SHELL) Shell shell) {
-		val manager = null // TODO: find manager
-		executeJob(shell, manager, true)
+		executeJob(shell, true)
 	}
 }
 
 class FileAddFilesHandler extends BaseFileFilesHandler {
 	@Execute
 	def void execute(@Named(IServiceConstants::ACTIVE_SHELL) Shell shell) {
-		val manager = null // TODO: find manager
-		executeJob(shell, manager, false)
+		executeJob(shell, false)
 	}
 }

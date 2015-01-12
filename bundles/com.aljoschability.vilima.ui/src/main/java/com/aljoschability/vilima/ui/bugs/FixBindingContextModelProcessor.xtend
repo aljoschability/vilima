@@ -17,9 +17,9 @@ class FixBindingContextModelProcessor {
 	@Execute
 	def void execute(MApplication application) {
 		for (table : application.bindingTables) {
-			debug('''processing table «table»''')
+			debug('''processing table for context "«table.bindingContext.elementId»"...''')
 			for (binding : table.bindings) {
-				debug('''processing binding «binding»''')
+				debug('''processing binding for command "«binding.command.elementId»"...''')
 				if(!binding.tags.contains(MAGIC_TAG)) {
 					binding.tags += MAGIC_TAG
 				}

@@ -11,4 +11,8 @@ class VilimaServiceImpl implements VilimaService {
 	new(BundleContext context) {
 		debug("created service")
 	}
+
+	override addFile(String path) {
+		debug('''add file "«path»"...''')
+	}
 }

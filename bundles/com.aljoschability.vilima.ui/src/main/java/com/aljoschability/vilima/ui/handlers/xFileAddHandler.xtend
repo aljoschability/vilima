@@ -15,8 +15,10 @@ class xFileAddHandler extends AbstractVilimaManagerHandler {
 		val root = new File('''C:\dev\repos\github.com\aljoschability\vilima\__TODO\files''')
 
 		val shell = null
-		val d=new DirectoryDialog(shell, SWT::OPEN)
+		val d = new DirectoryDialog(shell, SWT::OPEN)
 
-		new AddFilesJob(manager, root, true).schedule()
+		println("xFileAddHandler: did not start job!")
+
+	//new AddFilesJob(manager, root, true).schedule()
 	}
 }

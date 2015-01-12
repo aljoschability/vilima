@@ -1,7 +1,7 @@
 package com.aljoschability.vilima.jobs
 
 import com.aljoschability.vilima.Activator
-import com.aljoschability.vilima.VilimaManager
+import com.aljoschability.vilima.services.VilimaService
 import java.io.File
 import java.nio.file.AccessDeniedException
 import java.nio.file.Files
@@ -11,15 +11,15 @@ import org.eclipse.core.runtime.Status
 import org.eclipse.core.runtime.jobs.Job
 
 class AddFilesJob extends Job {
-	val VilimaManager manager
+	val VilimaService service
 	val File root
 	val Collection<File> files
 	val boolean clear
 
-	private new(VilimaManager manager, File root, Collection<File> files, boolean clear) {
+	private new(VilimaService service, File root, Collection<File> files, boolean clear) {
 		super(typeof(AddFilesJob).name)
 
-		this.manager = manager
+		this.service = service
 		this.root = root
 		this.files = files
 		this.clear = clear
@@ -32,8 +32,8 @@ class AddFilesJob extends Job {
 	 * @param files The files to add.
 	 * @param clear Whether to clear existing files.
 	 */
-	new(VilimaManager manager, Collection<File> files, boolean clear) {
-		this(manager, null, files, clear)
+	new(VilimaService service, Collection<File> files, boolean clear) {
+		this(service, null, files, clear)
 	}
 
 	/**
@@ -44,14 +44,14 @@ class AddFilesJob extends Job {
 	 * @param root The root directory of the files.
 	 * @param clear Whether to clear existing files.
 	 */
-	new(VilimaManager manager, File root, boolean clear) {
-		this(manager, root, null, clear)
+	new(VilimaService service, File root, boolean clear) {
+		this(service, root, null, clear)
 	}
 
 	override protected run(IProgressMonitor monitor) {
 		monitor.beginTask("Reading things!", IProgressMonitor::UNKNOWN)
 
-		println('''manager=«manager»''')
+		println('''manager=«service»''')
 		println('''root=«root»''')
 		println('''files=«files»''')
 		println('''clear=«clear»''')
@@ -63,8 +63,10 @@ class AddFilesJob extends Job {
 			} catch(AccessDeniedException e) {
 				Activator::get.warn('''[AddFilesJob] Access denied for something. Aborting.''')
 			}
+
+			// add collected files
 			for (file : walker.files) {
-				manager.addFile(file.toString)
+				service.addFile(file.toString)
 			}
 		}
 
