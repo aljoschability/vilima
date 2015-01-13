@@ -6,7 +6,7 @@ import com.aljoschability.vilima.xtend.LogExtension
 import com.aljoschability.vilima.Activator
 
 class VilimaServiceImpl implements VilimaService {
-	extension LogExtension = new LogExtension("VilimaServiceImpl", Activator::get)
+	extension LogExtension = new LogExtension(typeof(VilimaServiceImpl), Activator::get)
 
 	new(BundleContext context) {
 		debug("created service")

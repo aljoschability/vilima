@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite
 import org.eclipse.swt.widgets.Label
 import org.eclipse.swt.widgets.Text
 import com.aljoschability.vilima.ui.Activator
+import com.aljoschability.vilima.xtend.LogExtension
 
 abstract class BaseWidget<E> {
 	protected static val EMPTY = ""
@@ -99,6 +100,8 @@ abstract class BaseWidget<E> {
 }
 
 abstract class BaseTextWidget<E> extends BaseWidget<E> {
+	extension LogExtension = new LogExtension(typeof(BaseTextWidget), Activator::get)
+
 	val String labelValue
 
 	Label labelControl
@@ -126,8 +129,7 @@ abstract class BaseTextWidget<E> extends BaseWidget<E> {
 	}
 
 	def protected void validateValue(E element, String text) {
-
-		println('''validate value "«text»" for element «element»''')
+		debug('''validate value "«text»" for element «element»''')
 	}
 
 	def protected void setValue(E element, String value)

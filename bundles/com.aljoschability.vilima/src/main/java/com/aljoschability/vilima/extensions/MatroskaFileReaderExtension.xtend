@@ -7,11 +7,15 @@ import com.google.common.base.Charsets
 import com.google.common.primitives.UnsignedLong
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
+import com.aljoschability.vilima.xtend.LogExtension
+import com.aljoschability.vilima.Activator
 
 class MatroskaFileReaderExtension {
 	val static public INSTANCE = new MatroskaFileReaderExtension
 
 	val static HEX = "0123456789ABCDEF".toCharArray
+
+	static extension LogExtension = new LogExtension(typeof(MatroskaFileReaderExtension), Activator::get)
 
 	def byte[] asBytes(EbmlDataElement element) {
 		element.data
@@ -104,7 +108,7 @@ class MatroskaFileReaderExtension {
 		val result = buffer.long
 		if(result < 0) {
 			val exp = UnsignedLong::fromLongBits(result).bigIntegerValue
-			println('''could not convert unsigned integer to long: «exp» expected, returned «result» instead.''')
+			debug('''could not convert unsigned integer to long: «exp» expected, returned «result» instead.''')
 		}
 
 		return result

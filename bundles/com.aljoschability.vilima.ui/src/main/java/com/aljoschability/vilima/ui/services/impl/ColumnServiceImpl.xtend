@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.IExtensionRegistry
 import org.osgi.framework.BundleContext
 
 class ColumnServiceImpl implements ColumnService {
-	extension LogExtension = new LogExtension("ColumnServiceImpl", Activator::get)
+	extension LogExtension = new LogExtension(typeof(ColumnServiceImpl), Activator::get)
 
 	val IExtensionRegistry registry
 

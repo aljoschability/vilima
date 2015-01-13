@@ -12,7 +12,7 @@ import org.eclipse.e4.ui.model.application.MApplication
 class FixBindingContextModelProcessor {
 	static val MAGIC_TAG = "type:user"
 
-	extension LogExtension = new LogExtension("FixBindingContextModelProcessor", Activator::get)
+	extension LogExtension = new LogExtension(typeof(FixBindingContextModelProcessor), Activator::get)
 
 	@Execute
 	def void execute(MApplication application) {

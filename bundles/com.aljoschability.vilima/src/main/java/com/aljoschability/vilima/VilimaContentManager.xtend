@@ -2,8 +2,11 @@ package com.aljoschability.vilima
 
 import org.eclipse.e4.core.services.events.IEventBroker
 import org.eclipse.emf.ecore.util.EcoreUtil
+import com.aljoschability.vilima.xtend.LogExtension
 
 class VilimaContentManager implements IContentManager {
+	extension LogExtension = new LogExtension(typeof(VilimaContentManager), Activator::get)
+
 	IEventBroker broker
 
 	XVilimaLibrary library
@@ -38,7 +41,7 @@ class VilimaContentManager implements IContentManager {
 	}
 
 	override getPath() {
-		println("VilimaContentManager#getPath() does not function")
+		debug("#getPath() does not function")
 		return path
 	}
 

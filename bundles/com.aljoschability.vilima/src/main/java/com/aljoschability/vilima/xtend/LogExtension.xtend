@@ -6,9 +6,9 @@ class LogExtension {
 	val LoggingBundleActivator activator
 	val String prefix
 
-	new(String prefix, LoggingBundleActivator activator) {
+	new(Class<?> clazz, LoggingBundleActivator activator) {
 		this.activator = activator
-		this.prefix = prefix
+		this.prefix = clazz.simpleName
 	}
 
 	def void debug(String message) {

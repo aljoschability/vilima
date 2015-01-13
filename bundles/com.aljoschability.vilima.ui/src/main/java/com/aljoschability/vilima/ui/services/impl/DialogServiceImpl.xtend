@@ -15,7 +15,7 @@ class DialogServiceImpl implements DialogService {
 	val BundleContext context
 	val IDialogSettings settings
 
-	extension LogExtension = new LogExtension("DialogServiceImpl", Activator::get)
+	extension LogExtension = new LogExtension(typeof(DialogServiceImpl), Activator::get)
 
 	new(BundleContext context) {
 		this.context = context

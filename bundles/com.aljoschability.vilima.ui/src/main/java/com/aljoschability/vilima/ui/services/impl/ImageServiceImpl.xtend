@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display
 import org.osgi.framework.BundleContext
 
 class ImageServiceImpl implements ImageService {
-	extension LogExtension = new LogExtension("ImageServiceImpl", Activator::get)
+	extension LogExtension = new LogExtension(typeof(ImageServiceImpl), Activator::get)
 
 	val Map<Display, Map<String, Image>> cache = newLinkedHashMap
 

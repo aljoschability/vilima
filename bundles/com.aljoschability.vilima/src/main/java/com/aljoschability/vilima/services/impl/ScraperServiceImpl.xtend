@@ -31,7 +31,7 @@ class ScraperServiceImpl implements ScraperService {
 
 	List<ShowScraperExtension> showScraperExtensions
 
-	extension LogExtension = new LogExtension("ScraperServiceImpl", Activator::get)
+	extension LogExtension = new LogExtension(typeof(ScraperServiceImpl), Activator::get)
 
 	val IExtensionRegistry registry
 
