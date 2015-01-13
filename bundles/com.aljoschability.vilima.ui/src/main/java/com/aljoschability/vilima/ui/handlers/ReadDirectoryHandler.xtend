@@ -15,7 +15,7 @@ class ReadDirectoryHandler {
 	@Inject IContentManager manager
 
 	@Execute
-	def execute(MWindow window, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
+	def void execute(MWindow window, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 		val dialog = new DirectoryDialog(shell)
 		dialog.text = "Directory Selection"
 		dialog.message = "Select the directory containing the video files."
@@ -23,19 +23,17 @@ class ReadDirectoryHandler {
 
 		// check whether something should be read
 		val path = dialog.open
-		if (path == null) {
-			return true
+		if(path == null) {
+			return
 		}
 
 		// check whether path has been changed
-		if (manager.path == path) {
-			return true
+		if(manager.path == path) {
+			return
 		}
 
 		window.label = '''Vilima - «path»'''
 
 		new VilimaScanJob(manager, Paths::get(path)).schedule
-
-		return true
 	}
 }
