@@ -18,16 +18,16 @@
             name="vilima">
          <property
                name="appName"
-               value="vilima">
-         </property>
+               value="vilima"/>
          <property
                name="applicationXMI"
-               value="platform:/plugin/com.aljoschability.vilima.rcp/src/main/resources/vilima.e4xmi">
-         </property>
+               value="platform:/plugin/com.aljoschability.vilima.rcp/src/main/resources/vilima.e4xmi"/>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/com.aljoschability.vilima.rcp/src/main/resources/vilima.css"/>
          <property
                name="lifeCycleURI"
-               value="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.VilimaLifeCycleManager">
-         </property>
+               value="bundleclass://com.aljoschability.vilima.ui/com.aljoschability.vilima.ui.VilimaLifeCycleManager"/>
       </product>
    </extension>
 </plugin>
