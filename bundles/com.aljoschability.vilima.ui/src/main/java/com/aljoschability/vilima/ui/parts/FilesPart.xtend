@@ -292,7 +292,9 @@ class FilesPart implements Provider<VilimaManager> {
 
 		column.moveable = false
 		column.resizable = false
-		column.width = 20
+		column.width = viewer.tree.itemHeight
+		
+		print(viewer.tree.itemHeight)
 
 		val viewerColumn = new TreeViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ProgramImageLabelProvider(column.display)
