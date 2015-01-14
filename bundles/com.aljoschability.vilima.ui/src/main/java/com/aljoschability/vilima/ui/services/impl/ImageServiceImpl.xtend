@@ -67,6 +67,13 @@ class ImageServiceImpl implements ImageService {
 	}
 
 	override stop() {
+		for (display : cache.keySet) {
+			for (key : cache.get(display).keySet) {
+				cache.get(display).get(key).dispose
+				debug('''Disposed image[«display.hashCode»]: "«key»"''')
+			}
+		}
+
 		debug("The image service has been stopped.")
 	}
 }
