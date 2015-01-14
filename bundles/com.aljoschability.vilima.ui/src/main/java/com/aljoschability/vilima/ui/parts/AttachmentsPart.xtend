@@ -3,9 +3,11 @@ package com.aljoschability.vilima.ui.parts;
 import com.aljoschability.vilima.MkAttachment
 import com.aljoschability.vilima.MkFile
 import com.aljoschability.vilima.extensions.VilimaFormatter
+import com.aljoschability.vilima.ui.xtend.SwtExtension
 import com.google.common.io.Files
 import java.io.File
 import java.nio.file.Paths
+import java.util.Collection
 import java.util.Map
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
@@ -18,14 +20,13 @@ import org.eclipse.jface.viewers.ArrayContentProvider
 import org.eclipse.jface.viewers.ColumnLabelProvider
 import org.eclipse.jface.viewers.IStructuredSelection
 import org.eclipse.jface.viewers.ITreeContentProvider
-import org.eclipse.jface.viewers.TreeViewer
-import org.eclipse.jface.viewers.TreeViewerColumn
+import org.eclipse.jface.viewers.TableViewer
+import org.eclipse.jface.viewers.TableViewerColumn
 import org.eclipse.swt.SWT
 import org.eclipse.swt.graphics.Image
 import org.eclipse.swt.program.Program
 import org.eclipse.swt.widgets.Composite
-import org.eclipse.swt.widgets.Tree
-import org.eclipse.swt.widgets.TreeColumn
+import org.eclipse.swt.widgets.TableColumn
 
 class AttachmentsTreeContentProvider extends ArrayContentProvider implements ITreeContentProvider {
 	override getElements(Object element) {
@@ -44,20 +45,38 @@ class AttachmentsTreeContentProvider extends ArrayContentProvider implements ITr
 }
 
 class AttachmentsPart {
+	extension SwtExtension = SwtExtension::INSTANCE
+
 	val Map<String, Image> fileImages = newLinkedHashMap
 
-	TreeViewer viewer
+	TableViewer viewer
 
-	MkFile input
+	Collection<MkAttachment> input
 
 	@PostConstruct
 	def postConstruct(Composite parent) {
-		val tree = new Tree(parent, SWT::MULTI.bitwiseOr(SWT::FULL_SELECTION))
-		tree.headerVisible = true
-		tree.linesVisible = true
+		val sash = parent.newSashForm(SWT::HORIZONTAL, [layoutData = newGridData(true, true)])
 
-		viewer = new TreeViewer(tree)
-		viewer.contentProvider = new AttachmentsTreeContentProvider
+		sash.createTable()
+
+		sash.createDetails()
+
+		sash.weights = #[4, 1]
+	}
+
+	private def void createTable(Composite parent) {
+		val composite = parent.newComposite [
+			layout = newGridLayoutSwt
+			layoutData = newGridData(true, true)
+		]
+
+		viewer = composite.newTableViewer(
+			[
+				table.layoutData = newGridData(true, true)
+				table.headerVisible = true
+				table.linesVisible = true
+				contentProvider = ArrayContentProvider::getInstance()
+			], SWT::SINGLE, SWT::FULL_SELECTION, SWT::BORDER)
 
 		viewer.addDoubleClickListener(
 			[
@@ -100,16 +119,29 @@ class AttachmentsPart {
 		input = null
 	}
 
+	private def void createDetails(Composite parent) {
+		val composite = parent.newComposite [
+			layout = newGridLayoutSwt
+			layoutData = newGridData(true, true)
+		]
+
+		val group = composite.newGroup [
+			text = "Details"
+			layout = newGridLayoutSwt(3)
+			layoutData = newGridData(true, true)
+		]
+	}
+
 	def private createAttachmentColumn(String title, int width, int style, boolean monospaced, boolean showIcon,
 		(MkAttachment)=>String function) {
-		val column = new TreeColumn(viewer.tree, style)
+		val column = new TableColumn(viewer.table, style)
 
 		column.moveable = true
 		column.resizable = true
 		column.width = width
 		column.text = title
 
-		val viewerColumn = new TreeViewerColumn(viewer, column)
+		val viewerColumn = new TableViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ColumnLabelProvider() {
 			override getText(Object element) {
 				if(element instanceof MkAttachment) {
@@ -160,14 +192,14 @@ class AttachmentsPart {
 	def void handleSelection(@Optional @Named(IServiceConstants.ACTIVE_SELECTION) IStructuredSelection selection) {
 		input = null
 
-		if(selection != null && selection.size() == 1) {
-			val selected = selection.firstElement
-			if(selected instanceof MkFile) {
-				input = selected
+		if(selection != null && selection.size == 1) {
+			val element = selection.firstElement
+			if(element instanceof MkFile) {
+				input = element.attachments
 			}
 		}
 
-		if(viewer != null && !viewer.control.disposed) {
+		if(viewer.active) {
 			viewer.input = input
 		}
 	}
