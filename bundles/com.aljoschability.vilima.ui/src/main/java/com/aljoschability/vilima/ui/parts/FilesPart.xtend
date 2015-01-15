@@ -42,6 +42,8 @@ import org.eclipse.swt.widgets.MenuItem
 import org.eclipse.swt.widgets.TreeColumn
 
 import static com.aljoschability.vilima.ui.parts.FilesPart.*
+import com.aljoschability.vilima.ui.services.DialogService
+import java.util.List
 
 class FilesPart implements Provider<VilimaManager> {
 	static val ID_CONTEXT_MENU = "com.aljoschability.vilima.menu.popup.files"
@@ -57,7 +59,9 @@ class FilesPart implements Provider<VilimaManager> {
 	@Inject EMenuService menuService
 	@Inject MkFileColumnRegistry columnRegistry
 
-	IDialogSettings settings
+	@Inject DialogService dialogService
+
+	IDialogSettings dialogSettings
 
 	TreeViewer viewer
 
@@ -65,20 +69,34 @@ class FilesPart implements Provider<VilimaManager> {
 
 	new() {
 		vilimaManager = new VilimaManagerImpl
-
-		initializeDialogSettings()
 	}
 
-	def private void initializeDialogSettings() {
-		val bundleSettings = Activator::get.dialogSettings
-		settings = bundleSettings.getSection(FilesPart.name)
-		if(settings == null) {
-			settings = bundleSettings.addNewSection(FilesPart.name)
-
-			settings.put(SETTINGS_COLUMN_IDS, #["file.name", "segment.title", "segment.duration"])
-			settings.put(SETTINGS_COLUMN_WIDTHS, #["240", "160", "61"])
-			settings.put(SETTINGS_SORT_ID, "file.name")
+	/* should be somewhere else! */
+	@Deprecated
+	def void checkDefault(IDialogSettings settings, String key, List<String> values) {
+		if(settings.getArray(key) == null) {
+			settings.put(key, values)
 		}
+	}
+
+	/* should be somewhere else! */
+	@Deprecated
+	def void checkDefault(IDialogSettings settings, String key, String value) {
+		if(settings.get(key) == null) {
+			settings.put(key, value)
+		}
+	}
+
+	private def IDialogSettings getSettings() {
+		if(dialogSettings == null) {
+			dialogSettings = dialogService.getSettings(typeof(FilesPart))
+
+			dialogSettings.checkDefault(SETTINGS_COLUMN_IDS, #["file.name", "segment.title", "segment.duration"])
+			dialogSettings.checkDefault(SETTINGS_COLUMN_WIDTHS, #["240", "160", "61"])
+			dialogSettings.checkDefault(SETTINGS_SORT_ID, "file.name")
+		}
+
+		return dialogSettings
 	}
 
 	@PersistState
@@ -293,8 +311,6 @@ class FilesPart implements Provider<VilimaManager> {
 		column.moveable = false
 		column.resizable = false
 		column.width = viewer.tree.itemHeight
-		
-		print(viewer.tree.itemHeight)
 
 		val viewerColumn = new TreeViewerColumn(viewer, column)
 		viewerColumn.labelProvider = new ProgramImageLabelProvider(column.display)
